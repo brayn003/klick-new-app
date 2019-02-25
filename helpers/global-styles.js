@@ -8,8 +8,9 @@ export default createGlobalStyle`
   }
 
   body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 16px;
+    color: #333;
   }
 
   #__next {

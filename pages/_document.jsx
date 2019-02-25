@@ -22,7 +22,7 @@ export default class CustomDocument extends Document {
         <Head>
           <meta charSet="UTF-8" />
           <meta key="viewport" name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-          <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+          <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" />
           {this.props.styleTags}
         </Head>
         <body style={{ margin: 0 }}>
