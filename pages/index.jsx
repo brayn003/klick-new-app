@@ -1,12 +1,9 @@
-import { Component } from 'react';
-import Router from 'next/router';
+import DashboardView from '../components/dashboard/DashboardView';
 
-export default class Page extends Component {
-  componentDidMount() {
-    Router.push('/canvas/add-media');
-  }
-
-  render() {
-    return <p>Redirecting ...</p>;
-  }
+function Page() {
+  return <DashboardView />;
 }
+
+Page.getInitialProps = () => ({ layout: { sidebar: { collapse: false } } });
+
+export default Page;
