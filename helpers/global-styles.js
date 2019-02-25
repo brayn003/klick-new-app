@@ -7,18 +7,13 @@ export default createGlobalStyle`
     border: 0;
   }
 
-  html {
-    height: 100%;
-  }
-
   body {
-    height: 100%;
-    font-family: 'Poppins';
-    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
   }
 
   #__next {
-    height: 100%;
+    min-height: 100vh;
   }
 
 `;
