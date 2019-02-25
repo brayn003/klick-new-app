@@ -15,6 +15,7 @@ export default createGlobalStyle`
 
   #__next {
     min-height: 100vh;
+    display: flex;
   }
 
 `;
