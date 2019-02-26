@@ -51,16 +51,16 @@ const Container = styled.nav`
 `;
 
 const Logo = styled.p`
-  font-size: 1.4em;
+  font-size: 1.6em;
   color: #FFF;
   text-align: center;
-  padding-bottom: 32px;
-  padding-top: 32px;
+  padding: 32px 24px;
   margin: 0;
 `;
 
 const Menu = styled.ul`
   padding: 0;
+  margin: 0;
 `;
 
 const MenuItem = styled.li`
