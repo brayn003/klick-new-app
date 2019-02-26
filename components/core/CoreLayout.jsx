@@ -13,9 +13,19 @@ function CoreLayout(props) {
     title,
     ...rest
   } = props;
-  const { sidebar = {} } = layout;
+
+  const { sidebar = {}, topbar = {}, body = {} } = layout;
+
+  // sidebar
   const isSidebarCollapsed = typeof sidebar.collapsed === 'undefined' ? false : sidebar.collapsed;
   const isSidebarShown = typeof sidebar.show === 'undefined' ? true : sidebar.show;
+
+  // topbar
+  const isTopbarShown = typeof topbar.show === 'undefined' ? true : topbar.show;
+
+  // body
+  const noPadding = typeof body.noPadding === 'undefined' ? false : body.noPadding;
+
   return (
     <>
       <Head>
@@ -28,10 +38,12 @@ function CoreLayout(props) {
           </Sidebar>
         )}
         <Content>
-          <TopBar>
-            <Title>{title}</Title>
-          </TopBar>
-          <CoreBody>
+          {isTopbarShown && (
+            <TopBar>
+              <Title>{title}</Title>
+            </TopBar>
+          )}
+          <CoreBody noPadding={noPadding}>
             {children}
           </CoreBody>
         </Content>
@@ -62,6 +74,8 @@ const Container = styled.div`
 
 const Content = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Sidebar = styled.aside`
@@ -79,7 +93,12 @@ const Title = styled.p`
 `;
 
 const CoreBody = styled.div`
-  padding: 16px 24px;
+  padding: ${p => (p.noPadding ? '0' : '16px 24px')};
+  flex: 1;
 `;
+
+CoreBody.defaultProps = {
+  noPadding: false,
+};
 
 export default CoreLayout;

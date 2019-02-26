@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 const menu = [{
   title: 'Dashboard',
@@ -12,7 +13,7 @@ const menu = [{
 }, {
   title: 'Expenses',
   key: 'expenses',
-  path: '/exxpenses',
+  path: '/expenses',
 }];
 
 function CoreNav(props) {
@@ -24,8 +25,14 @@ function CoreNav(props) {
       </Logo>
       <Menu>
         {menu.map(item => (
-          <MenuItem active={pathname === item.path} key={item.key}>
-            {item.title}
+          <MenuItem key={item.key} active={pathname === item.path}>
+            <Link href={item.path} passHref>
+              {/* eslint-disable */}
+              <a>
+              {/* eslint-enable */}
+                {item.title}
+              </a>
+            </Link>
           </MenuItem>
         ))}
       </Menu>
@@ -54,7 +61,8 @@ const Logo = styled.p`
   font-size: 1.6em;
   color: #FFF;
   text-align: center;
-  padding: 32px 24px;
+  padding-bottom: 32px;
+  padding-top: 32px;
   margin: 0;
 `;
 
@@ -71,10 +79,22 @@ const MenuItem = styled.li`
   color: #FFF;
   list-style-type: none;
   cursor: pointer;
-  will-change: background-color;
-  transition: background-color 0.1s linear;
+  will-change: background-color, border-left-width;
+  border: 0;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.8);
   background-color: ${p => (p.active ? 'rgba(0, 0, 0, 0.13)' : 'transparent')};
+  border-left-width: ${p => (p.active ? '4px' : '0')};
+  transition: background-color 0.1s linear, border-left-width 0.1s linear;
 
+  > a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #FFF;
+    text-decoration: none;
+  }
+  
   &:hover, &:focus, &:active {
     background-color: ${p => (p.active ? 'rgba(0, 0, 0, 0.13)' : 'rgba(0, 0, 0, 0.04)')};
   }

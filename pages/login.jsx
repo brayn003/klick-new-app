@@ -6,7 +6,21 @@ function Page() {
   return <LoginView />;
 }
 
-Page.getInitialProps = () => ({ layout: { sidebar: { show: false } } });
+Page.getInitialProps = () => (
+  {
+    layout: {
+      sidebar: {
+        show: false,
+      },
+      topbar: {
+        show: false,
+      },
+      body: {
+        noPadding: true,
+      },
+    },
+  }
+);
 
 
 export default Page;
