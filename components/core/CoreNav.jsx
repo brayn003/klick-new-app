@@ -9,7 +9,7 @@ const menu = [{
 }, {
   title: 'Invoices',
   key: 'invoices',
-  path: '/invoices',
+  path: '/invoice',
 }, {
   title: 'Expenses',
   key: 'expenses',

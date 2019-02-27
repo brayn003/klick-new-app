@@ -18,9 +18,9 @@ function showError(description, title) {
 
 function requestHandler(config) {
   const newConfig = config;
-  const autd = cookies.get('autd');
-  if (config.includeAuth === true && autd) {
-    newConfig.headers.Authorization = `Token ${autd}`;
+  const sessToken = cookies.get('sessToken');
+  if (config.includeAuth === true && sessToken) {
+    newConfig.headers.Authorization = `Token ${sessToken}`;
   }
   return newConfig;
 }
