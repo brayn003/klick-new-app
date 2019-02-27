@@ -4,32 +4,40 @@ import { verifyToken } from '../apis/auth-apis';
 export async function checkToken(ctx) {
   const { req = false, pathname } = ctx;
   if (req) {
-    const { autd } = ctx.req.cookies;
-    if (!autd && pathname !== '/login') {
+    const { sessToken } = ctx.req.cookies;
+    if (!sessToken && pathname !== '/login') {
       ctx.res.redirect('/login');
     }
-    if (autd && pathname === '/login') {
-      const res = await verifyToken({ token: autd });
-      if (res.success) {
+    if (sessToken && pathname === '/login') {
+      const res = await verifyToken({ token: sessToken });
+      if (res.verified) {
         ctx.res.redirect('/');
       }
     }
   } else {
-    const module = await import('next/router');
-    const Router = module.default;
-    const autd = cookie.get('autd');
-    if (!autd && pathname !== '/login') {
+    const md = await import('next/router');
+    const Router = md.default;
+    const sessToken = cookie.get('sessToken');
+    if (!sessToken && pathname !== '/login') {
       Router.push('/login');
     }
-    if (autd && pathname === '/login') {
-      const res = await verifyToken({ token: autd });
-      if (res.success) {
+    if (sessToken && pathname === '/login') {
+      const res = await verifyToken({ token: sessToken });
+      if (res.verified) {
         Router.push('/');
       }
     }
   }
 }
 
+export async function setToken(sessToken, redirect = false) {
+  const md = await import('next/router');
+  const Router = md.default;
+  cookie.set('sessToken', sessToken);
+  if (redirect) {
+    Router.push('/');
+  }
+}
 
 export default {
   checkToken,

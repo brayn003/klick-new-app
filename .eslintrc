@@ -20,7 +20,8 @@
 					"^helpers",
 					"^packages",
 					"^store",
-					"^util"
+          "^util",
+          "^hooks"
 				]
 			}
 		],
