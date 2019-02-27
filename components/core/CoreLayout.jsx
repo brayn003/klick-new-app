@@ -70,6 +70,7 @@ const Container = styled.div`
   flex: 1;
   width: 100%;
   display: flex;
+  background-color: #F9F9F9;
 `;
 
 const Content = styled.div`
