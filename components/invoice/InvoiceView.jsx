@@ -5,13 +5,13 @@ import { getInvoices } from 'apis/invoice-apis';
 import InvoiceCard from './InvoiceCard';
 import Input from '../../common-components/controls/Input';
 import DropDown from '../../common-components/controls/DropDown';
+import useForm from '../../hooks/useForm';
 
 const pdfWidth = 200;
 
 const options = [{
   title: 'All Status',
   key: 'all_status',
-  value: undefined,
 }, {
   title: 'Open',
   key: 'open',
@@ -26,12 +26,14 @@ const options = [{
 function InvoiceView() {
   const [invoices, setInvoices] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(undefined);
-  const [status, setStatus] = useState(undefined);
+
+  const { formField, getValues } = useForm();
+  const values = getValues();
 
   useEffect(() => {
     setLoading(true);
-    getInvoices({ serial: searchTerm || undefined })
+    const { status, ...rest } = values;
+    getInvoices({ status: status === 'all_status' ? undefined : status, ...rest })
       .then((res) => {
         setLoading(false);
         setInvoices(res);
@@ -39,24 +41,25 @@ function InvoiceView() {
       .catch(() => {
         setLoading(false);
       });
-  }, [searchTerm]);
+  }, [values.serial, values.status]);
 
   return (
     <Container>
       <ActionBar>
         <SearchContainer>
           <Input
-            onChange={setSearchTerm}
-            value={searchTerm}
+            {...formField('serial')}
             placeholder="Search invoices"
           />
         </SearchContainer>
         <ActionContainer>
-          <DropDown
-            value={status}
-            onChange={setStatus}
-            options={options}
-          />
+          <Actions>
+            <DropDown
+              {...formField('status')}
+              buttonProps={{ block: true }}
+              options={options}
+            />
+          </Actions>
         </ActionContainer>
       </ActionBar>
       <CardContainer>
@@ -91,7 +94,13 @@ const SearchContainer = styled.div`
 
 const ActionContainer = styled.div`
   flex: 1;
-  text-align: right;
+  text-align: left;
+  padding-left: 16px;
+`;
+
+const Actions = styled.div`
+  width: 120px;
+  display: inline-block;
 `;
 
 export default InvoiceView;

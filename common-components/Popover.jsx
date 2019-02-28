@@ -11,7 +11,6 @@ function Popover(props) {
         prefixCls="app-tooltip"
         overlayClassName="app-popover"
         transitionName="animation-popover"
-        placement="bottomRight"
         arrowContent={<PopoverArrow />}
       />
     </>
@@ -60,7 +59,7 @@ const PopoverStyles = createGlobalStyle`
       width: 30px;
       position: absolute;
       top: -15px;
-      right: 8px;
+      left: 8px;
       overflow: hidden;
       will-change: box-shadow;
       transition: box-shadow 0.1s linear;

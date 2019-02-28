@@ -1,6 +1,7 @@
 
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { MdArrowDropDown } from 'react-icons/md';
 
 import ButtonLink from '../button/ButtonLink';
 import Popover from '../Popover';
@@ -9,6 +10,7 @@ function DropDown(props) {
   const {
     options,
     onChange,
+    buttonProps,
   } = props;
   const {
     value = options.length ? (options[0].value || options[0].key) : undefined,
@@ -19,7 +21,8 @@ function DropDown(props) {
   }
   return (
     <Popover
-      trigger={['click']}
+      trigger={['focus']}
+      placement="bottomLeft"
       overlay={(
         <PopoverContainer>
           {options.map(option => (
@@ -34,8 +37,15 @@ function DropDown(props) {
         </PopoverContainer>
       )}
     >
-      <ButtonLink>
+      <ButtonLink {...buttonProps}>
         {valueOption.title}
+        <MdArrowDropDown style={{
+          fontSize: 24,
+          height: 40,
+          lineHeight: 40,
+          verticalAlign: 'top',
+        }}
+        />
       </ButtonLink>
     </Popover>
   );
@@ -63,12 +73,14 @@ DropDown.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.shape({})),
+  buttonProps: PropTypes.shape({}),
 };
 
 DropDown.defaultProps = {
   onChange: () => {},
   value: undefined,
   options: [],
+  buttonProps: {},
 };
 
 export default DropDown;

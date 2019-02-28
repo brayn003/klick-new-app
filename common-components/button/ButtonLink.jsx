@@ -7,6 +7,8 @@ function ButtonLink(props) {
 }
 
 const StyledButtonLink = styled.button`
+  width: ${p => (p.block ? '100%' : 'initial')};
+  text-align: ${p => (p.block ? 'center' : 'initial')};
   height: 40px;
   padding: 0 12px;
   line-height: 40px;
@@ -17,7 +19,6 @@ const StyledButtonLink = styled.button`
   cursor: pointer;
   will-change: box-shadow, background-color, color;
   transition: box-shadow 0.1s linear, background-color 0.1s linear, color 0.1s linear ;
-  color: #999;
 
   &:hover, &:focus, &:active {
     outline: 0;
