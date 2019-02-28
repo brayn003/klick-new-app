@@ -12,7 +12,7 @@ function InvoiceCard(props) {
           <PdfLoading>
             Loading ...
           </PdfLoading>
-            )}
+        )}
         file={invoice.fileUrl}
       >
         <StyledPdfPage pageNumber={1} width={width} />
