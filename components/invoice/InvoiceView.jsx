@@ -64,8 +64,13 @@ function InvoiceView() {
       </ActionBar>
       <CardContainer>
         {loading && 'Loading ...'}
-        {!loading && invoices && invoices.docs.map(invoice => (
-          <InvoiceCard key={invoice.id} width={pdfWidth} invoice={invoice} />
+        {!loading && invoices && invoices.docs.map((invoice, index) => (
+          <InvoiceCard
+            animationDelay={`${index * 100}ms`}
+            key={invoice.id}
+            width={pdfWidth}
+            invoice={invoice}
+          />
         ))}
       </CardContainer>
     </Container>

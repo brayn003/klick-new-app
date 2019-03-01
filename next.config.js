@@ -3,7 +3,8 @@ const { parsed: localEnv } = require('dotenv').config();
 // const path = require('path');
 /* eslint-disable */
 const webpack = require('webpack');
-const withCSS = require('@zeit/next-css')
+const withCSS = require('@zeit/next-css');
+// const withWorkers = require('@zeit/next-workers');
 /* eslint-enable */
 
 
@@ -22,7 +23,8 @@ const webpackFunc = (c) => {
   return config;
 };
 
-
-module.exports = withCSS({
+const exportCss = {
   webpack: webpackFunc,
-});
+};
+
+module.exports = withCSS(exportCss);
