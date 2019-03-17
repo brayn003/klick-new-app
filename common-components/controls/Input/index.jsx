@@ -2,10 +2,11 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 function Input(props) {
-  const { onChange, ...rest } = props;
+  const { onChange, block, ...rest } = props;
   return (
     <StyledInput
       {...rest}
+      block={block}
       onChange={(e) => { onChange(e.target.value); }}
     />
   );
@@ -13,15 +14,23 @@ function Input(props) {
 
 Input.propTypes = {
   onChange: PropTypes.func,
+  block: PropTypes.bool,
 };
 
 Input.defaultProps = {
   onChange: () => {},
+  block: false,
 };
 
 export const StyledInput = styled.input`
+  ${p => (p.block ? `
+    display: block;
+    width: 100%;
+  ` : `
+    display: inline-block;
+    width: 300px;
+  `)}
   height: 40px;
-  width: 100%;
   border: 0;
   background-color: transparent;
   border: 1px solid #CCC;
@@ -29,7 +38,6 @@ export const StyledInput = styled.input`
   box-sizing: border-box;
   line-height: 28px;
   border-radius: 20px;
-  margin-bottom: 16px;
   will-change: box-shadow, border-color, background-color;
   transition: box-shadow 0.1s linear, border-color 0.1s linear, background-color 0.1s linear;
 
@@ -48,5 +56,9 @@ export const StyledInput = styled.input`
     color: #DADADA;
   }
 `;
+
+StyledInput.defaultProps = {
+  block: false,
+};
 
 export default Input;

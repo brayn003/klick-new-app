@@ -4,14 +4,14 @@ import Input from 'common-components/controls/Input';
 import useForm from 'hooks/useForm';
 import { login } from 'apis/auth-apis';
 import { setToken } from 'helpers/auth-service';
+import Card from 'common-components/card/Card';
+import Label from 'common-components/Label';
 
 import {
   Container,
   Logo,
   Title,
   Description,
-  Card,
-  Label,
   SubActionBar,
   Anchor,
   Button,
@@ -37,15 +37,18 @@ function LoginView() {
         <Logo>The Klick App.</Logo>
         <Title>Log In</Title>
         <Description>Raise invoices. Track your expenses. Get started.</Description>
-        <Card>
+        <Card style={{ width: 400 }}>
           <Label>Email</Label>
           <Input
+            style={{ marginBottom: 16 }}
+            block
             {...formField('email')}
             placeholder="abc@example.com"
           />
           <Label>Password</Label>
           <Input
             {...formField('password')}
+            block
             type="password"
             style={{ marginBottom: 8 }}
             placeholder="********"

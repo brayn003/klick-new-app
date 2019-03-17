@@ -9,15 +9,6 @@ export const Container = styled.div`
   background-image: linear-gradient(to bottom right, #4064d8, #4ad8dd); 
 `;
 
-export const Card = styled.div`
-  background-color: #FFFFFF;
-  width: 400px;
-  height: auto;
-  padding: 24px;
-  border-radius: 20px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 14px 28px, rgba(0, 0, 0, 0.08) 0px 10px 10px;
-`;
-
 export const Title = styled.h1`
   font-size: 2em;
   color: #FFF;
@@ -28,13 +19,6 @@ export const Description = styled.p`
   margin-top: 0;
   margin-bottom: 24px;
   color: #FFF;
-`;
-
-
-export const Label = styled.label`
-  margin-bottom: 8px;
-  display: block;
-  font-weight: 700;
 `;
 
 export const Button = styled.button`
