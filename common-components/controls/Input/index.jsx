@@ -1,11 +1,15 @@
+import { forwardRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 function Input(props) {
-  const { onChange, block, ...rest } = props;
+  const {
+    onChange, block, forwardedRef, ...rest
+  } = props;
   return (
     <StyledInput
       {...rest}
+      ref={forwardedRef}
       block={block}
       onChange={(e) => { onChange(e.target.value); }}
     />
@@ -15,11 +19,13 @@ function Input(props) {
 Input.propTypes = {
   onChange: PropTypes.func,
   block: PropTypes.bool,
+  forwardedRef: PropTypes.shape({}),
 };
 
 Input.defaultProps = {
   onChange: () => {},
   block: false,
+  forwardedRef: null,
 };
 
 export const StyledInput = styled.input`
@@ -61,4 +67,4 @@ StyledInput.defaultProps = {
   block: false,
 };
 
-export default Input;
+export default forwardRef((p, ref) => <Input {...p} forwardedRef={ref} />);
