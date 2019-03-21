@@ -28,7 +28,7 @@ const Container = styled.div`
   height: auto;
   padding: 24px;
   border-radius: 8px;
-  box-shadow: 0px 2px 8px 0px rgba(175,175,175,0.5);
+  box-shadow: rgba(175, 175, 175, 0.5) 0px 2px 4px 0px;
   margin-bottom: 24px;
 
   &::after {
@@ -44,7 +44,7 @@ const Title = styled.p`
   font-size: 1em;
   border-bottom: 1px solid #EFEFEF;
   padding-bottom: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 
 export default Card;

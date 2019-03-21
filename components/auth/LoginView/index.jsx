@@ -6,6 +6,7 @@ import { login } from 'apis/auth-apis';
 import { setToken } from 'helpers/auth-service';
 import Card from 'common-components/card/Card';
 import Label from 'common-components/Label';
+import Button from 'common-components/button/Button';
 
 import {
   Container,
@@ -14,7 +15,6 @@ import {
   Description,
   SubActionBar,
   Anchor,
-  Button,
 } from './styles';
 
 function LoginView() {
@@ -59,6 +59,7 @@ function LoginView() {
             </Link>
           </SubActionBar>
           <Button
+            block
             loading={loading}
             onClick={onClickLogin}
           >

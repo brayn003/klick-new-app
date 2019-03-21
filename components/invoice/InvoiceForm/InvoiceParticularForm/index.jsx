@@ -6,10 +6,8 @@ import ButtonLink from 'common-components/button/ButtonLink';
 
 function InvoiceParticularForm() {
   const [rows, setRows] = useState(1);
-
-  const onClickAddNew = () => {
-    setRows(rows + 1);
-  };
+  const onClickAddNew = () => { setRows(rows + 1); };
+  const onClickRemove = () => { setRows(rows - 1); };
   return (
     <>
       <Row>
@@ -18,6 +16,7 @@ function InvoiceParticularForm() {
         <Col align="center" bold flex="0 0 100px">Rate</Col>
         <Col align="center" bold flex="0 0 100px">Qty</Col>
         <Col align="center" bold flex="0 0 100px">Amount</Col>
+        <Col align="center" bold flex="0 0 60px">&nbsp;</Col>
       </Row>
       {Array(rows).fill(null).map((item, index) => (
         <Row>
@@ -33,6 +32,13 @@ function InvoiceParticularForm() {
           </Col>
           <Col align="right" flex="0 0 100px">
             <Input block placeholder="0.00" />
+          </Col>
+          <Col align="center" flex="0 0 60px">
+            <ButtonLink
+              onClick={() => { onClickRemove(index); }}
+            >
+              X
+            </ButtonLink>
           </Col>
         </Row>
       ))}
@@ -59,7 +65,7 @@ const Col = styled.div`
   line-height: 40px;
   text-align: ${p => p.align};
   box-sizing: border-box;
-  padding: 0 4px;
+  padding: 0 8px;
 `;
 
 const ActionContainer = styled.div`
