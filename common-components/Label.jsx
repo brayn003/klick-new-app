@@ -6,4 +6,5 @@ export default styled.label`
   display: inline-block;
   font-weight: 700;
   padding-right: 24px;
+  box-sizing: border-box;
 `;

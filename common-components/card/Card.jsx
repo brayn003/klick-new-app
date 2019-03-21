@@ -29,6 +29,13 @@ const Container = styled.div`
   padding: 24px;
   border-radius: 8px;
   box-shadow: 0px 2px 8px 0px rgba(175,175,175,0.5);
+  margin-bottom: 24px;
+
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
 `;
 
 const Title = styled.p`
