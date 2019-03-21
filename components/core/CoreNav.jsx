@@ -13,7 +13,7 @@ const menu = [{
 }, {
   title: 'Expenses',
   key: 'expenses',
-  path: '/expenses',
+  path: '/expense',
 }];
 
 function CoreNav(props) {

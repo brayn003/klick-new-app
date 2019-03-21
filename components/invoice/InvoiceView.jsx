@@ -49,6 +49,7 @@ function InvoiceView() {
         <SearchContainer>
           <Input
             {...formField('serial')}
+            block
             placeholder="Search invoices"
           />
         </SearchContainer>

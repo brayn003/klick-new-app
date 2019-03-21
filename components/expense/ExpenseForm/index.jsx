@@ -4,16 +4,16 @@ import styled from 'styled-components';
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
 import Label from 'common-components/Label';
-import InvoiceParticularForm from './InvoiceParticularForm';
-import Button from '../../../common-components/button/Button';
-import DatePicker from '../../../common-components/controls/DatePicker';
+import Button from 'common-components/button/Button';
+import DatePicker from 'common-components/controls/DatePicker';
+import TextArea from '../../../common-components/controls/Textarea';
 
 function InvoiceForm() {
   return (
     <>
-      <Card title="Invoice Details">
+      <Card title="Dates">
         <FormGroup width="50%">
-          <InlineLabel>Raised Date</InlineLabel>
+          <InlineLabel>Date of expense</InlineLabel>
           <DatePicker block placeholder="DD / MM / YYYY" />
         </FormGroup>
         <FormGroup width="50%">
@@ -21,25 +21,36 @@ function InvoiceForm() {
           <DatePicker block placeholder="DD / MM / YYYY" />
         </FormGroup>
       </Card>
-      <Card title="Client Details">
+      <Card title="Details">
         <FormGroup width="50%">
-          <InlineLabel>Client</InlineLabel>
-          <Input block placeholder="Search your client list" />
+          <InlineLabel>Description</InlineLabel>
+          <Input block placeholder="Eg. Office Party" />
+        </FormGroup>
+        <FormGroup width="50%">
+          <InlineLabel>Categrory</InlineLabel>
+          <Input block placeholder="Eg. Parties" />
         </FormGroup>
       </Card>
-      <Card title="Particulars">
-        <InvoiceParticularForm />
-      </Card>
-      <Card title="Discount">
+      <Card title="Accounts & Amounts">
         <FormGroup width="50%">
-          <InlineLabel>Discount Rate</InlineLabel>
-          <Input block placeholder="0.00%" />
+          <InlineLabel>Amount</InlineLabel>
+          <Input block placeholder="0.00" />
+        </FormGroup>
+        <FormGroup width="50%">
+          <InlineLabel>Account</InlineLabel>
+          <Input block placeholder="Expense Account " />
         </FormGroup>
       </Card>
       <Card title="Deductions">
         <FormGroup width="50%">
           <InlineLabel>TDS Amount</InlineLabel>
           <Input block placeholder="0.00" />
+        </FormGroup>
+      </Card>
+      <Card title="Additional Details">
+        <FormGroup width="50%">
+          <InlineLabel>Comment</InlineLabel>
+          <TextArea block placeholder="Add a comment to this expense" />
         </FormGroup>
       </Card>
       <ActionCard>

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import Input from 'common-components/controls/Input';
 import ButtonLink from 'common-components/button/ButtonLink';
+import { FlexRow, FlexCol } from 'common-components/table/FlexTable';
 
 function InvoiceParticularForm() {
   const [rows, setRows] = useState(1);
@@ -10,37 +11,37 @@ function InvoiceParticularForm() {
   const onClickRemove = () => { setRows(rows - 1); };
   return (
     <>
-      <Row>
-        <Col align="left" bold flex="0 0 40px">Sr.</Col>
-        <Col align="center" bold flex="1 1 auto">Particular</Col>
-        <Col align="center" bold flex="0 0 100px">Rate</Col>
-        <Col align="center" bold flex="0 0 100px">Qty</Col>
-        <Col align="center" bold flex="0 0 100px">Amount</Col>
-        <Col align="center" bold flex="0 0 60px">&nbsp;</Col>
-      </Row>
+      <FlexRow>
+        <FlexCol align="left" bold flex="0 0 40px">Sr.</FlexCol>
+        <FlexCol align="center" bold flex="1 1 auto">Particular</FlexCol>
+        <FlexCol align="center" bold flex="0 0 100px">Rate</FlexCol>
+        <FlexCol align="center" bold flex="0 0 100px">Qty</FlexCol>
+        <FlexCol align="center" bold flex="0 0 100px">Amount</FlexCol>
+        <FlexCol align="center" bold flex="0 0 60px">&nbsp;</FlexCol>
+      </FlexRow>
       {Array(rows).fill(null).map((item, index) => (
-        <Row>
-          <Col flex="0 0 40px">{index + 1}.</Col>
-          <Col flex="1 1 auto">
+        <FlexRow>
+          <FlexCol flex="0 0 40px">{index + 1}.</FlexCol>
+          <FlexCol flex="1 1 auto">
             <Input block placeholder="Item description" />
-          </Col>
-          <Col align="right" flex="0 0 100px">
+          </FlexCol>
+          <FlexCol align="right" flex="0 0 100px">
             <Input block placeholder="0.00" />
-          </Col>
-          <Col align="right" flex="0 0 100px">
+          </FlexCol>
+          <FlexCol align="right" flex="0 0 100px">
             <Input block placeholder="0.00" />
-          </Col>
-          <Col align="right" flex="0 0 100px">
+          </FlexCol>
+          <FlexCol align="right" flex="0 0 100px">
             <Input block placeholder="0.00" />
-          </Col>
-          <Col align="center" flex="0 0 60px">
+          </FlexCol>
+          <FlexCol align="center" flex="0 0 60px">
             <ButtonLink
               onClick={() => { onClickRemove(index); }}
             >
               X
             </ButtonLink>
-          </Col>
-        </Row>
+          </FlexCol>
+        </FlexRow>
       ))}
       <ActionContainer>
         <ButtonLink
@@ -53,32 +54,12 @@ function InvoiceParticularForm() {
   );
 }
 
-const Row = styled.div`
-  display: flex;
-  margin-bottom: 8px;
-`;
-
-const Col = styled.div`
-  font-weight: ${p => (p.bold ? '700' : 'inherit')};
-  flex: ${p => p.flex};
-  height: 40px;
-  line-height: 40px;
-  text-align: ${p => p.align};
-  box-sizing: border-box;
-  padding: 0 8px;
-`;
 
 const ActionContainer = styled.div`
   height: 40px;
   /* text-align: right; */
   margin-top: 24px;
 `;
-
-Col.defaultProps = {
-  flex: '1',
-  bold: false,
-  align: 'initial',
-};
 
 
 export default InvoiceParticularForm;
