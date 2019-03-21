@@ -64,10 +64,10 @@ function InvoiceView() {
       </ActionBar>
       <Card>
         <FlexRow>
-          <FlexCol bold flex="0 0 100px">Date</FlexCol>
+          <FlexCol bold flex="0 0 120px">Date</FlexCol>
           <FlexCol align="center" bold flex="1 1 auto">Description</FlexCol>
-          <FlexCol bold flex="0 0 100px">Category</FlexCol>
-          <FlexCol bold flex="0 0 100px">Created by</FlexCol>
+          <FlexCol bold flex="0 0 160px">Category</FlexCol>
+          <FlexCol bold flex="0 0 160px">Created by</FlexCol>
           <FlexCol bold flex="0 0 100px">Account Type</FlexCol>
           <FlexCol align="right" bold flex="0 0 100px">Amount</FlexCol>
           <FlexCol align="center" bold flex="0 0 100px">&nbsp;</FlexCol>
@@ -75,28 +75,28 @@ function InvoiceView() {
 
         {/* goes into map */}
         <FlexRow>
-          <FlexCol flex="0 0 100px">23 Jan 2019</FlexCol>
+          <FlexCol flex="0 0 120px">23 Jan 2019</FlexCol>
           <FlexCol flex="1 1 auto">Some nice thing not ellipsis</FlexCol>
-          <FlexCol flex="0 0 100px">Government fees</FlexCol>
-          <FlexCol flex="0 0 100px">Arnav Kapadia</FlexCol>
+          <FlexCol flex="0 0 160px">Government fees</FlexCol>
+          <FlexCol flex="0 0 160px">Arnav Kapadia</FlexCol>
           <FlexCol flex="0 0 100px">Personal</FlexCol>
           <FlexCol align="right" flex="0 0 100px">$ 102.43</FlexCol>
           <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
         </FlexRow>
         <FlexRow>
-          <FlexCol flex="0 0 100px">23 Jan 2019</FlexCol>
+          <FlexCol flex="0 0 120px">23 Jan 2019</FlexCol>
           <FlexCol flex="1 1 auto">Some nice thing not ellipsis</FlexCol>
-          <FlexCol flex="0 0 100px">Government fees</FlexCol>
-          <FlexCol flex="0 0 100px">Arnav Kapadia</FlexCol>
+          <FlexCol flex="0 0 160px">Government fees</FlexCol>
+          <FlexCol flex="0 0 160px">Arnav Kapadia</FlexCol>
           <FlexCol flex="0 0 100px">Personal</FlexCol>
           <FlexCol align="right" flex="0 0 100px">$ 4.32</FlexCol>
           <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
         </FlexRow>
         <FlexRow>
-          <FlexCol flex="0 0 100px">23 Jan 2019</FlexCol>
+          <FlexCol flex="0 0 120px">23 Jan 2019</FlexCol>
           <FlexCol flex="1 1 auto">Some nice thing not ellipsis</FlexCol>
-          <FlexCol flex="0 0 100px">Government fees</FlexCol>
-          <FlexCol flex="0 0 100px">Arnav Kapadia</FlexCol>
+          <FlexCol flex="0 0 160px">Government fees</FlexCol>
+          <FlexCol flex="0 0 160px">Arnav Kapadia</FlexCol>
           <FlexCol flex="0 0 100px">Personal</FlexCol>
           <FlexCol align="right" flex="0 0 100px">$ 66.63</FlexCol>
           <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
