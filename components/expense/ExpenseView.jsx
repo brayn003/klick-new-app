@@ -1,65 +1,46 @@
-// import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import dayjs from 'dayjs';
 
 // import { getInvoices } from 'apis/invoice-apis';
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
-import DropDown from 'common-components/controls/DropDown';
 import { FlexRow, FlexCol } from 'common-components/table/FlexTable';
-// import useForm from 'hooks/useForm';
-
-const options = [{
-  title: 'All Status',
-  key: 'all_status',
-}, {
-  title: 'Open',
-  key: 'open',
-}, {
-  title: 'Closed',
-  key: 'closed',
-}, {
-  title: 'Cancelled',
-  key: 'cancelled',
-}];
+import useForm from 'hooks/useForm';
+import { getExpenses } from '../../apis/expense-apis';
 
 function InvoiceView() {
-  // const [expenses, set] = useState(null);
-  // const [loading, setLoading] = useState(false);
+  const [expenses, setExpenses] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // const { formField, getValues } = useForm();
-  // const values = getValues();
+  const { formField, getValues } = useForm();
+  const values = getValues();
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const { status, ...rest } = values;
-  //   getInvoices({ status: status === 'all_status' ? undefined : status, ...rest })
-  //     .then((res) => {
-  //       setLoading(false);
-  //       setInvoices(res);
-  //     })
-  //     .catch(() => {
-  //       setLoading(false);
-  //     });
-  // }, [values.serial, values.status]);
+  useEffect(() => {
+    setLoading(true);
+    const { status, ...rest } = values;
+    getExpenses({ status: status === 'all_status' ? undefined : status, ...rest })
+      .then((res) => {
+        setLoading(false);
+        setExpenses(res);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <Container>
       <ActionBar>
         <SearchContainer>
           <Input
-            // {...formField('serial')}
+            {...formField('title')}
             placeholder="Search expenses"
             block
           />
         </SearchContainer>
         <ActionContainer>
-          <Actions>
-            <DropDown
-              // {...formField('status')}
-              buttonProps={{ block: true }}
-              options={options}
-            />
-          </Actions>
+          <Actions />
         </ActionContainer>
       </ActionBar>
       <Card>
@@ -73,35 +54,17 @@ function InvoiceView() {
           <FlexCol align="center" bold flex="0 0 100px">&nbsp;</FlexCol>
         </FlexRow>
 
-        {/* goes into map */}
-        <FlexRow>
-          <FlexCol flex="0 0 120px">23 Jan 2019</FlexCol>
-          <FlexCol flex="1 1 auto">Some nice thing not ellipsis</FlexCol>
-          <FlexCol flex="0 0 160px">Government fees</FlexCol>
-          <FlexCol flex="0 0 160px">Arnav Kapadia</FlexCol>
-          <FlexCol flex="0 0 100px">Personal</FlexCol>
-          <FlexCol align="right" flex="0 0 100px">$ 102.43</FlexCol>
-          <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
-        </FlexRow>
-        <FlexRow>
-          <FlexCol flex="0 0 120px">23 Jan 2019</FlexCol>
-          <FlexCol flex="1 1 auto">Some nice thing not ellipsis</FlexCol>
-          <FlexCol flex="0 0 160px">Government fees</FlexCol>
-          <FlexCol flex="0 0 160px">Arnav Kapadia</FlexCol>
-          <FlexCol flex="0 0 100px">Personal</FlexCol>
-          <FlexCol align="right" flex="0 0 100px">$ 4.32</FlexCol>
-          <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
-        </FlexRow>
-        <FlexRow>
-          <FlexCol flex="0 0 120px">23 Jan 2019</FlexCol>
-          <FlexCol flex="1 1 auto">Some nice thing not ellipsis</FlexCol>
-          <FlexCol flex="0 0 160px">Government fees</FlexCol>
-          <FlexCol flex="0 0 160px">Arnav Kapadia</FlexCol>
-          <FlexCol flex="0 0 100px">Personal</FlexCol>
-          <FlexCol align="right" flex="0 0 100px">$ 66.63</FlexCol>
-          <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
-        </FlexRow>
-        {/* map ends here */}
+        {expenses && expenses.docs.map(expense => (
+          <FlexRow key={expense.id}>
+            <FlexCol flex="0 0 120px">{dayjs(expense.expenseDate).format('DD MMM YYYY')}</FlexCol>
+            <FlexCol flex="1 1 auto">{expense.description}</FlexCol>
+            <FlexCol flex="0 0 160px">{expense.category}</FlexCol>
+            <FlexCol flex="0 0 160px">{expense.createdBy}</FlexCol>
+            <FlexCol flex="0 0 100px">{expense.accountType}</FlexCol>
+            <FlexCol align="right" flex="0 0 100px">{expense.amountAfterTax}</FlexCol>
+            <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
+          </FlexRow>
+        ))}
 
       </Card>
     </Container>
