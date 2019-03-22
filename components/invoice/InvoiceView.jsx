@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Anime from 'react-anime';
 
 import { getInvoices } from 'apis/invoice-apis';
 import InvoiceCard from './InvoiceCard';
@@ -65,14 +66,17 @@ function InvoiceView() {
       </ActionBar>
       <CardContainer>
         {loading && 'Loading ...'}
-        {!loading && invoices && invoices.docs.map((invoice, index) => (
-          <InvoiceCard
-            animationDelay={`${index * 100}ms`}
-            key={invoice.id}
-            width={pdfWidth}
-            invoice={invoice}
-          />
-        ))}
+        {!loading && invoices && (
+        <Anime delay={(e, i) => i * 50} opacity={[0, 1]} translateY={[4, 0]}>
+          {invoices.docs.map(invoice => (
+            <InvoiceCard
+              key={invoice.id}
+              width={pdfWidth}
+              invoice={invoice}
+            />
+          ))}
+        </Anime>
+        )}
       </CardContainer>
     </Container>
   );

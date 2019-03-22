@@ -1,5 +1,5 @@
-
-import styled, { keyframes } from 'styled-components';
+import { forwardRef } from 'react';
+import styled from 'styled-components';
 import { Document as PdfDocument, Page as PdfPage } from 'react-pdf';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
@@ -20,9 +20,9 @@ const getStatusColor = (status) => {
 };
 
 function InvoiceCard(props) {
-  const { width, invoice, animationDelay } = props;
+  const { width, invoice, forwardedRef } = props;
   return (
-    <Card animationDelay={animationDelay} width={width}>
+    <Card width={width} ref={forwardedRef}>
       <StyledPdfDocument
         loading={null}
         file={invoice.fileUrl}
@@ -51,24 +51,16 @@ function InvoiceCard(props) {
 InvoiceCard.propTypes = {
   width: PropTypes.number,
   invoice: PropTypes.shape({}).isRequired,
-  animationDelay: PropTypes.string,
+  forwardedRef: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.func,
+  ]),
 };
 
 InvoiceCard.defaultProps = {
   width: 200,
-  animationDelay: '0',
+  forwardedRef: {},
 };
-
-const cardAnimation = keyframes`
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 4px, 0);
-  }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-`;
 
 const Card = styled.div`
   height: ${p => `${p.width * 1.4142}px`};
@@ -79,11 +71,6 @@ const Card = styled.div`
   display: inline-block;
   margin-bottom: 24px;
   cursor: pointer;
-  animation-name: ${cardAnimation};
-  animation-duration: 300ms;
-  animation-timing-function: linear;
-  animation-delay: ${p => p.animationDelay};
-  animation-fill-mode: forwards;
   opacity: 0;
   background-color: #FFF;
   transition: box-shadow 0.1s linear;
@@ -95,7 +82,6 @@ const Card = styled.div`
 
 Card.defaultProps = {
   width: 200,
-  animationDelay: 0,
 };
 
 const Info = styled.div`
@@ -146,4 +132,4 @@ const StatusTag = styled(Tag)`
   position: absolute;
 `;
 
-export default InvoiceCard;
+export default forwardRef((p, ref) => <InvoiceCard {...p} forwardedRef={ref} />);

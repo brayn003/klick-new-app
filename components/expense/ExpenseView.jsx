@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
+import Anime from 'react-anime';
 
 // import { getInvoices } from 'apis/invoice-apis';
 import Card from 'common-components/card/Card';
@@ -54,17 +55,21 @@ function InvoiceView() {
           <FlexCol align="center" bold flex="0 0 100px">&nbsp;</FlexCol>
         </FlexRow>
 
-        {expenses && expenses.docs.map(expense => (
-          <FlexRow key={expense.id}>
-            <FlexCol flex="0 0 120px">{dayjs(expense.expenseDate).format('DD MMM YYYY')}</FlexCol>
-            <FlexCol flex="1 1 auto">{expense.description}</FlexCol>
-            <FlexCol flex="0 0 160px">{expense.category}</FlexCol>
-            <FlexCol flex="0 0 160px">{expense.createdBy}</FlexCol>
-            <FlexCol flex="0 0 100px">{expense.accountType}</FlexCol>
-            <FlexCol align="right" flex="0 0 100px">{expense.amountAfterTax}</FlexCol>
-            <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
-          </FlexRow>
-        ))}
+        {expenses && (
+        <Anime delay={(e, i) => i * 50} opacity={[0, 1]} translateY={[4, 0]}>
+          {expenses.docs.map(expense => (
+            <FlexRow key={expense.id}>
+              <FlexCol flex="0 0 120px">{dayjs(expense.expenseDate).format('DD MMM YYYY')}</FlexCol>
+              <FlexCol flex="1 1 auto">{expense.description}</FlexCol>
+              <FlexCol flex="0 0 160px">{expense.category}</FlexCol>
+              <FlexCol flex="0 0 160px">{expense.createdBy}</FlexCol>
+              <FlexCol flex="0 0 100px">{expense.accountType}</FlexCol>
+              <FlexCol align="right" flex="0 0 100px">{expense.amountAfterTax}</FlexCol>
+              <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
+            </FlexRow>
+          ))}
+        </Anime>
+        )}
 
       </Card>
     </Container>
