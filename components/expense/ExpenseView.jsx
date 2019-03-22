@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import Anime from 'react-anime';
+import Router from 'next/router';
 
 // import { getInvoices } from 'apis/invoice-apis';
+import Button from 'common-components/button/Button';
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
 import { FlexRow, FlexCol } from 'common-components/table/FlexTable';
@@ -30,6 +32,12 @@ function InvoiceView() {
       });
   }, []);
 
+  useEffect(() => {
+    Router.events.on('routeChangeError', (err) => {
+      console.log(err);
+    });
+  }, []);
+
   return (
     <Container>
       <ActionBar>
@@ -41,7 +49,14 @@ function InvoiceView() {
           />
         </SearchContainer>
         <ActionContainer>
-          <Actions />
+          <Button
+            onClick={() => { Router.push({ pathname: '/expense/create' }); }}
+            style={{
+              marginLeft: 'auto',
+            }}
+          >
+          New Expense
+          </Button>
         </ActionContainer>
       </ActionBar>
       <Card>
@@ -54,7 +69,7 @@ function InvoiceView() {
           <FlexCol align="right" bold flex="0 0 100px">Amount</FlexCol>
           <FlexCol align="center" bold flex="0 0 100px">&nbsp;</FlexCol>
         </FlexRow>
-
+        {loading && <p>Loading...</p>}
         {expenses && (
         <Anime delay={(e, i) => i * 50} opacity={[0, 1]} translateY={[4, 0]}>
           {expenses.docs.map(expense => (
@@ -83,7 +98,6 @@ const ActionBar = styled.div`
   height: 40px;
   margin-bottom: 24px;
   display: flex;
-  justify-content: space-between;
 `;
 
 const SearchContainer = styled.div`
@@ -92,14 +106,7 @@ const SearchContainer = styled.div`
 
 const ActionContainer = styled.div`
   flex: 1;
-  text-align: left;
-  padding-left: 16px;
+  display: flex;
 `;
-
-const Actions = styled.div`
-  width: 120px;
-  display: inline-block;
-`;
-
 
 export default InvoiceView;

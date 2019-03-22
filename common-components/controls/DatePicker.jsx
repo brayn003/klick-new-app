@@ -3,7 +3,6 @@ import Flatpickr from 'flatpickr';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 
-import 'flatpickr/dist/flatpickr.min.css';
 import usePrevious from '../../hooks/usePrevious';
 import Input from './Input';
 

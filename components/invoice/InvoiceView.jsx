@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Anime from 'react-anime';
+import Router from 'next/router';
 
 import { getInvoices } from 'apis/invoice-apis';
 import InvoiceCard from './InvoiceCard';
 import Input from '../../common-components/controls/Input';
 import DropDown from '../../common-components/controls/DropDown';
 import useForm from '../../hooks/useForm';
+import Button from '../../common-components/button/Button';
 
 const pdfWidth = 200;
 
@@ -55,19 +57,32 @@ function InvoiceView() {
           />
         </SearchContainer>
         <ActionContainer>
-          <Actions>
-            <DropDown
-              {...formField('status')}
-              buttonProps={{ block: true }}
-              options={options}
-            />
-          </Actions>
+          <DropDown
+            {...formField('status')}
+            buttonProps={{
+              style: {
+                marginLeft: 24,
+                width: 140,
+                textAlign: 'center',
+
+              },
+            }}
+            options={options}
+          />
+          <Button
+            onClick={() => { Router.push('/invoice/create'); }}
+            style={{
+              marginLeft: 'auto',
+            }}
+          >
+          New Invoice
+          </Button>
         </ActionContainer>
       </ActionBar>
       <CardContainer>
         {loading && 'Loading ...'}
         {!loading && invoices && (
-        <Anime delay={(e, i) => i * 50} opacity={[0, 1]} translateY={[4, 0]}>
+        <Anime delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[4, 0]}>
           {invoices.docs.map(invoice => (
             <InvoiceCard
               key={invoice.id}
@@ -89,7 +104,6 @@ const ActionBar = styled.div`
   height: 40px;
   margin-bottom: 24px;
   display: flex;
-  justify-content: space-between;
 `;
 
 const CardContainer = styled.div`
@@ -104,13 +118,7 @@ const SearchContainer = styled.div`
 
 const ActionContainer = styled.div`
   flex: 1;
-  text-align: left;
-  padding-left: 16px;
-`;
-
-const Actions = styled.div`
-  width: 120px;
-  display: inline-block;
+  display: flex;
 `;
 
 export default InvoiceView;

@@ -3,9 +3,14 @@ import App, { Container } from 'next/app';
 import { Provider } from 'react-redux';
 import withReduxStore from 'helpers/with-redux-store';
 
-import CoreLayout from '../components/core/CoreLayout';
-import intercept from '../helpers/api-interceptor';
-import { checkToken } from '../helpers/auth-service';
+import 'flatpickr/dist/flatpickr.min.css';
+import { pdfjs } from 'react-pdf';
+
+import CoreLayout from 'components/core/CoreLayout';
+import intercept from 'helpers/api-interceptor';
+import { checkToken } from 'helpers/auth-service';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 intercept();
 

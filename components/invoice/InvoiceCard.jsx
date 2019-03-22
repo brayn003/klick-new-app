@@ -27,7 +27,7 @@ function InvoiceCard(props) {
         loading={null}
         file={invoice.fileUrl}
       >
-        <StyledPdfPage pageNumber={1} width={width} />
+        <StyledPdfPage loading={null} pageNumber={1} width={width} />
       </StyledPdfDocument>
       <Info>
         <Text bold>{invoice.serial || 'n/a'}</Text>

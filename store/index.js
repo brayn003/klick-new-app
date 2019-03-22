@@ -1,3 +1,9 @@
 import { combineReducers } from 'redux';
 
-export default combineReducers({});
+function main(state = {}) {
+  return state;
+}
+
+export default combineReducers({
+  main,
+});
