@@ -49,6 +49,7 @@ export const StyledInput = styled.input`
 
   &:hover {
     box-shadow: rgba(175, 175, 175, 0.5) 0px 2px 4px 0px;
+    background-color: #FFF;
   }
 
   &:focus, &:active {

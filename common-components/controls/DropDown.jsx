@@ -1,16 +1,14 @@
 
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { MdArrowDropDown } from 'react-icons/md';
 
-import ButtonLink from '../button/ButtonLink';
 import Popover from '../Popover';
 
 function DropDown(props) {
   const {
     options,
     onChange,
-    buttonProps,
+    children,
   } = props;
   const {
     value = options.length ? (options[0].value || options[0].key) : undefined,
@@ -37,16 +35,7 @@ function DropDown(props) {
         </PopoverContainer>
       )}
     >
-      <ButtonLink {...buttonProps}>
-        {valueOption.title}
-        <MdArrowDropDown style={{
-          fontSize: 24,
-          height: 40,
-          lineHeight: 40,
-          verticalAlign: 'top',
-        }}
-        />
-      </ButtonLink>
+      {children({ title: valueOption.title })}
     </Popover>
   );
 }
@@ -73,14 +62,14 @@ DropDown.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.shape({})),
-  buttonProps: PropTypes.shape({}),
+  children: PropTypes.func,
 };
 
 DropDown.defaultProps = {
   onChange: () => {},
   value: undefined,
   options: [],
-  buttonProps: {},
+  children: () => null,
 };
 
 export default DropDown;

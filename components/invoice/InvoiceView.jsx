@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Anime from 'react-anime';
 import Router from 'next/router';
+import { MdArrowDropDown } from 'react-icons/md';
 
 import { getInvoices } from 'apis/invoice-apis';
+import Input from 'common-components/controls/Input';
+import DropDown from 'common-components/controls/DropDown';
+import useForm from 'hooks/useForm';
+import Button from 'common-components/button/Button';
+import ButtonLink from 'common-components/button/ButtonLink';
 import InvoiceCard from './InvoiceCard';
-import Input from '../../common-components/controls/Input';
-import DropDown from '../../common-components/controls/DropDown';
-import useForm from '../../hooks/useForm';
-import Button from '../../common-components/button/Button';
 
 const pdfWidth = 200;
 
@@ -59,16 +61,27 @@ function InvoiceView() {
         <ActionContainer>
           <DropDown
             {...formField('status')}
-            buttonProps={{
-              style: {
-                marginLeft: 24,
-                width: 140,
-                textAlign: 'center',
-
-              },
-            }}
             options={options}
-          />
+          >
+            {({ title }) => (
+              <ButtonLink
+                style={{
+                  marginLeft: 24,
+                  width: 140,
+                  textAlign: 'center',
+                }}
+              >
+                {title}
+                <MdArrowDropDown style={{
+                  fontSize: 24,
+                  height: 40,
+                  lineHeight: 40,
+                  verticalAlign: 'top',
+                }}
+                />
+              </ButtonLink>
+            )}
+          </DropDown>
           <Button
             onClick={() => { Router.push('/invoice/create'); }}
             style={{
