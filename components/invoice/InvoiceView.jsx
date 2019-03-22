@@ -82,7 +82,7 @@ function InvoiceView() {
       <CardContainer>
         {loading && 'Loading ...'}
         {!loading && invoices && (
-        <Anime delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[4, 0]}>
+        <Anime delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
           {invoices.docs.map(invoice => (
             <InvoiceCard
               key={invoice.id}

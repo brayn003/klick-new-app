@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Anime from 'react-anime';
 
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
@@ -10,7 +11,7 @@ import TextArea from '../../../common-components/controls/Textarea';
 
 function InvoiceForm() {
   return (
-    <>
+    <Anime delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
       <Card title="Dates">
         <FormGroup width="50%">
           <InlineLabel>Date of expense</InlineLabel>
@@ -58,7 +59,7 @@ function InvoiceForm() {
           Submit
         </Button>
       </ActionCard>
-    </>
+    </Anime>
   );
 }
 

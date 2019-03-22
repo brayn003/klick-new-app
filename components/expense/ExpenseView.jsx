@@ -32,12 +32,6 @@ function InvoiceView() {
       });
   }, []);
 
-  useEffect(() => {
-    Router.events.on('routeChangeError', (err) => {
-      console.log(err);
-    });
-  }, []);
-
   return (
     <Container>
       <ActionBar>

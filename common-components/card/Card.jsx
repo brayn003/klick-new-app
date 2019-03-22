@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import {
+  string, node, shape, oneOfType, func,
+} from 'prop-types';
 
 function Card(props) {
-  const { title, children, ...rest } = props;
+  const {
+    title, children, forwardedRef, ...rest
+  } = props;
   return (
-    <Container {...rest}>
+    <Container ref={forwardedRef} {...rest}>
       {title && <Title>{title}</Title>}
       {children}
     </Container>
@@ -13,13 +17,15 @@ function Card(props) {
 }
 
 Card.propTypes = {
-  title: PropTypes.string,
-  children: PropTypes.node,
+  title: string,
+  children: node,
+  forwardedRef: oneOfType([shape({}), func]),
 };
 
 Card.defaultProps = {
   title: null,
   children: null,
+  forwardedRef: {},
 };
 
 const Container = styled.div`
@@ -47,4 +53,4 @@ const Title = styled.p`
   margin-bottom: 24px;
 `;
 
-export default Card;
+export default forwardRef((p, ref) => <Card {...p} forwardedRef={ref} />);
