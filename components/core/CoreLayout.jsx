@@ -56,10 +56,10 @@ function CoreLayout(props) {
                         borderRadius: 24,
                       }}
                     >
-                      <Avatar />
                       <AvatarText>
                         Rudraprasad Das
                       </AvatarText>
+                      <Avatar />
                     </ButtonLink>
                   )}
                 </DropDown>
