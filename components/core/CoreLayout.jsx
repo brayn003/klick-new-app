@@ -3,10 +3,8 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 
-import DropDown from 'common-components/controls/DropDown';
-import ButtonLink from 'common-components/button/ButtonLink';
-
 import CoreNav from './CoreNav';
+import CoreTopBar from './CoreTopBar';
 
 function CoreLayout(props) {
   const {
@@ -41,31 +39,7 @@ function CoreLayout(props) {
           </Sidebar>
         )}
         <Content>
-          {isTopbarShown && (
-            <TopBar>
-              <Title>{title}</Title>
-              <ActionsContainer>
-                <DropDown
-                  options={[]}
-                >
-                  {() => (
-                    <ButtonLink
-                      style={{
-                        padding: 0,
-                        height: 48,
-                        borderRadius: 24,
-                      }}
-                    >
-                      <AvatarText>
-                        Rudraprasad Das
-                      </AvatarText>
-                      <Avatar />
-                    </ButtonLink>
-                  )}
-                </DropDown>
-              </ActionsContainer>
-            </TopBar>
-          )}
+          {isTopbarShown && <CoreTopBar title={title} />}
           <CoreBody noPadding={noPadding}>
             {children}
           </CoreBody>
@@ -106,44 +80,6 @@ const Sidebar = styled.aside`
   width: 240px;
 `;
 
-const TopBar = styled.div`
-  height: 80px;
-  line-height: 32px;
-  padding: 32px 24px 16px 24px;
-  box-sizing: border-box;
-  display: flex;
-`;
-
-const ActionsContainer = styled.div`
-  flex: 1;
-  text-align: right;
-  margin-top: -4px;
-  margin-bottom: -4px;
-`;
-
-const Title = styled.p`
-  font-size: 1.6em;
-  margin: 0;
-  flex: 0 0 260px;
-`;
-
-const Avatar = styled.div`
-  width: 48px;
-  height: 48px;
-  background-color: rgba(0, 0, 0, 0.1);
-  display: inline-block;
-  border-radius: 24px;
-  vertical-align: middle;
-`;
-
-const AvatarText = styled.p`
-  margin: 0;
-  line-height: 48px;
-  padding: 0 24px;
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 1em;
-`;
 
 const CoreBody = styled.div`
   padding: ${p => (p.noPadding ? '0' : '16px 24px')};

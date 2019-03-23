@@ -7,8 +7,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import { pdfjs } from 'react-pdf';
 import CoreLayout from 'components/core/CoreLayout';
 import intercept from 'helpers/api-interceptor';
-import { checkToken } from 'helpers/auth-service';
-import { getMeAction } from 'store/user/me';
+import bootstrap from '../helpers/app-bootstrap';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -18,9 +17,7 @@ class Kappa extends App {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
 
-    const token = await checkToken(ctx);
-    const { dispatch } = ctx.reduxStore;
-    await dispatch(getMeAction(token));
+    await bootstrap(ctx);
 
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
