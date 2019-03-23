@@ -14,20 +14,22 @@ export async function checkToken(ctx) {
         ctx.res.redirect('/');
       }
     }
-  } else {
-    const md = await import('next/router');
-    const Router = md.default;
-    const sessToken = cookie.get('sessToken');
-    if (!sessToken && pathname !== '/login') {
-      Router.push('/login');
-    }
-    if (sessToken && pathname === '/login') {
-      const res = await verifyToken({ token: sessToken });
-      if (res.verified) {
-        Router.push('/');
-      }
+    return sessToken;
+  }
+
+  const md = await import('next/router');
+  const Router = md.default;
+  const sessToken = cookie.get('sessToken');
+  if (!sessToken && pathname !== '/login') {
+    Router.push('/login');
+  }
+  if (sessToken && pathname === '/login') {
+    const res = await verifyToken({ token: sessToken });
+    if (res.verified) {
+      Router.push('/');
     }
   }
+  return sessToken;
 }
 
 export async function setToken(sessToken, redirect = false) {
