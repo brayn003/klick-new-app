@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { shape } from 'prop-types';
 import styled from 'styled-components';
 import Anime from 'react-anime';
 import Router from 'next/router';
 import { MdArrowDropDown } from 'react-icons/md';
+
+import { connect } from 'react-redux';
 
 import { getInvoices } from 'apis/invoice-apis';
 import Input from 'common-components/controls/Input';
@@ -28,7 +31,8 @@ const options = [{
   key: 'cancelled',
 }];
 
-function InvoiceView() {
+function InvoiceView(props) {
+  const { activeOrg } = props;
   const [invoices, setInvoices] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -38,7 +42,11 @@ function InvoiceView() {
   useEffect(() => {
     setLoading(true);
     const { status, ...rest } = values;
-    getInvoices({ status: status === 'all_status' ? undefined : status, ...rest })
+    getInvoices({
+      organization: activeOrg && activeOrg.id,
+      status: status === 'all_status' ? undefined : status,
+      ...rest,
+    })
       .then((res) => {
         setLoading(false);
         setInvoices(res);
@@ -110,6 +118,14 @@ function InvoiceView() {
   );
 }
 
+InvoiceView.propTypes = {
+  activeOrg: shape({}),
+};
+
+InvoiceView.defaultProps = {
+  activeOrg: {},
+};
+
 const Container = styled.div`
 `;
 
@@ -134,4 +150,11 @@ const ActionContainer = styled.div`
   display: flex;
 `;
 
-export default InvoiceView;
+const mapStateToProps = (state) => {
+  const activeOrg = state.organization.active.value;
+  return {
+    activeOrg,
+  };
+};
+
+export default connect(mapStateToProps, null)(InvoiceView);
