@@ -6,6 +6,15 @@ function Page() {
   );
 }
 
-Page.getInitialProps = () => ({ title: 'Select Organization', layout: { sidebar: { show: false } } });
+Page.getInitialProps = async (ctx) => {
+  const { getState } = ctx.reduxStore;
+  const state = getState();
+  return {
+    title: 'Select Organization',
+    layout: {
+      sidebar: { show: !!state.organization.active },
+    },
+  };
+};
 
 export default Page;

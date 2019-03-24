@@ -1,13 +1,19 @@
 
 import { checkToken } from 'helpers/auth-service';
 import { getMeAction } from 'store/user/me';
+import { setActiveOrganizationAction } from '../store/organization/active';
 
 export async function checkOrganization(ctx) {
-  const { reduxStore, res, pathname } = ctx;
-  const { getState } = reduxStore;
-  const store = await getState();
+  const {
+    req, res, pathname, reduxStore,
+  } = ctx;
+  const { dispatch } = reduxStore;
   if (res) {
-    if (!store.organization.active && pathname !== '/organization') {
+    const { activeOrg } = req.cookies;
+    if (activeOrg) {
+      dispatch(setActiveOrganizationAction(activeOrg));
+    }
+    if (!activeOrg && pathname !== '/organization') {
       res.redirect('/organization');
     }
   }
