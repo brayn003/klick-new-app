@@ -39,7 +39,7 @@ function CoreLayout(props) {
           </Sidebar>
         )}
         <Content>
-          {isTopbarShown && <CoreTopBar title={title} />}
+          {isTopbarShown && <CoreTopBar pathname={pathname} title={title} />}
           <CoreBody noPadding={noPadding}>
             {children}
           </CoreBody>

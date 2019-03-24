@@ -7,8 +7,16 @@ export function getOrganizations(params) {
   return axios.get(`${base}/organizations`, { params, includeAuth });
 }
 
-export function getOrganization(id, params) {
-  return axios.get(`${base}/organization/${id}`, { params, includeAuth });
+export function getOrganization(id, params, token) {
+  const headers = {};
+  if (token) {
+    headers.Authorization = `Token ${token}`;
+  }
+  return axios.get(`${base}/organization/${id}`, {
+    headers,
+    params,
+    includeAuth,
+  });
 }
 
 export default { getOrganizations };

@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { getOrganizations } from 'apis/organization-apis';
-import { setActiveOrganizationAction } from 'store/organization/active';
+import { setActiveOrgAction } from 'store/organization/active';
 
 function OrganizationSelectView(props) {
   const { meId } = props;
@@ -151,7 +151,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  setActiveOrganization: setActiveOrganizationAction,
+  setActiveOrganization: setActiveOrgAction,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrganizationSelectView);

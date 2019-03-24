@@ -1,5 +1,6 @@
 import { string, shape } from 'prop-types';
 import styled from 'styled-components';
+import Router from 'next/router';
 
 import { connect } from 'react-redux';
 
@@ -7,27 +8,39 @@ import DropDown from 'common-components/controls/DropDown';
 import ButtonLink from 'common-components/button/ButtonLink';
 
 function CoreTopBar(props) {
-  const { title, me } = props;
+  const {
+    title, me, activeOrganization, pathname,
+  } = props;
+  const options = [{
+    title: 'Select Organization',
+    key: '/organization',
+  }];
+
+  const onChangeAvatarMenu = (key) => {
+    Router.push(key);
+  };
+
   return (
     <TopBar>
       <Title>{title}</Title>
       <ActionsContainer>
         <DropDown
-          options={[]}
+          value={pathname}
+          options={options}
+          onChange={onChangeAvatarMenu}
         >
           {() => (
-            <ButtonLink
-              style={{
-                padding: 0,
-                height: 48,
-                borderRadius: 24,
-              }}
-            >
-              <AvatarText>
-                {me.value && me.value.name}
-              </AvatarText>
+            <AvatarButton>
+              <AvatarTextContainer>
+                <AvatarText small>
+                  {me.value && me.value.name}
+                </AvatarText>
+                <AvatarText>
+                  {activeOrganization && activeOrganization.value && activeOrganization.value.name}
+                </AvatarText>
+              </AvatarTextContainer>
               <Avatar />
-            </ButtonLink>
+            </AvatarButton>
           )}
         </DropDown>
       </ActionsContainer>
@@ -38,11 +51,15 @@ function CoreTopBar(props) {
 CoreTopBar.propTypes = {
   title: string,
   me: shape({}),
+  activeOrganization: shape({}),
+  pathname: string,
 };
 
 CoreTopBar.defaultProps = {
   title: null,
   me: {},
+  activeOrganization: {},
+  pathname: null,
 };
 
 const TopBar = styled.div`
@@ -55,9 +72,9 @@ const TopBar = styled.div`
 
 const ActionsContainer = styled.div`
   flex: 1;
-  text-align: right;
   margin-top: -4px;
   margin-bottom: -4px;
+  display: flex;
 `;
 
 const Title = styled.p`
@@ -77,17 +94,40 @@ const Avatar = styled.div`
 
 const AvatarText = styled.p`
   margin: 0;
-  line-height: 48px;
   padding: 0 24px;
   display: inline-block;
   vertical-align: middle;
-  font-size: 1em;
+  text-align: right;
+  line-height: 100%;
+  line-height: 20px;
+  font-size: ${p => (p.small ? '0.8em' : '1em')};
+  font-weight: ${p => (p.bold ? 700 : 400)};
+`;
+
+AvatarText.defaultProps = {
+  small: false,
+  bold: false,
+};
+
+const AvatarButton = styled(ButtonLink)`
+  padding: 0;
+  height: 48px;
+  border-radius: 24px;
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+`;
+
+export const AvatarTextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const mapStateToProps = (state) => {
-  const { me } = state.user;
+  const { user: { me }, organization } = state;
   return {
     me,
+    activeOrganization: organization.active,
   };
 };
 

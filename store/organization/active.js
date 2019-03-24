@@ -37,11 +37,14 @@ export default function (state = intialState, action) {
   }
 }
 
-export const setActiveOrganizationAction = organizationId => async (dispatch) => {
+export const setActiveOrgAction = organizationId => async (dispatch, getStore) => {
   dispatch({ type: ORGANIZATION_SET_ACTIVE_REQUESTED, payload: {} });
   cookies.set('activeOrg', organizationId);
+  const state = await getStore();
+  const { token } = state.auth;
   try {
-    const organization = await getOrganization();
+    const organization = await getOrganization(organizationId, undefined, token);
+    console.log(organization);
     dispatch({
       type: ORGANIZATION_SET_ACTIVE_SUCCEEDED,
       payload: { organization },
