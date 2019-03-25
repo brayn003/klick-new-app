@@ -19,4 +19,8 @@ export function getOrganization(id, params, token) {
   });
 }
 
+export function createOrganization(body) {
+  return axios.post(`${base}/organization`, body, { includeAuth });
+}
+
 export default { getOrganizations };

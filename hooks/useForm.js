@@ -13,6 +13,31 @@ const useForm = ({
 } = {}) => {
   const [formValue, setFormValue] = useState({});
 
+  const setValue = (fieldName, value) => {
+    let field = formValue[fieldName];
+    if (!field) {
+      field = {
+        name: fieldName,
+        value,
+        pristine: true,
+      };
+    }
+
+    const newFormValue = {
+      ...formValue,
+      [fieldName]: {
+        ...field,
+        value,
+        pristine: false,
+      },
+    };
+
+    const vals = {};
+    forEach(newFormValue, (f, key) => set(vals, key, f.value));
+    onChange(vals);
+    setFormValue(newFormValue);
+  };
+
   const formField = (fieldName, options = {}) => {
     if (!fieldName) {
       throw new Error('Field name is required');
@@ -24,13 +49,9 @@ const useForm = ({
       handlerPropName = 'onChange',
     } = options;
 
-    let field = formValue[fieldName];
+    const field = formValue[fieldName];
     if (!field) {
-      field = {
-        name: fieldName,
-        value: initialValue,
-        pristine: true,
-      };
+      setValue(fieldName, initialValue);
     }
 
     if (!isEqual(field, formValue[fieldName])) {
@@ -38,22 +59,10 @@ const useForm = ({
     }
 
     const onChangeField = (value) => {
-      const newFormValue = {
-        ...formValue,
-        [fieldName]: {
-          ...field,
-          value,
-          pristine: false,
-        },
-      };
-
-      const vals = {};
-      forEach(newFormValue, (f, key) => set(vals, key, f.value));
-      onChange(vals);
-      setFormValue(newFormValue);
+      setValue(fieldName, value);
     };
 
-    const { value } = field;
+    const { value } = field || {};
     return {
       [valuePropName]: value,
       [handlerPropName]: onChangeField,
@@ -66,10 +75,12 @@ const useForm = ({
     return vals;
   };
 
+
   return {
     formField,
     getValues,
     formValue,
+    setValue,
   };
 };
 

@@ -1,24 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { string } from 'prop-types';
 
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
 import Label from 'common-components/Label';
 import Button from 'common-components/button/Button';
 import DatePicker from 'common-components/controls/DatePicker';
+import SelectOrganization from 'common-components/smart-selects/SelectOrganization';
+import useForm from 'hooks/useForm';
+import SelectBranch from 'common-components/smart-selects/SelectBranch';
+// import { createInvoice } from 'apis/invoice-apis';
 
 import InvoiceParticularForm from './InvoiceParticularForm';
-import useForm from '../../../hooks/useForm';
-import { createInvoice } from '../../../apis/invoice-apis';
+import Modal from '../../../common-components/Modal';
+import OrganizationClientForm from '../../organization/OrganizationClientForm';
 
-function InvoiceForm() {
-  const { formField, getValues } = useForm();
+function InvoiceForm(props) {
+  const { activeOrgId } = props;
+  const { formField, getValues, setValue } = useForm();
+  const [showAddOrg, setShowAddOrg] = useState(null);
 
   const onClickSubmit = async () => {
     const body = getValues();
-    const res = await createInvoice(body);
-    console.log(res);
+    console.log(body);
+    // const res = await createInvoice(body);
   };
+
+  const onClickNewOrganization = (orgName) => { setShowAddOrg(orgName); };
+  const onCloseAddOrg = () => { setShowAddOrg(null); };
+  const onCompleteClient = ({ organization }) => {
+    setShowAddOrg(null);
+    setValue('clientBranch', {
+      label: organization.name,
+      value: organization.id,
+    });
+  };
+
   return (
     <>
       <Card title="Invoice Details">
@@ -42,18 +61,21 @@ function InvoiceForm() {
       <Card title="Client Details">
         <FormGroup width="50%">
           <InlineLabel>Branch</InlineLabel>
-          <Input
+          <SelectBranch
             {...formField('organizationBranch')}
+            organizationId={activeOrgId}
             block
             placeholder="Search your client list"
           />
         </FormGroup>
         <FormGroup width="50%">
           <InlineLabel>Client</InlineLabel>
-          <Input
+          <SelectOrganization
             {...formField('clientBranch')}
             block
+            filter={[activeOrgId]}
             placeholder="Search your client list"
+            onCreateOption={onClickNewOrganization}
           />
         </FormGroup>
       </Card>
@@ -91,9 +113,28 @@ function InvoiceForm() {
           Submit
         </Button>
       </ActionCard>
+      <Modal
+        show={showAddOrg}
+        width={480}
+        title="Create Organization"
+        onClose={onCloseAddOrg}
+      >
+        <OrganizationClientForm
+          value={{ name: showAddOrg }}
+          onComplete={onCompleteClient}
+        />
+      </Modal>
     </>
   );
 }
+
+InvoiceForm.propTypes = {
+  activeOrgId: string,
+};
+
+InvoiceForm.defaultProps = {
+  activeOrgId: null,
+};
 
 const FormGroup = styled.div`
   width: ${p => p.width};
@@ -120,4 +161,11 @@ const ActionCard = styled.div`
   text-align: right;
 `;
 
-export default InvoiceForm;
+const mapStateToProps = (state) => {
+  const { organization } = state;
+  return {
+    activeOrgId: (organization.active.value || {}).id,
+  };
+};
+
+export default connect(mapStateToProps, null)(InvoiceForm);

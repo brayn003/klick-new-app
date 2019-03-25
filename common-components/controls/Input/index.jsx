@@ -52,7 +52,6 @@ export const StyledInput = styled.input`
     width: 300px;
   `)}
   height: 40px;
-  border: 0;
   background-color: transparent;
   border: 1px solid #CCC;
   padding: 6px 16px;
