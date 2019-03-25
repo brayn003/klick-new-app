@@ -1,4 +1,4 @@
-import cookie from 'js-cookie';
+import cookies from 'js-cookie';
 import { verifyToken } from '../apis/auth-apis';
 
 export async function checkToken(ctx) {
@@ -19,7 +19,7 @@ export async function checkToken(ctx) {
 
   const md = await import('next/router');
   const Router = md.default;
-  const sessToken = cookie.get('sessToken');
+  const sessToken = cookies.get('sessToken');
   if (!sessToken && pathname !== '/login') {
     Router.push('/login');
   }
@@ -35,9 +35,13 @@ export async function checkToken(ctx) {
 export async function setToken(sessToken, redirect = false) {
   const md = await import('next/router');
   const Router = md.default;
-  cookie.set('sessToken', sessToken);
+  cookies.set('sessToken', sessToken);
   if (redirect) {
-    Router.push('/');
+    if (cookies.get('activeOrg')) {
+      Router.push('/');
+    } else {
+      Router.push('/organization');
+    }
   }
 }
 

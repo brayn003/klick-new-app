@@ -1,31 +1,46 @@
 import { forwardRef } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import {
+  func, bool, shape, oneOfType, string, number,
+} from 'prop-types';
+import isNil from 'lodash/isNil';
 
 function Input(props) {
   const {
-    onChange, block, forwardedRef, ...rest
+    onChange, block, forwardedRef, type, ...rest
   } = props;
   return (
     <StyledInput
       {...rest}
+      type={type}
       ref={forwardedRef}
       block={block}
-      onChange={(e) => { onChange(e.target.value); }}
+      onChange={(e) => {
+        const val = e.target.value;
+        if (type === 'number') {
+          onChange(isNil(val) ? '' : parseFloat(val));
+        } else {
+          onChange(val);
+        }
+      }}
     />
   );
 }
 
 Input.propTypes = {
-  onChange: PropTypes.func,
-  block: PropTypes.bool,
-  forwardedRef: PropTypes.shape({}),
+  onChange: func,
+  block: bool,
+  forwardedRef: shape({}),
+  value: oneOfType([string, number]),
+  type: string,
 };
 
 Input.defaultProps = {
   onChange: () => {},
   block: false,
   forwardedRef: null,
+  value: '',
+  type: 'text',
 };
 
 export const StyledInput = styled.input`

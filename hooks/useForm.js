@@ -1,70 +1,74 @@
 import { useState } from 'react';
 import isEqual from 'lodash/isEqual';
 // import filter from 'lodash/filter';
-import mapValues from 'lodash/mapValues';
+// import mapValues from 'lodash/mapValues';
 // import validate from '../../validations';
 
-const useForm = () => {
+// import get from 'lodash/get';
+import forEach from 'lodash/forEach';
+import set from 'lodash/set';
+
+const useForm = ({
+  onChange = () => {},
+} = {}) => {
   const [formValue, setFormValue] = useState({});
 
-  return {
-    formField(fieldName, options = {}) {
-      if (!fieldName) {
-        throw new Error('Field name is required');
-      }
+  const formField = (fieldName, options = {}) => {
+    if (!fieldName) {
+      throw new Error('Field name is required');
+    }
 
-      const {
-        initialValue = undefined,
-        valuePropName = 'value',
-        handlerPropName = 'onChange',
-        // rules,
-      } = options;
+    const {
+      initialValue = undefined,
+      valuePropName = 'value',
+      handlerPropName = 'onChange',
+    } = options;
 
-      let field = formValue[fieldName];
-      if (!field) {
-        field = {
-          name: fieldName,
-          value: initialValue,
+    let field = formValue[fieldName];
+    if (!field) {
+      field = {
+        name: fieldName,
+        value: initialValue,
+        pristine: true,
+      };
+    }
+
+    if (!isEqual(field, formValue[fieldName])) {
+      setFormValue({ ...formValue, [fieldName]: field });
+    }
+
+    const onChangeField = (value) => {
+      const newFormValue = {
+        ...formValue,
+        [fieldName]: {
+          ...field,
+          value,
           pristine: false,
-          isError: false,
-          messages: [],
-        };
-      }
-
-      if (!isEqual(field, formValue[fieldName])) {
-        setFormValue({ ...formValue, [fieldName]: field });
-      }
-
-      const onChange = (value) => {
-        // const isError = validate(fieldName, value, rules);
-        setFormValue({
-          ...formValue,
-          [fieldName]: {
-            ...field,
-            value,
-            pristine: true,
-            // isError: !isError.isValid,
-            // messages: isError.messages,
-          },
-        });
+        },
       };
 
-      const { value } = field;
+      const vals = {};
+      forEach(newFormValue, (f, key) => set(vals, key, f.value));
+      onChange(vals);
+      setFormValue(newFormValue);
+    };
 
-      return {
-        [valuePropName]: value,
-        [handlerPropName]: onChange,
-      };
-    },
+    const { value } = field;
+    return {
+      [valuePropName]: value,
+      [handlerPropName]: onChangeField,
+    };
+  };
 
-    getValues() {
-      return mapValues(formValue, v => v.value);
-    },
+  const getValues = () => {
+    const vals = {};
+    forEach(formValue, (field, key) => set(vals, key, field.value));
+    return vals;
+  };
 
-    // getErrors() {
-    //   return filter(formValue, v => !v.isError);
-    // },
-
+  return {
+    formField,
+    getValues,
     formValue,
   };
 };

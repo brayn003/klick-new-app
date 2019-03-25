@@ -147,7 +147,7 @@ Card.defaultProps = {
 
 const mapStateToProps = (state) => {
   const { me } = state.user;
-  return { meId: me.value.id };
+  return { meId: (me.value || {}).id };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({

@@ -11,11 +11,10 @@ export async function checkOrganization(ctx) {
   const { dispatch } = reduxStore;
   if (res) {
     const { activeOrg } = req.cookies;
-    console.log('activeOrg', activeOrg);
     if (activeOrg) {
       await dispatch(setActiveOrgAction(activeOrg));
     }
-    if (!activeOrg && pathname !== '/organization') {
+    if (!activeOrg && pathname !== '/login' && pathname !== '/organization') {
       res.redirect('/organization');
     }
   }
@@ -24,9 +23,9 @@ export async function checkOrganization(ctx) {
 export default async function bootstrap(ctx) {
   const token = await checkToken(ctx);
   const { dispatch } = ctx.reduxStore;
-  await dispatch(setTokenAction(token));
-  if (ctx.req) {
-    await dispatch(getMeAction(token));
+  if (token) {
+    await dispatch(setTokenAction(token));
   }
+  await dispatch(getMeAction(token));
   await checkOrganization(ctx);
 }

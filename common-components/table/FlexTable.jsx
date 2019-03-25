@@ -15,7 +15,7 @@ export const FlexCol = styled.div`
   padding: 0 8px;
 
   white-space: nowrap; 
-  overflow: hidden;
+  /* overflow-x: hidden; */
   text-overflow: ellipsis;
 `;
 

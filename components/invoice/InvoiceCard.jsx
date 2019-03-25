@@ -21,27 +21,36 @@ const getStatusColor = (status) => {
 
 function InvoiceCard(props) {
   const { width, invoice, forwardedRef } = props;
+
+  const {
+    fileUrl,
+  } = invoice;
+  const serial = invoice.serial || 'n/a';
+  const raisedDate = dayjs(invoice.raisedDate).format('DD MMM YYYY');
+  const roundedTotal = invoice.roundedTotal ? invoice.roundedTotal.toLocaleString('en-IN') : '-';
+  const roundedAmountReceivable = invoice.roundedAmountReceivable.toLocaleString('en-IN');
+  const statusColor = getStatusColor(invoice.status);
+  const status = startCase(invoice.status);
+
   return (
     <Card width={width} ref={forwardedRef}>
       <StyledPdfDocument
         loading={null}
-        file={invoice.fileUrl}
+        file={fileUrl}
       >
         <StyledPdfPage loading={null} pageNumber={1} width={width} />
       </StyledPdfDocument>
       <Info>
-        <Text bold>{invoice.serial || 'n/a'}</Text>
-        <Text gray>{dayjs(invoice.raisedDate).format('DD MMM YYYY')}</Text>
+        <Text bold>{serial}</Text>
+        <Text gray>{raisedDate}</Text>
         <Flex>
           <Text noMargin bold style={{ fontSize: '1em' }}>
-            ₹ {invoice.roundedGrandTotal.toLocaleString('en-IN')}
+            ₹ {roundedTotal}
           </Text>
-          <Text gray noMargin>Left: ₹ {invoice.roundedAmountReceivable.toLocaleString('en-IN')}</Text>
+          <Text gray noMargin>Left: ₹ {roundedAmountReceivable}</Text>
         </Flex>
-        <StatusTag
-          color={getStatusColor(invoice.status)}
-        >
-          {startCase(invoice.status)}
+        <StatusTag color={statusColor}>
+          {status}
         </StatusTag>
       </Info>
     </Card>
