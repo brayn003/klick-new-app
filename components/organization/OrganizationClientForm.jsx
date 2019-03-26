@@ -8,8 +8,8 @@ import Label from 'common-components/Label';
 import Button from 'common-components/button/Button';
 import ButtonLink from 'common-components/button/ButtonLink';
 import useForm from 'hooks/useForm';
-import { createOrganization } from '../../apis/organization-apis';
-import { createBranch } from '../../apis/branch-apis';
+import { createOrganization } from 'apis/organization-apis';
+import { updateBranch } from 'apis/branch-apis';
 
 function InvoiceForm(props) {
   const { value, onComplete } = props;
@@ -21,12 +21,10 @@ function InvoiceForm(props) {
       name,
       phone,
     });
-    const branch = await createBranch({
-      name: 'DEFAULT',
-      organization: organization.id,
-      gstNumber,
-    });
-    onComplete({ organization, branch });
+    if (gstNumber) {
+      await updateBranch(organization.defaultBranch.id, { gstNumber });
+    }
+    onComplete({ organization });
   };
 
   const onClickSubmit = () => { add(); };

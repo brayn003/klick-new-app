@@ -44,7 +44,6 @@ export const setActiveOrgAction = organizationId => async (dispatch, getStore) =
   const { token } = state.auth;
   try {
     const organization = await getOrganization(organizationId, undefined, token);
-    console.log(organization);
     dispatch({
       type: ORGANIZATION_SET_ACTIVE_SUCCEEDED,
       payload: { organization },

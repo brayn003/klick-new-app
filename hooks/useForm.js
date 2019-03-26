@@ -58,7 +58,7 @@ const useForm = (
   };
 
   const setValue = (fieldName, value) => {
-    setFieldProperties(fieldName, value);
+    setFieldProperties(fieldName, { value });
   };
 
   const formField = (fieldName, options = {}) => {

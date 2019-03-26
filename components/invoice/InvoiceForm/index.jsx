@@ -12,14 +12,14 @@ import SelectOrganization from 'common-components/smart-selects/SelectOrganizati
 import useForm from 'hooks/useForm';
 import SelectBranch from 'common-components/smart-selects/SelectBranch';
 import Select from 'common-components/controls/select/Select';
+import Modal from 'common-components/Modal';
+import UploadS3 from 'common-components/file/UploadS3';
+import Textarea from 'common-components/controls/Textarea';
+import SelectTaxType from 'common-components/smart-selects/SelectTaxType';
 // import { createInvoice } from 'apis/invoice-apis';
 
 import InvoiceParticularForm from './InvoiceParticularForm';
-import Modal from '../../../common-components/Modal';
 import OrganizationClientForm from '../../organization/OrganizationClientForm';
-import UploadS3 from '../../../common-components/file/UploadS3';
-import Textarea from '../../../common-components/controls/Textarea';
-import SelectTaxType from '../../../common-components/smart-selects/SelectTaxType';
 
 function InvoiceForm(props) {
   const { activeOrg } = props;
@@ -36,7 +36,7 @@ function InvoiceForm(props) {
   const onCloseAddOrg = () => { setShowAddOrg(null); };
   const onCompleteClient = ({ organization }) => {
     setShowAddOrg(null);
-    setValue('clientBranch', {
+    setValue('client', {
       label: organization.name,
       value: organization.id,
     });
@@ -74,7 +74,7 @@ function InvoiceForm(props) {
         <FormGroup width="50%">
           <InlineLabel>Client</InlineLabel>
           <SelectOrganization
-            {...formField('clientBranch')}
+            {...formField('client')}
             block
             filter={[activeOrg.id]}
             placeholder="Search your client list"

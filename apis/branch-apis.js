@@ -11,4 +11,6 @@ export function createBranch(body) {
   return axios.post(`${base}/branch`, body, { includeAuth });
 }
 
-export default { getBranches };
+export function updateBranch(id, body) {
+  return axios.patch(`${base}/branch/${id}`, body, { includeAuth });
+}

@@ -9,7 +9,6 @@ function Page() {
 Page.getInitialProps = async (ctx) => {
   const { getState } = ctx.reduxStore;
   const state = getState();
-  console.log(state);
   return {
     title: 'Select Organization',
     layout: {

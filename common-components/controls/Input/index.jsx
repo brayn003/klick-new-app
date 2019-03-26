@@ -19,7 +19,6 @@ function Input(props) {
       value={value}
       onChange={(e) => {
         const val = e.target.value;
-        console.log(parseFloat(val));
         if (type === 'number') {
           onChange(isNil(val) ? '' : parseFloat(val));
         } else {
