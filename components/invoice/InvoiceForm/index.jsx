@@ -16,6 +16,7 @@ import SelectBranch from 'common-components/smart-selects/SelectBranch';
 import InvoiceParticularForm from './InvoiceParticularForm';
 import Modal from '../../../common-components/Modal';
 import OrganizationClientForm from '../../organization/OrganizationClientForm';
+import UploadS3 from '../../../common-components/file/UploadS3';
 
 function InvoiceForm(props) {
   const { activeOrgId } = props;
@@ -103,6 +104,15 @@ function InvoiceForm(props) {
             type="number"
             block
             placeholder="0.00"
+          />
+        </FormGroup>
+      </Card>
+      <Card title="Extras">
+        <FormGroup width="50%">
+          <InlineLabel>Attachments</InlineLabel>
+          <UploadS3
+            {...formField('attachments')}
+            multiple
           />
         </FormGroup>
       </Card>
