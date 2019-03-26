@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { string } from 'prop-types';
+import { shape } from 'prop-types';
 
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
@@ -11,6 +11,7 @@ import DatePicker from 'common-components/controls/DatePicker';
 import SelectOrganization from 'common-components/smart-selects/SelectOrganization';
 import useForm from 'hooks/useForm';
 import SelectBranch from 'common-components/smart-selects/SelectBranch';
+import Select from 'common-components/controls/select/Select';
 // import { createInvoice } from 'apis/invoice-apis';
 
 import InvoiceParticularForm from './InvoiceParticularForm';
@@ -18,9 +19,10 @@ import Modal from '../../../common-components/Modal';
 import OrganizationClientForm from '../../organization/OrganizationClientForm';
 import UploadS3 from '../../../common-components/file/UploadS3';
 import Textarea from '../../../common-components/controls/Textarea';
+import SelectTaxType from '../../../common-components/smart-selects/SelectTaxType';
 
 function InvoiceForm(props) {
-  const { activeOrgId } = props;
+  const { activeOrg } = props;
   const { formField, getValues, setValue } = useForm();
   const [showAddOrg, setShowAddOrg] = useState(null);
 
@@ -65,7 +67,7 @@ function InvoiceForm(props) {
           <InlineLabel>Branch</InlineLabel>
           <SelectBranch
             {...formField('organizationBranch')}
-            organizationId={activeOrgId}
+            organizationId={activeOrg.id}
             block
             placeholder="Search your client list"
           />
@@ -75,7 +77,7 @@ function InvoiceForm(props) {
           <SelectOrganization
             {...formField('clientBranch')}
             block
-            filter={[activeOrgId]}
+            filter={[activeOrg.id]}
             placeholder="Search your client list"
             onCreateOption={onClickNewOrganization}
           />
@@ -83,8 +85,34 @@ function InvoiceForm(props) {
       </Card>
       <Card title="Particulars">
         <InvoiceParticularForm
+          taxPerItem
           {...formField('particulars')}
         />
+      </Card>
+      <Card title="Taxes">
+        <FormGroup width="50%">
+          <InlineLabel>Tax Inclusion</InlineLabel>
+          <Select
+            {...formField('taxInclusion', {
+              initialValue: { label: 'Inclusive', value: 'inclusive' },
+            })}
+            options={[
+              { label: 'Inclusive', value: 'inclusive' },
+              { label: 'Exclusive', value: 'exclusive' },
+            ]}
+          />
+        </FormGroup>
+        {!(activeOrg.invoicePreferences || {}).taxPerItem && (
+          <FormGroup width="50%">
+            <InlineLabel>Tax Rate</InlineLabel>
+            <SelectTaxType
+              {...formField('taxTypes')}
+              type="number"
+              block
+              placeholder="Select Tax Type"
+            />
+          </FormGroup>
+        )}
       </Card>
       <Card title="Discount">
         <FormGroup width="50%">
@@ -149,11 +177,11 @@ function InvoiceForm(props) {
 }
 
 InvoiceForm.propTypes = {
-  activeOrgId: string,
+  activeOrg: shape({}),
 };
 
 InvoiceForm.defaultProps = {
-  activeOrgId: null,
+  activeOrg: {},
 };
 
 const FormGroup = styled.div`
@@ -184,7 +212,7 @@ const ActionCard = styled.div`
 const mapStateToProps = (state) => {
   const { organization } = state;
   return {
-    activeOrgId: (organization.active.value || {}).id,
+    activeOrg: organization.active.value,
   };
 };
 

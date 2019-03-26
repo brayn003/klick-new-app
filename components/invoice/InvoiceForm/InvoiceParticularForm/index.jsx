@@ -1,20 +1,37 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { func } from 'prop-types';
+import { func, shape } from 'prop-types';
+import { connect } from 'react-redux';
 
 import Input from 'common-components/controls/Input';
 import ButtonLink from 'common-components/button/ButtonLink';
 import { FlexRow, FlexCol } from 'common-components/table/FlexTable';
 import useForm from '../../../../hooks/useForm';
+import SelectTaxType from '../../../../common-components/smart-selects/SelectTaxType';
 
 function InvoiceParticularForm(props) {
-  const { onChange } = props;
+  const { onChange, activeOrg } = props;
   const [rows, setRows] = useState(1);
   const { formField } = useForm({
     onChange: (formValue) => {
       onChange(formValue.particulars);
     },
   });
+
+  const { includeQuantity, taxPerItem } = ((activeOrg || {}).invoicePreferences) || {};
+
+  // const value = getValues();
+  // const getAmount = (index) => {
+  //   if (value && value.particulars) {
+  //     const { rate = 0, quantity: origQuantity = 0 } = value.particulars[index] || {};
+  //     let quantity = origQuantity;
+  //     if (!includeQuantity) {
+  //       quantity = 1;
+  //     }
+  //     return (rate * quantity).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+  //   }
+  //   return '-';
+  // };
 
   const onClickAddNew = () => { setRows(rows + 1); };
   const onClickRemove = () => { setRows(rows - 1); };
@@ -23,9 +40,10 @@ function InvoiceParticularForm(props) {
       <FlexRow>
         <FlexCol align="left" bold flex="0 0 40px">Sr.</FlexCol>
         <FlexCol align="center" bold flex="1 1 auto">Particular</FlexCol>
-        <FlexCol align="center" bold flex="0 0 100px">Rate</FlexCol>
-        <FlexCol align="center" bold flex="0 0 100px">Qty</FlexCol>
-        <FlexCol align="center" bold flex="0 0 100px">Amount</FlexCol>
+        <FlexCol align="center" bold flex="0 0 100px">{includeQuantity ? 'Rate' : 'Amount'}</FlexCol>
+        {includeQuantity && <FlexCol align="center" bold flex="0 0 100px">Qty</FlexCol>}
+        {taxPerItem && <FlexCol align="center" bold flex="0 0 240px">Tax Rate</FlexCol>}
+        {/* <FlexCol align="right" bold flex="0 0 100px">Amount</FlexCol> */}
         <FlexCol align="center" bold flex="0 0 76px">&nbsp;</FlexCol>
       </FlexRow>
       {Array(rows).fill(null).map((item, index) => (
@@ -40,22 +58,43 @@ function InvoiceParticularForm(props) {
           </FlexCol>
           <FlexCol align="right" flex="0 0 100px">
             <Input
-              {...formField(`particulars[${index}].rate`)}
+              {...formField(`particulars[${index}].rate`, {
+                initialValue: 0,
+              })}
               type="number"
+              min={0}
               block
               placeholder="0.00"
             />
           </FlexCol>
-          <FlexCol align="right" flex="0 0 100px">
-            <Input
-              {...formField(`particulars[${index}].quantity`)}
-              type="number"
-              block
-              placeholder="0.00"
-            />
-          </FlexCol>
+          {includeQuantity && (
+            <FlexCol align="right" flex="0 0 100px">
+              <Input
+                {...formField(`particulars[${index}].quantity`, {
+                  initialValue: 1,
+                })}
+                type="number"
+                min={0}
+                block
+                placeholder="0.00"
+              />
+            </FlexCol>
+          )}
+          {taxPerItem && (
+            <FlexCol align="right" flex="0 0 240px">
+              <SelectTaxType
+                {...formField(`particulars[${index}].taxTypes`)}
+                placeholder="Tax Rate"
+                params={{
+                  'config.isSameState': true,
+                }}
+                groupByRate
+                block
+              />
+            </FlexCol>
+          )}
           {/* <FlexCol align="right" flex="0 0 100px">
-            <Input {...formField(`particulars[${index}].rate`)} block placeholder="0.00" />
+            {getAmount(index)}
           </FlexCol> */}
           <FlexCol align="center" flex="0 0 76px">
             <ButtonLink
@@ -79,10 +118,12 @@ function InvoiceParticularForm(props) {
 
 InvoiceParticularForm.propTypes = {
   onChange: func,
+  activeOrg: shape({}),
 };
 
 InvoiceParticularForm.defaultProps = {
   onChange: () => {},
+  activeOrg: {},
 };
 
 
@@ -92,5 +133,11 @@ const ActionContainer = styled.div`
   margin-top: 24px;
 `;
 
+const mapStateToProps = (state) => {
+  const { organization } = state;
+  return {
+    activeOrg: organization.active.value,
+  };
+};
 
-export default InvoiceParticularForm;
+export default connect(mapStateToProps, null)(InvoiceParticularForm);

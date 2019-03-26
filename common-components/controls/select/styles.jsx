@@ -21,6 +21,11 @@ export const StyledSelect = styled(({ block, ...rest }) => <ReactSelect {...rest
     align-items: flex-start;
     will-change: border;
 
+    line-height: 1.15;
+    text-align: initial;
+    white-space: initial;
+    font-weight: 400;
+
     will-change: box-shadow, border-color, background-color;
     transition: box-shadow 0.1s linear, border-color 0.1s linear, background-color 0.1s linear;
 
@@ -61,6 +66,26 @@ export const StyledSelect = styled(({ block, ...rest }) => <ReactSelect {...rest
 
   .select__dropdown-indicator {
     padding-right: 0;
+  }
+
+  .select__single-value {
+    height: 100%;
+    line-height: 26px;
+  }
+
+  .select__option {
+    line-height: 1.15;
+    text-align: initial;
+    white-space: initial;
+    font-weight: 400;
+    padding: 12px 24px;
+  }
+
+  .select__menu {
+    border-radius: 20px;
+    border: 0;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 14px 28px, rgba(0, 0, 0, 0.08) 0px 10px 10px;
+    overflow: hidden;
   }
 `;
 

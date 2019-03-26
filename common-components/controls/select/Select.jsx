@@ -1,4 +1,4 @@
-import { StyledSelect } from 'react-select';
+import { StyledSelect } from './styles';
 
 function Select(props) {
   return (
