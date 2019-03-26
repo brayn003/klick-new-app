@@ -17,6 +17,7 @@ import InvoiceParticularForm from './InvoiceParticularForm';
 import Modal from '../../../common-components/Modal';
 import OrganizationClientForm from '../../organization/OrganizationClientForm';
 import UploadS3 from '../../../common-components/file/UploadS3';
+import Textarea from '../../../common-components/controls/Textarea';
 
 function InvoiceForm(props) {
   const { activeOrgId } = props;
@@ -109,9 +110,18 @@ function InvoiceForm(props) {
       </Card>
       <Card title="Extras">
         <FormGroup width="50%">
+          <InlineLabel>Comment</InlineLabel>
+          <Textarea
+            {...formField('inlineComment')}
+            placeholder="Write a comment"
+            block
+          />
+        </FormGroup>
+        <FormGroup width="50%">
           <InlineLabel>Attachments</InlineLabel>
           <UploadS3
             {...formField('attachments')}
+            style={{ width: '70%' }}
             multiple
           />
         </FormGroup>
