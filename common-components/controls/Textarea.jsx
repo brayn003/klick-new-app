@@ -1,14 +1,18 @@
 import { forwardRef } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import {
+  func, bool, shape, number, string,
+} from 'prop-types';
 
 function Textarea(props) {
   const {
-    onChange, block, forwardedRef, ...rest
+    onChange, block, forwardedRef, value, ...rest
   } = props;
+
   return (
     <StyledTextarea
       {...rest}
+      value={value}
       ref={forwardedRef}
       block={block}
       onChange={(e) => { onChange(e.target.value); }}
@@ -17,10 +21,11 @@ function Textarea(props) {
 }
 
 Textarea.propTypes = {
-  onChange: PropTypes.func,
-  block: PropTypes.bool,
-  forwardedRef: PropTypes.shape({}),
-  rows: PropTypes.number,
+  onChange: func,
+  block: bool,
+  forwardedRef: shape({}),
+  rows: number,
+  value: string,
 };
 
 Textarea.defaultProps = {
@@ -28,6 +33,7 @@ Textarea.defaultProps = {
   block: false,
   forwardedRef: null,
   rows: 3,
+  value: '',
 };
 
 export const StyledTextarea = styled.textarea`

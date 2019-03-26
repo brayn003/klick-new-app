@@ -43,7 +43,7 @@ function DatePicker(props) {
     ...options,
     onChange: (selectedDates) => {
       if (mode === 'single') {
-        onChange(selectedDates[0].toISOString());
+        onChange(selectedDates[0] ? selectedDates[0].toISOString() : undefined);
       }
       if (mode === 'multiple') {
         onChange(selectedDates.map(d => d.toISOString()));
@@ -68,8 +68,8 @@ function DatePicker(props) {
 
   // assigning value to date
   useEffect(() => {
-    if (ref.current && picker && value) {
-      picker.setDate(new Date(value), false);
+    if (ref.current && picker) {
+      picker.setDate(value && new Date(value), false);
     }
   }, [value]);
 

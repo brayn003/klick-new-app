@@ -59,7 +59,7 @@ function InvoiceParticularForm(props) {
           <FlexCol align="right" flex="0 0 100px">
             <Input
               {...formField(`particulars[${index}].rate`, {
-                initialValue: 0,
+                initialValue: 1,
               })}
               type="number"
               min={0}

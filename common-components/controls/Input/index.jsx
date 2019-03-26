@@ -7,16 +7,19 @@ import isNil from 'lodash/isNil';
 
 function Input(props) {
   const {
-    onChange, block, forwardedRef, type, ...rest
+    onChange, block, forwardedRef, type, value, ...rest
   } = props;
+
   return (
     <StyledInput
       {...rest}
       type={type}
       ref={forwardedRef}
       block={block}
+      value={value}
       onChange={(e) => {
         const val = e.target.value;
+        console.log(parseFloat(val));
         if (type === 'number') {
           onChange(isNil(val) ? '' : parseFloat(val));
         } else {

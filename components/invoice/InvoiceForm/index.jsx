@@ -41,7 +41,6 @@ function InvoiceForm(props) {
       value: organization.id,
     });
   };
-
   return (
     <>
       <Card title="Invoice Details">
@@ -140,7 +139,9 @@ function InvoiceForm(props) {
         <FormGroup width="50%">
           <InlineLabel>Comment</InlineLabel>
           <Textarea
-            {...formField('inlineComment')}
+            {...formField({
+              initialValue: 'something',
+            })}
             placeholder="Write a comment"
             block
           />
