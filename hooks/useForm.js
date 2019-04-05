@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'react';
+import { useReducer, useEffect, useRef } from 'react';
 import forEach from 'lodash/forEach';
 import set from 'lodash/set';
 
@@ -42,6 +42,7 @@ const useForm = (
   } = {},
 ) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const instance = useRef({});
 
   const intializeField = (fieldName, options) => {
     dispatch({ type: INITIALIZE_FIELD, payload: { fieldName, ...options } });
@@ -53,7 +54,14 @@ const useForm = (
 
   const getValues = () => {
     const vals = {};
-    forEach(state, (f, key) => set(vals, key, f.value));
+    forEach(state, (f, key) => {
+      const { transform } = instance.current[key] || {};
+      return set(
+        vals,
+        key,
+        transform ? transform(f.value) : f.value,
+      );
+    });
     return vals;
   };
 
@@ -64,11 +72,17 @@ const useForm = (
   const formField = (fieldName, options = {}) => {
     const { valuePropName = 'value' } = options;
     const { handlerPropName = 'onChange' } = options;
+    const { transform } = options;
 
     if (!state[fieldName]) {
       intializeField(fieldName, options);
     }
-
+    instance.current = {
+      ...instance.current,
+      [fieldName]: {
+        transform,
+      },
+    };
     const props = {
       [handlerPropName]: (value) => {
         setFieldProperties(fieldName, { value, pristine: false });

@@ -16,6 +16,7 @@ import Modal from 'common-components/Modal';
 import UploadS3 from 'common-components/file/UploadS3';
 import Textarea from 'common-components/controls/Textarea';
 import SelectTaxType from 'common-components/smart-selects/SelectTaxType';
+import { transformSelect, transformMultiUploadS3 } from 'helpers/form-transforms';
 // import { createInvoice } from 'apis/invoice-apis';
 
 import InvoiceParticularForm from './InvoiceParticularForm';
@@ -65,7 +66,9 @@ function InvoiceForm(props) {
         <FormGroup width="50%">
           <InlineLabel>Branch</InlineLabel>
           <SelectBranch
-            {...formField('organizationBranch')}
+            {...formField('organizationBranch', {
+              transform: transformSelect,
+            })}
             organizationId={activeOrg.id}
             block
             placeholder="Search your client list"
@@ -74,7 +77,9 @@ function InvoiceForm(props) {
         <FormGroup width="50%">
           <InlineLabel>Client</InlineLabel>
           <SelectOrganization
-            {...formField('client')}
+            {...formField('client', {
+              transform: transformSelect,
+            })}
             block
             filter={[activeOrg.id]}
             placeholder="Search your client list"
@@ -105,7 +110,9 @@ function InvoiceForm(props) {
           <FormGroup width="50%">
             <InlineLabel>Tax Rate</InlineLabel>
             <SelectTaxType
-              {...formField('taxTypes')}
+              {...formField('taxTypes', {
+                transform: transformSelect,
+              })}
               type="number"
               block
               placeholder="Select Tax Type"
@@ -149,7 +156,9 @@ function InvoiceForm(props) {
         <FormGroup width="50%">
           <InlineLabel>Attachments</InlineLabel>
           <UploadS3
-            {...formField('attachments')}
+            {...formField('attachments', {
+              transform: transformMultiUploadS3,
+            })}
             style={{ width: '70%' }}
             multiple
           />
