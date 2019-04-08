@@ -1,23 +1,41 @@
-import { string, shape } from 'prop-types';
+import { string, shape, func } from 'prop-types';
 import styled from 'styled-components';
 import Router from 'next/router';
-
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import DropDown from 'common-components/controls/DropDown';
 import ButtonLink from 'common-components/button/ButtonLink';
+import { clearToken } from 'helpers/auth-service';
+
+import { resetTokenAction } from 'store/auth/token';
+import { resetActiveOrgAction } from 'store/organization/active';
 
 function CoreTopBar(props) {
   const {
-    title, me, activeOrganization, pathname,
+    title,
+    me,
+    activeOrganization,
+    pathname,
+    resetToken,
+    resetActiveOrg,
   } = props;
   const options = [{
     title: 'Select Organization',
     key: '/organization',
+  }, {
+    title: 'Logout',
+    key: 'logout',
   }];
 
   const onChangeAvatarMenu = (key) => {
-    Router.push(key);
+    if (key === 'logout') {
+      clearToken(true);
+      resetToken();
+      resetActiveOrg();
+    } else {
+      Router.push(key);
+    }
   };
 
   return (
@@ -53,6 +71,8 @@ CoreTopBar.propTypes = {
   me: shape({}),
   activeOrganization: shape({}),
   pathname: string,
+  resetActiveOrg: func,
+  resetToken: func,
 };
 
 CoreTopBar.defaultProps = {
@@ -60,6 +80,8 @@ CoreTopBar.defaultProps = {
   me: {},
   activeOrganization: {},
   pathname: null,
+  resetActiveOrg: () => {},
+  resetToken: () => {},
 };
 
 const TopBar = styled.div`
@@ -131,4 +153,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(CoreTopBar);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  resetToken: resetTokenAction,
+  resetActiveOrg: resetActiveOrgAction,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(CoreTopBar);

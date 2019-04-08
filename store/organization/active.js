@@ -2,7 +2,7 @@ import cookies from 'js-cookie';
 import { getOrganization } from 'apis/organization-apis';
 import { handleError } from 'helpers/error-handler';
 
-const intialState = {
+const initialState = {
   value: null,
   loading: false,
   error: null,
@@ -11,8 +11,9 @@ const intialState = {
 export const ORGANIZATION_SET_ACTIVE_REQUESTED = 'set active organization requested';
 export const ORGANIZATION_SET_ACTIVE_SUCCEEDED = 'set active organization succeeded';
 export const ORGANIZATION_SET_ACTIVE_FAILED = 'set active organization failed';
+export const ORGANIZATION_RESET_ACTIVE = 'reset active organization';
 
-export default function (state = intialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case ORGANIZATION_SET_ACTIVE_REQUESTED:
@@ -32,6 +33,8 @@ export default function (state = intialState, action) {
         ...state,
         value: payload.error,
       };
+    case ORGANIZATION_RESET_ACTIVE:
+      return initialState;
     default:
       return state;
   }
@@ -55,3 +58,5 @@ export const setActiveOrgAction = organizationId => async (dispatch, getStore) =
     });
   }
 };
+
+export const resetActiveOrgAction = () => ({ type: ORGANIZATION_RESET_ACTIVE, payload: {} });

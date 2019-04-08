@@ -4,17 +4,23 @@ import { verifyToken } from '../apis/auth-apis';
 export async function checkToken(ctx) {
   const { req = false, pathname } = ctx;
   if (req) {
-    const { sessToken } = ctx.req.cookies;
+    const { sessToken, activeOrg } = ctx.req.cookies;
     if (!sessToken && pathname !== '/login') {
       ctx.res.redirect('/login');
     }
     if (sessToken) {
       try {
         const res = await verifyToken({ token: sessToken });
-        if (res.verified) {
-          ctx.res.redirect('/');
+        if (res.verified && pathname !== '/') {
+          if (activeOrg) {
+            ctx.res.redirect('/');
+          } else if (pathname !== '/organization') {
+            ctx.res.redirect('/organization');
+          }
         }
       } catch (err) {
+        ctx.res.clearCookie('sessToken');
+        ctx.res.clearCookie('activeOrg');
         if (pathname !== '/login') {
           ctx.res.redirect('/login');
         }
@@ -51,6 +57,12 @@ export async function setToken(sessToken, redirect = false) {
   }
 }
 
-export default {
-  checkToken,
-};
+export async function clearToken(redirect = false) {
+  const md = await import('next/router');
+  const Router = md.default;
+  cookies.remove('sessToken');
+  cookies.remove('activeOrg');
+  if (redirect) {
+    Router.push('/login');
+  }
+}
