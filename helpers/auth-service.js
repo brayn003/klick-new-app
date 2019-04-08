@@ -8,10 +8,16 @@ export async function checkToken(ctx) {
     if (!sessToken && pathname !== '/login') {
       ctx.res.redirect('/login');
     }
-    if (sessToken && pathname === '/login') {
-      const res = await verifyToken({ token: sessToken });
-      if (res.verified) {
-        ctx.res.redirect('/');
+    if (sessToken) {
+      try {
+        const res = await verifyToken({ token: sessToken });
+        if (res.verified) {
+          ctx.res.redirect('/');
+        }
+      } catch (err) {
+        if (pathname !== '/login') {
+          ctx.res.redirect('/login');
+        }
       }
     }
     return sessToken;
