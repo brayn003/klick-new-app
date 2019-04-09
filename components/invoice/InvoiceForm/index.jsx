@@ -148,9 +148,7 @@ function InvoiceForm(props) {
         <FormGroup width="50%">
           <InlineLabel>Comment</InlineLabel>
           <Textarea
-            {...formField({
-              initialValue: 'something',
-            })}
+            {...formField('inlineComment')}
             placeholder="Write a comment"
             block
           />

@@ -1,18 +1,14 @@
 import axios from 'axios';
-// import { notification } from 'antd';
+import { toast } from 'common-components/Toast';
 import omit from 'lodash/omit';
 import cookies from 'js-cookie';
 import isUnderfined from 'lodash/isUndefined';
 
 import { handleError } from './error-handler';
 
-function showError(description, title) {
+function showError(description) {
   if (typeof window !== 'undefined') {
-    // notification.error({
-    //   message: title || 'Some error occured',
-    //   description,
-    // });
-    console.error(title);
+    toast.error(description || 'Some error occured');
   }
 }
 
