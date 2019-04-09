@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
-import Anime from 'react-anime';
+// import Anime from 'react-anime';
 import Router from 'next/router';
 
 // import { getInvoices } from 'apis/invoice-apis';
 import Button from 'common-components/button/Button';
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
+import Animate from 'common-components/animate/Animate';
 import { FlexRow, FlexCol } from 'common-components/table/FlexTable';
 import useForm from 'hooks/useForm';
+
 import { getExpenses } from '../../apis/expense-apis';
 
 function InvoiceView() {
@@ -21,8 +23,8 @@ function InvoiceView() {
 
   useEffect(() => {
     setLoading(true);
-    const { status, ...rest } = values;
-    getExpenses({ status: status === 'all_status' ? undefined : status, ...rest })
+    // const { status, ...rest } = values;
+    getExpenses(values)
       .then((res) => {
         setLoading(false);
         setExpenses(res);
@@ -30,7 +32,7 @@ function InvoiceView() {
       .catch(() => {
         setLoading(false);
       });
-  }, []);
+  }, Object.values(values));
 
   return (
     <Container>
@@ -64,9 +66,8 @@ function InvoiceView() {
           <FlexCol align="center" bold flex="0 0 100px">&nbsp;</FlexCol>
         </FlexRow>
         {loading && <p>Loading...</p>}
-        {expenses && (
-        <Anime delay={(e, i) => i * 50} opacity={[0, 1]} translateY={[4, 0]}>
-          {expenses.docs.map(expense => (
+        <Animate delay={(e, i) => i * 50} opacity={[0, 1]} translateY={[4, 0]}>
+          {expenses && expenses.docs.map(expense => (
             <FlexRow key={expense.id}>
               <FlexCol flex="0 0 120px">{dayjs(expense.expenseDate).format('DD MMM YYYY')}</FlexCol>
               <FlexCol flex="1 1 auto">{expense.description}</FlexCol>
@@ -77,8 +78,7 @@ function InvoiceView() {
               <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
             </FlexRow>
           ))}
-        </Anime>
-        )}
+        </Animate>
 
       </Card>
     </Container>

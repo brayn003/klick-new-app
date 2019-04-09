@@ -91,9 +91,9 @@ const Card = styled.div`
   border-radius: 4px;
   overflow: hidden;
   display: inline-block;
+  position: relative;
   margin-bottom: 24px;
   cursor: pointer;
-  opacity: 0;
   background-color: #FFF;
   transition: box-shadow 0.1s linear;
 

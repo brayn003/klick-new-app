@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { shape } from 'prop-types';
 import styled from 'styled-components';
-import Anime from 'react-anime';
+// import Anime from 'react-anime';
 import Router from 'next/router';
 import { MdArrowDropDown } from 'react-icons/md';
 
@@ -13,6 +13,8 @@ import DropDown from 'common-components/controls/DropDown';
 import useForm from 'hooks/useForm';
 import Button from 'common-components/button/Button';
 import ButtonLink from 'common-components/button/ButtonLink';
+import Animate from 'common-components/animate/Animate';
+
 import InvoiceCard from './InvoiceCard';
 
 const pdfWidth = 200;
@@ -102,17 +104,15 @@ function InvoiceView(props) {
       </ActionBar>
       <CardContainer>
         {loading && 'Loading ...'}
-        {!loading && invoices && (
-        <Anime delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
-          {invoices.docs.map(invoice => (
+        <Animate delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
+          {!loading && invoices && invoices.docs.map(invoice => (
             <InvoiceCard
               key={invoice.id}
               width={pdfWidth}
               invoice={invoice}
             />
           ))}
-        </Anime>
-        )}
+        </Animate>
       </CardContainer>
     </Container>
   );
