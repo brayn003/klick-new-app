@@ -6,19 +6,28 @@ import { connect } from 'react-redux';
 import Input from 'common-components/controls/Input';
 import ButtonLink from 'common-components/button/ButtonLink';
 import { FlexRow, FlexCol } from 'common-components/table/FlexTable';
-import useForm from '../../../../hooks/useForm';
-import SelectTaxType from '../../../../common-components/smart-selects/SelectTaxType';
+import useForm from 'hooks/useForm';
+import SelectTaxType from 'common-components/smart-selects/SelectTaxType';
 
 function InvoiceParticularForm(props) {
   const { onChange, activeOrg } = props;
+  const { includeQuantity, taxPerItem } = ((activeOrg || {}).invoicePreferences) || {};
+
   const [rows, setRows] = useState(1);
+
   const { formField } = useForm({
     onChange: (formValue) => {
-      onChange(formValue.particulars);
+      let { particulars } = formValue;
+      if (!includeQuantity) {
+        particulars = particulars.map(p => ({
+          ...p,
+          quantity: 1,
+        }));
+      }
+      onChange(particulars);
     },
   });
 
-  const { includeQuantity, taxPerItem } = ((activeOrg || {}).invoicePreferences) || {};
 
   // const value = getValues();
   // const getAmount = (index) => {
@@ -83,7 +92,9 @@ function InvoiceParticularForm(props) {
           {taxPerItem && (
             <FlexCol align="right" flex="0 0 240px">
               <SelectTaxType
-                {...formField(`particulars[${index}].taxTypes`)}
+                {...formField(`particulars[${index}].taxes`, {
+                  transform: t => ((t || {}).value || []).map(t2 => ({ taxType: t2 })),
+                })}
                 placeholder="Tax Rate"
                 params={{
                   'config.isSameState': true,

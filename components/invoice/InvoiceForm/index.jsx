@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { shape } from 'prop-types';
+import Router from 'next/router';
 
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
@@ -17,7 +18,7 @@ import UploadS3 from 'common-components/file/UploadS3';
 import Textarea from 'common-components/controls/Textarea';
 import SelectTaxType from 'common-components/smart-selects/SelectTaxType';
 import { transformSelect, transformMultiUploadS3 } from 'helpers/form-transforms';
-// import { createInvoice } from 'apis/invoice-apis';
+import { createInvoice } from 'apis/invoice-apis';
 
 import InvoiceParticularForm from './InvoiceParticularForm';
 import OrganizationClientForm from '../../organization/OrganizationClientForm';
@@ -29,8 +30,8 @@ function InvoiceForm(props) {
 
   const onClickSubmit = async () => {
     const body = getValues();
-    console.log(body);
-    // const res = await createInvoice(body);
+    await createInvoice(body);
+    Router.push('/invoice');
   };
 
   const onClickNewOrganization = (orgName) => { setShowAddOrg(orgName); };
@@ -99,6 +100,7 @@ function InvoiceForm(props) {
           <Select
             {...formField('taxInclusion', {
               initialValue: { label: 'Inclusive', value: 'inclusive' },
+              transform: transformSelect,
             })}
             options={[
               { label: 'Inclusive', value: 'inclusive' },
