@@ -17,6 +17,7 @@ import Modal from 'common-components/Modal';
 import UploadS3 from 'common-components/file/UploadS3';
 import Textarea from 'common-components/controls/Textarea';
 import SelectTaxType from 'common-components/smart-selects/SelectTaxType';
+import Animate from 'common-components/animate/Animate';
 import { transformSelect, transformMultiUploadS3 } from 'helpers/form-transforms';
 import { createInvoice } from 'apis/invoice-apis';
 
@@ -45,70 +46,71 @@ function InvoiceForm(props) {
   };
   return (
     <>
-      <Card title="Invoice Details">
-        <FormGroup width="50%">
-          <InlineLabel>Raised Date</InlineLabel>
-          <DatePicker
-            {...formField('raisedDate')}
-            block
-            placeholder="DD / MM / YYYY"
+      <Animate delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
+        <Card title="Invoice Details">
+          <FormGroup width="50%">
+            <InlineLabel>Raised Date</InlineLabel>
+            <DatePicker
+              {...formField('raisedDate')}
+              block
+              placeholder="DD / MM / YYYY"
+            />
+          </FormGroup>
+          <FormGroup width="50%">
+            <InlineLabel>Due Date</InlineLabel>
+            <DatePicker
+              {...formField('dueDate')}
+              block
+              placeholder="DD / MM / YYYY"
+            />
+          </FormGroup>
+        </Card>
+        <Card title="Client Details">
+          <FormGroup width="50%">
+            <InlineLabel>Branch</InlineLabel>
+            <SelectBranch
+              {...formField('organizationBranch', {
+                transform: transformSelect,
+              })}
+              organizationId={activeOrg.id}
+              block
+              placeholder="Search your client list"
+            />
+          </FormGroup>
+          <FormGroup width="50%">
+            <InlineLabel>Client</InlineLabel>
+            <SelectOrganization
+              {...formField('client', {
+                transform: transformSelect,
+              })}
+              block
+              filter={[activeOrg.id]}
+              placeholder="Search your client list"
+              onCreateOption={onClickNewOrganization}
+            />
+          </FormGroup>
+        </Card>
+        <Card title="Particulars">
+          <InvoiceParticularForm
+            taxPerItem
+            {...formField('particulars')}
           />
-        </FormGroup>
-        <FormGroup width="50%">
-          <InlineLabel>Due Date</InlineLabel>
-          <DatePicker
-            {...formField('dueDate')}
-            block
-            placeholder="DD / MM / YYYY"
-          />
-        </FormGroup>
-      </Card>
-      <Card title="Client Details">
-        <FormGroup width="50%">
-          <InlineLabel>Branch</InlineLabel>
-          <SelectBranch
-            {...formField('organizationBranch', {
-              transform: transformSelect,
-            })}
-            organizationId={activeOrg.id}
-            block
-            placeholder="Search your client list"
-          />
-        </FormGroup>
-        <FormGroup width="50%">
-          <InlineLabel>Client</InlineLabel>
-          <SelectOrganization
-            {...formField('client', {
-              transform: transformSelect,
-            })}
-            block
-            filter={[activeOrg.id]}
-            placeholder="Search your client list"
-            onCreateOption={onClickNewOrganization}
-          />
-        </FormGroup>
-      </Card>
-      <Card title="Particulars">
-        <InvoiceParticularForm
-          taxPerItem
-          {...formField('particulars')}
-        />
-      </Card>
-      <Card title="Taxes">
-        <FormGroup width="50%">
-          <InlineLabel>Tax Inclusion</InlineLabel>
-          <Select
-            {...formField('taxInclusion', {
-              initialValue: { label: 'Inclusive', value: 'inclusive' },
-              transform: transformSelect,
-            })}
-            options={[
-              { label: 'Inclusive', value: 'inclusive' },
-              { label: 'Exclusive', value: 'exclusive' },
-            ]}
-          />
-        </FormGroup>
-        {!(activeOrg.invoicePreferences || {}).taxPerItem && (
+        </Card>
+        <Card title="Taxes">
+          <FormGroup width="50%">
+            <InlineLabel>Tax Inclusion</InlineLabel>
+            <Select
+              {...formField('taxInclusion', {
+                initialValue: { label: 'Inclusive', value: 'inclusive' },
+                transform: transformSelect,
+              })}
+              options={[
+                { label: 'Inclusive', value: 'inclusive' },
+                { label: 'Exclusive', value: 'exclusive' },
+              ]}
+            />
+          </FormGroup>
+          {!(activeOrg.invoicePreferences || {}).taxPerItem && (
           <FormGroup width="50%">
             <InlineLabel>Tax Rate</InlineLabel>
             <SelectTaxType
@@ -120,57 +122,58 @@ function InvoiceForm(props) {
               placeholder="Select Tax Type"
             />
           </FormGroup>
-        )}
-      </Card>
-      <Card title="Discount">
-        <FormGroup width="50%">
-          <InlineLabel>Discount Rate</InlineLabel>
-          <Input
-            {...formField('discountRate')}
-            type="number"
-            block
-            placeholder="0.00%"
-          />
-        </FormGroup>
-      </Card>
-      <Card title="Deductions">
-        <FormGroup width="50%">
-          <InlineLabel>TDS Amount</InlineLabel>
-          <Input
-            {...formField('tdsAmount')}
-            type="number"
-            block
-            placeholder="0.00"
-          />
-        </FormGroup>
-      </Card>
-      <Card title="Extras">
-        <FormGroup width="50%">
-          <InlineLabel>Comment</InlineLabel>
-          <Textarea
-            {...formField('inlineComment')}
-            placeholder="Write a comment"
-            block
-          />
-        </FormGroup>
-        <FormGroup width="50%">
-          <InlineLabel>Attachments</InlineLabel>
-          <UploadS3
-            {...formField('attachments', {
-              transform: transformMultiUploadS3,
-            })}
-            style={{ width: '70%' }}
-            multiple
-          />
-        </FormGroup>
-      </Card>
-      <ActionCard>
-        <Button
-          onClick={onClickSubmit}
-        >
+          )}
+        </Card>
+        <Card title="Discount">
+          <FormGroup width="50%">
+            <InlineLabel>Discount Rate</InlineLabel>
+            <Input
+              {...formField('discountRate')}
+              type="number"
+              block
+              placeholder="0.00%"
+            />
+          </FormGroup>
+        </Card>
+        <Card title="Deductions">
+          <FormGroup width="50%">
+            <InlineLabel>TDS Amount</InlineLabel>
+            <Input
+              {...formField('tdsAmount')}
+              type="number"
+              block
+              placeholder="0.00"
+            />
+          </FormGroup>
+        </Card>
+        <Card title="Extras">
+          <FormGroup width="50%">
+            <InlineLabel>Comment</InlineLabel>
+            <Textarea
+              {...formField('inlineComment')}
+              placeholder="Write a comment"
+              block
+            />
+          </FormGroup>
+          <FormGroup width="50%">
+            <InlineLabel>Attachments</InlineLabel>
+            <UploadS3
+              {...formField('attachments', {
+                transform: transformMultiUploadS3,
+              })}
+              style={{ width: '70%' }}
+              multiple
+            />
+          </FormGroup>
+        </Card>
+        <ActionCard>
+          <Button
+            onClick={onClickSubmit}
+          >
           Submit
-        </Button>
-      </ActionCard>
+          </Button>
+        </ActionCard>
+      </Animate>
       <Modal
         show={showAddOrg}
         width={480}

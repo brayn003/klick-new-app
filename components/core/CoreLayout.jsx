@@ -74,10 +74,13 @@ const Content = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  padding-left: 240px;
 `;
 
 const Sidebar = styled.aside`
   width: 240px;
+  height: 100%;
+  position: fixed;
 `;
 
 
