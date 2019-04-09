@@ -1,11 +1,13 @@
-import { forwardRef } from 'react';
+import { useState, forwardRef } from 'react';
 import styled from 'styled-components';
-import { Document as PdfDocument, Page as PdfPage } from 'react-pdf';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import startCase from 'lodash/startCase';
 
 import Tag from 'common-components/Tag';
+
+import InvoicePdf from './InvoicePdf';
+import InvoicePdfModal from './InvoicePdfModal';
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -22,6 +24,8 @@ const getStatusColor = (status) => {
 function InvoiceCard(props) {
   const { width, invoice, forwardedRef } = props;
 
+  const [showModal, setShowModal] = useState(false);
+
   const {
     fileUrl,
   } = invoice;
@@ -32,28 +36,37 @@ function InvoiceCard(props) {
   const statusColor = getStatusColor(invoice.status);
   const status = startCase(invoice.status);
 
+  const onClickCard = () => { setShowModal(p => !p); };
+  const onCloseModal = () => { console.log('onClose'); setShowModal(false); };
+
   return (
-    <Card width={width} ref={forwardedRef}>
-      <StyledPdfDocument
-        loading={null}
-        file={fileUrl}
+    <>
+      <Card
+        width={width}
+        ref={forwardedRef}
+        onClick={onClickCard}
       >
-        <StyledPdfPage loading={null} pageNumber={1} width={width} />
-      </StyledPdfDocument>
-      <Info>
-        <Text bold>{serial}</Text>
-        <Text gray>{raisedDate}</Text>
-        <Flex>
-          <Text noMargin bold style={{ fontSize: '1em' }}>
+        <InvoicePdf src={fileUrl} />
+        <Info>
+          <Text bold>{serial}</Text>
+          <Text gray>{raisedDate}</Text>
+          <Flex>
+            <Text noMargin bold style={{ fontSize: '1em' }}>
             ₹ {roundedTotal}
-          </Text>
-          <Text gray noMargin>Left: ₹ {roundedAmountReceivable}</Text>
-        </Flex>
-        <StatusTag color={statusColor}>
-          {status}
-        </StatusTag>
-      </Info>
-    </Card>
+            </Text>
+            <Text gray noMargin>Left: ₹ {roundedAmountReceivable}</Text>
+          </Flex>
+          <StatusTag color={statusColor}>
+            {status}
+          </StatusTag>
+        </Info>
+      </Card>
+      <InvoicePdfModal
+        show={showModal}
+        invoice={invoice}
+        onClose={onCloseModal}
+      />
+    </>
   );
 }
 
@@ -119,15 +132,6 @@ Text.defaultProps = {
   gray: false,
 };
 
-const StyledPdfDocument = styled(PdfDocument)`
-  width: 100%;
-  height: 100%;
-`;
-
-const StyledPdfPage = styled(PdfPage)`
-  width: 100%;
-  height: 100%;
-`;
 
 const Flex = styled.div`
   display: flex;
