@@ -37,7 +37,7 @@ function InvoiceCard(props) {
   const status = startCase(invoice.status);
 
   const onClickCard = () => { setShowModal(p => !p); };
-  const onCloseModal = () => { console.log('onClose'); setShowModal(false); };
+  const onCloseModal = () => { setShowModal(false); };
 
   return (
     <>
