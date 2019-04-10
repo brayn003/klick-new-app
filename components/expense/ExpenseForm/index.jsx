@@ -8,6 +8,7 @@ import Label from 'common-components/Label';
 import Button from 'common-components/button/Button';
 import DatePicker from 'common-components/controls/DatePicker';
 import TextArea from 'common-components/controls/Textarea';
+import SelectExpenseCategory from 'common-components/smart-selects/SelectExpenseCategory';
 import useForm from 'hooks/useForm';
 
 function InvoiceForm() {
@@ -36,7 +37,7 @@ function InvoiceForm() {
         </FormGroup>
         <FormGroup width="50%">
           <InlineLabel>Categrory</InlineLabel>
-          <Input
+          <SelectExpenseCategory
             {...formField('category')}
             block
             placeholder="Eg. Parties"

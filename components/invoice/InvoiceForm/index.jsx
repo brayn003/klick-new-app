@@ -12,12 +12,12 @@ import DatePicker from 'common-components/controls/DatePicker';
 import SelectOrganization from 'common-components/smart-selects/SelectOrganization';
 import useForm from 'hooks/useForm';
 import SelectBranch from 'common-components/smart-selects/SelectBranch';
-import Select from 'common-components/controls/select/Select';
 import Modal from 'common-components/Modal';
 import UploadS3 from 'common-components/file/UploadS3';
 import Textarea from 'common-components/controls/Textarea';
 import SelectTaxType from 'common-components/smart-selects/SelectTaxType';
 import Animate from 'common-components/animate/Animate';
+import SelectTaxInclusion from 'common-components/smart-selects/SelectTaxInclusion';
 import { transformSelect, transformMultiUploadS3 } from 'helpers/form-transforms';
 import { createInvoice } from 'apis/invoice-apis';
 
@@ -99,15 +99,11 @@ function InvoiceForm(props) {
         <Card title="Taxes">
           <FormGroup width="50%">
             <InlineLabel>Tax Inclusion</InlineLabel>
-            <Select
+            <SelectTaxInclusion
               {...formField('taxInclusion', {
                 initialValue: { label: 'Inclusive', value: 'inclusive' },
                 transform: transformSelect,
               })}
-              options={[
-                { label: 'Inclusive', value: 'inclusive' },
-                { label: 'Exclusive', value: 'exclusive' },
-              ]}
             />
           </FormGroup>
           {!(activeOrg.invoicePreferences || {}).taxPerItem && (

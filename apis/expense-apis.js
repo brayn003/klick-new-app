@@ -3,8 +3,8 @@ import axios from 'axios';
 const base = `${process.env.SERVER_URL}/api/v1/app`;
 const includeAuth = true;
 
-export function getExpenses(params) {
-  return axios.get(`${base}/expenses`, { params, includeAuth });
-}
+export const getExpenses = params => axios.get(`${base}/expenses`, { params, includeAuth });
 
-export default { getExpenses };
+export const getExpenseCategories = params => axios.get(`${base}/expense/categories`, { params, includeAuth });
+
+export const createExpenseCategory = body => axios.post(`${base}/expense/category`, body, { includeAuth });

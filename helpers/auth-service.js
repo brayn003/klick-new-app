@@ -10,11 +10,10 @@ export async function checkToken(ctx) {
     }
     if (sessToken) {
       try {
+        console.log('hit verify token');
         const res = await verifyToken({ token: sessToken });
         if (res.verified && pathname !== '/') {
-          if (activeOrg) {
-            ctx.res.redirect('/');
-          } else if (pathname !== '/organization') {
+          if (!activeOrg && pathname !== '/organization') {
             ctx.res.redirect('/organization');
           }
         }
