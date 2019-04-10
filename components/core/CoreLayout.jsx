@@ -38,7 +38,7 @@ function CoreLayout(props) {
             <CoreNav pathname={pathname} onlyIcons={isSidebarCollapsed} />
           </Sidebar>
         )}
-        <Content>
+        <Content hasSidebar={isSidebarShown}>
           {isTopbarShown && <CoreTopBar pathname={pathname} title={title} />}
           <CoreBody noPadding={noPadding}>
             {children}
@@ -70,12 +70,16 @@ const Container = styled.div`
   background-color: #F9F9F9;
 `;
 
-const Content = styled.div`
+const Content = styled(({ hasSidebar, ...rest }) => <div {...rest} />)`
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-left: 240px;
+  padding-left: ${p => (p.hasSidebar ? '240px' : '0')};
 `;
+
+Content.defaultProps = {
+  hasSidebar: false,
+};
 
 const Sidebar = styled.aside`
   width: 240px;

@@ -28,7 +28,6 @@ const Animate = ({
         if (Children.count(children) === instance.current.refs.length) {
           if (targets.length) {
             const diff = difference(targets, instance.current.oldRefs);
-            console.log(diff);
             anime.remove(diff);
             anime({ targets: diff, ...rest });
           }

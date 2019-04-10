@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-// import Anime from 'react-anime';
+import Router from 'next/router';
+
 import Animate from 'common-components/animate/Animate';
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
@@ -8,12 +9,20 @@ import Label from 'common-components/Label';
 import Button from 'common-components/button/Button';
 import DatePicker from 'common-components/controls/DatePicker';
 import TextArea from 'common-components/controls/Textarea';
+import UploadS3 from 'common-components/file/UploadS3';
 import SelectExpenseCategory from 'common-components/smart-selects/SelectExpenseCategory';
+import SelectExpenseAccount from 'common-components/smart-selects/SelectExpenseAccount';
 import useForm from 'hooks/useForm';
+import { createExpense } from 'apis/expense-apis';
+import { transformSelect, transformMultiUploadS3 } from 'helpers/form-transforms';
 
 function InvoiceForm() {
-  const { formField } = useForm();
-
+  const { formField, getValues } = useForm();
+  const onClickSubmit = async () => {
+    const body = getValues();
+    await createExpense(body);
+    Router.push('/expense');
+  };
   return (
     <Animate delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
       <Card title="Dates">
@@ -38,7 +47,9 @@ function InvoiceForm() {
         <FormGroup width="50%">
           <InlineLabel>Categrory</InlineLabel>
           <SelectExpenseCategory
-            {...formField('category')}
+            {...formField('category', {
+              transform: transformSelect,
+            })}
             block
             placeholder="Eg. Parties"
           />
@@ -56,7 +67,13 @@ function InvoiceForm() {
         </FormGroup>
         <FormGroup width="50%">
           <InlineLabel>Account</InlineLabel>
-          <Input block placeholder="Expense Account " />
+          <SelectExpenseAccount
+            {...formField('accountType', {
+              transform: transformSelect,
+            })}
+            block
+            placeholder="Expense Account"
+          />
         </FormGroup>
       </Card>
       <Card title="Deductions">
@@ -79,9 +96,19 @@ function InvoiceForm() {
             placeholder="Add a comment to this expense"
           />
         </FormGroup>
+        <FormGroup width="50%">
+          <InlineLabel>Attachments</InlineLabel>
+          <UploadS3
+            {...formField('attachments', {
+              transform: transformMultiUploadS3,
+            })}
+            style={{ width: '70%' }}
+            multiple
+          />
+        </FormGroup>
       </Card>
       <ActionCard>
-        <Button>
+        <Button onClick={onClickSubmit}>
           Submit
         </Button>
       </ActionCard>
