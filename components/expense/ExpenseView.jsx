@@ -70,11 +70,11 @@ function InvoiceView() {
           {expenses && expenses.docs.map(expense => (
             <FlexRow key={expense.id}>
               <FlexCol flex="0 0 120px">{dayjs(expense.expenseDate).format('DD MMM YYYY')}</FlexCol>
-              <FlexCol flex="1 1 auto">{expense.description}</FlexCol>
-              <FlexCol flex="0 0 160px">{expense.category}</FlexCol>
-              <FlexCol flex="0 0 160px">{expense.createdBy}</FlexCol>
+              <FlexCol flex="1 1 auto">{expense.title}</FlexCol>
+              <FlexCol flex="0 0 160px">{(expense.category || {}).name}</FlexCol>
+              <FlexCol flex="0 0 160px">{(expense.createdBy || {}).name}</FlexCol>
               <FlexCol flex="0 0 100px">{expense.accountType}</FlexCol>
-              <FlexCol align="right" flex="0 0 100px">{expense.amountAfterTax}</FlexCol>
+              <FlexCol align="right" flex="0 0 100px">{expense.total}</FlexCol>
               <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
             </FlexRow>
           ))}

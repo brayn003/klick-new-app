@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { shape } from 'prop-types';
 import Router from 'next/router';
+import { connect } from 'react-redux';
 
 import Animate from 'common-components/animate/Animate';
 import Card from 'common-components/card/Card';
@@ -16,11 +18,16 @@ import useForm from 'hooks/useForm';
 import { createExpense } from 'apis/expense-apis';
 import { transformSelect, transformMultiUploadS3 } from 'helpers/form-transforms';
 
-function InvoiceForm() {
+const InvoiceForm = ({
+  activeOrg,
+}) => {
   const { formField, getValues } = useForm();
   const onClickSubmit = async () => {
     const body = getValues();
-    await createExpense(body);
+    await createExpense({
+      ...body,
+      organization: activeOrg.id,
+    });
     Router.push('/expense');
   };
   return (
@@ -59,7 +66,9 @@ function InvoiceForm() {
         <FormGroup width="50%">
           <InlineLabel>Amount</InlineLabel>
           <Input
-            {...formField('amount')}
+            {...formField('amount', {
+              initialValue: 0,
+            })}
             type="number"
             block
             placeholder="0.00"
@@ -70,6 +79,7 @@ function InvoiceForm() {
           <SelectExpenseAccount
             {...formField('accountType', {
               transform: transformSelect,
+              initialValue: { label: 'Business', value: 'business' },
             })}
             block
             placeholder="Expense Account"
@@ -80,7 +90,9 @@ function InvoiceForm() {
         <FormGroup width="50%">
           <InlineLabel>TDS Amount</InlineLabel>
           <Input
-            {...formField('tdsAmount')}
+            {...formField('tdsAmount', {
+              initialValue: 0,
+            })}
             type="number"
             block
             placeholder="0.00"
@@ -114,7 +126,15 @@ function InvoiceForm() {
       </ActionCard>
     </Animate>
   );
-}
+};
+
+InvoiceForm.propTypes = {
+  activeOrg: shape({}),
+};
+
+InvoiceForm.defaultProps = {
+  activeOrg: {},
+};
 
 const FormGroup = styled.div`
   width: ${p => p.width};
@@ -141,4 +161,11 @@ const ActionCard = styled.div`
   text-align: right;
 `;
 
-export default InvoiceForm;
+const mapStateToProps = (state) => {
+  const { organization } = state;
+  return {
+    activeOrg: organization.active.value,
+  };
+};
+
+export default connect(mapStateToProps, null)(InvoiceForm);
