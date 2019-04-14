@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
+import { shape } from 'prop-types';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 // import Anime from 'react-anime';
 import Router from 'next/router';
+import { connect } from 'react-redux';
+import { MdPerson } from 'react-icons/md';
+import startCase from 'lodash/startCase';
 
 // import { getInvoices } from 'apis/invoice-apis';
 import Button from 'common-components/button/Button';
@@ -13,8 +17,11 @@ import { FlexRow, FlexCol } from 'common-components/table/FlexTable';
 import useForm from 'hooks/useForm';
 
 import { getExpenses } from '../../apis/expense-apis';
+import Table from '../../common-components/table/Table';
 
-function InvoiceView() {
+const ExpenseView = ({
+  activeOrg,
+}) => {
   const [expenses, setExpenses] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -24,7 +31,10 @@ function InvoiceView() {
   useEffect(() => {
     setLoading(true);
     // const { status, ...rest } = values;
-    getExpenses(values)
+    getExpenses({
+      organization: activeOrg.id,
+      values,
+    })
       .then((res) => {
         setLoading(false);
         setExpenses(res);
@@ -55,35 +65,72 @@ function InvoiceView() {
           </Button>
         </ActionContainer>
       </ActionBar>
-      <Card>
-        <FlexRow>
-          <FlexCol bold flex="0 0 120px">Date</FlexCol>
-          <FlexCol align="center" bold flex="1 1 auto">Description</FlexCol>
-          <FlexCol bold flex="0 0 160px">Category</FlexCol>
-          <FlexCol bold flex="0 0 160px">Created by</FlexCol>
-          <FlexCol bold flex="0 0 100px">Account Type</FlexCol>
-          <FlexCol align="right" bold flex="0 0 100px">Amount</FlexCol>
-          <FlexCol align="center" bold flex="0 0 100px">&nbsp;</FlexCol>
-        </FlexRow>
-        {loading && <p>Loading...</p>}
-        <Animate delay={(e, i) => i * 50} opacity={[0, 1]} translateY={[4, 0]}>
-          {expenses && expenses.docs.map(expense => (
-            <FlexRow key={expense.id}>
-              <FlexCol flex="0 0 120px">{dayjs(expense.expenseDate).format('DD MMM YYYY')}</FlexCol>
-              <FlexCol flex="1 1 auto">{expense.title}</FlexCol>
-              <FlexCol flex="0 0 160px">{(expense.category || {}).name}</FlexCol>
-              <FlexCol flex="0 0 160px">{(expense.createdBy || {}).name}</FlexCol>
-              <FlexCol flex="0 0 100px">{expense.accountType}</FlexCol>
-              <FlexCol align="right" flex="0 0 100px">{expense.total}</FlexCol>
-              <FlexCol flex="0 0 100px">&nbsp;</FlexCol>
-            </FlexRow>
-          ))}
-        </Animate>
+      <Table
+        cols={[{
+          title: 'Expense Date',
+          key: 'expenseDate',
+          transform: v => dayjs(v).format('DD MMM YYYY'),
+        }, {
+          title: 'Title',
+          key: 'title',
+        }, {
+          title: 'Category',
+          key: 'category.name',
+        }, {
+          title: 'Created By',
+          key: 'createdBy.name',
+        }, {
+          title: 'Amount',
+          key: 'total',
+          style: { textAlign: 'right' },
+        }, {
+          title: 'Account Type',
+          key: 'accountType',
+          transform: startCase,
+        }]}
+        data={(expenses || {}).docs || []}
+        rowKey="id"
+      />
+      {/* {expenses && expenses.docs.map(expense => (
 
-      </Card>
+        // <Card key={expense.id}>
+        //   <ExpenseContainer>
+        //     <DateContainer>
+        //       {dayjs(expense.expenseDate).format('DD MMM YYYY')}
+        //     </DateContainer>
+        //     <DetailsContainer>
+        //       <Title>{expense.title}</Title>
+        //       <Meta>
+        //         Created At:&nbsp;
+        //         {dayjs(expense.createdAt).format('DD MMM YYYY')}&nbsp;
+        //         |&nbsp;&nbsp;Due Date:&nbsp;
+        //         {expense.dueDate ? dayjs(expense.dueDate).format('DD MMM YYYY') : 'n/a'}
+        //       </Meta>
+        //       <Meta>
+        //         <MdPerson
+        //           style={{
+        //             fontSize: '1.1em',
+        //             verticalAlign: 'top',
+        //           }}
+        //         />
+        //         &nbsp;
+        //         {(expense.createdBy || {}).name}
+        //       </Meta>
+        //     </DetailsContainer>
+        //   </ExpenseContainer>
+        // </Card>
+      ))} */}
     </Container>
   );
-}
+};
+
+ExpenseView.propTypes = {
+  activeOrg: shape({}),
+};
+
+ExpenseView.defaultProps = {
+  activeOrg: {},
+};
 
 const Container = styled.div`
 `;
@@ -103,4 +150,44 @@ const ActionContainer = styled.div`
   display: flex;
 `;
 
-export default InvoiceView;
+const DateContainer = styled.div`
+  flex: 0 0 200px;
+  display: inline-block;
+  vertical-align: top;
+  text-align: right;
+  box-sizing: border-box;
+  padding: 0 16px;
+`;
+
+const ExpenseContainer = styled.div`
+  display: flex;
+`;
+
+const DetailsContainer = styled.div`
+  flex: auto;
+`;
+
+const Title = styled.h3`
+  margin-top: 0;
+  font-size: 1em;
+  margin-bottom: 8px;
+`;
+
+const Meta = styled.p`
+  color: #666;
+  font-size: 0.83em;
+  margin: 0;
+  margin-bottom: 8px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const mapStateToProps = (state) => {
+  const activeOrg = state.organization.active.value;
+  return {
+    activeOrg,
+  };
+};
+
+export default connect(mapStateToProps, null)(ExpenseView);
