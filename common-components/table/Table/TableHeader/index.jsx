@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Th, Tr } from '../styles';
+
 const getCombinedChildren = cols => cols.reduce(
   (acc, col) => (col.children ? acc.concat(col.children) : acc),
   [],
@@ -20,17 +22,19 @@ function TableHeader(props) {
   const depth = calculateDepth(cols);
   return (
     <>
-      <tr>
+      <Tr>
         {cols.map(col => (
-          <th
+          <Th
             rowSpan={col.children ? undefined : depth}
             colSpan={col.children ? col.children.length : undefined}
             key={col.key}
+            style={col.style}
+            width={col.width}
           >
             {col.title}
-          </th>
+          </Th>
         ))}
-      </tr>
+      </Tr>
       {combinedChildren.length ? (
         <TableHeader cols={combinedChildren} />
       ) : null}

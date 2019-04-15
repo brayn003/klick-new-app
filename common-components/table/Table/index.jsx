@@ -1,6 +1,11 @@
 import { arrayOf, string, object } from 'prop-types';
 
-import { TableWrapper } from './styles';
+import {
+  TableWrapper,
+  THead,
+  TBody,
+  Tr,
+} from './styles';
 import TableCells from './TableCells';
 import TableCols from './TableCols';
 import TableHeader from './TableHeader';
@@ -10,16 +15,16 @@ const Table = ({ cols, data, rowKey }) => (
     <colgroup>
       <TableCols cols={cols} />
     </colgroup>
-    <thead>
+    <THead>
       <TableHeader cols={cols} />
-    </thead>
-    <tbody>
+    </THead>
+    <TBody>
       {data.map(row => (
-        <tr key={row[rowKey]}>
+        <Tr key={row[rowKey]}>
           <TableCells cols={cols} row={row} />
-        </tr>
+        </Tr>
       ))}
-    </tbody>
+    </TBody>
   </TableWrapper>
 );
 

@@ -5,15 +5,12 @@ import dayjs from 'dayjs';
 // import Anime from 'react-anime';
 import Router from 'next/router';
 import { connect } from 'react-redux';
-import { MdPerson } from 'react-icons/md';
 import startCase from 'lodash/startCase';
 
 // import { getInvoices } from 'apis/invoice-apis';
 import Button from 'common-components/button/Button';
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
-import Animate from 'common-components/animate/Animate';
-import { FlexRow, FlexCol } from 'common-components/table/FlexTable';
 import useForm from 'hooks/useForm';
 
 import { getExpenses } from '../../apis/expense-apis';
@@ -65,32 +62,35 @@ const ExpenseView = ({
           </Button>
         </ActionContainer>
       </ActionBar>
-      <Table
-        cols={[{
-          title: 'Expense Date',
-          key: 'expenseDate',
-          transform: v => dayjs(v).format('DD MMM YYYY'),
-        }, {
-          title: 'Title',
-          key: 'title',
-        }, {
-          title: 'Category',
-          key: 'category.name',
-        }, {
-          title: 'Created By',
-          key: 'createdBy.name',
-        }, {
-          title: 'Amount',
-          key: 'total',
-          style: { textAlign: 'right' },
-        }, {
-          title: 'Account Type',
-          key: 'accountType',
-          transform: startCase,
-        }]}
-        data={(expenses || {}).docs || []}
-        rowKey="id"
-      />
+      <Card>
+        <Table
+          cols={[{
+            title: 'Expense Date',
+            key: 'expenseDate',
+            transform: v => dayjs(v).format('DD MMM YYYY'),
+          }, {
+            title: 'Title',
+            key: 'title',
+          }, {
+            title: 'Category',
+            key: 'category.name',
+          }, {
+            title: 'Created By',
+            key: 'createdBy.name',
+          }, {
+            title: 'Amount',
+            key: 'total',
+            width: 100,
+            style: { textAlign: 'right' },
+          }, {
+            title: 'Account Type',
+            key: 'accountType',
+            transform: startCase,
+          }]}
+          data={(expenses || {}).docs || []}
+          rowKey="id"
+        />
+      </Card>
       {/* {expenses && expenses.docs.map(expense => (
 
         // <Card key={expense.id}>
