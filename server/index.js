@@ -3,6 +3,7 @@ const express = require('express');
 
 const next = require('next');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 const app = next({ dev: process.env.NODE_ENV !== 'production' });
 const handle = app.getRequestHandler();
@@ -12,6 +13,8 @@ app
   .then(() => {
     const server = express();
     server.use(cookieParser());
+
+    server.use('/static', express.static(path.join(__dirname, 'static')));
 
     server.get('/canvas/:id', (req, res) => {
       const actualPage = '/canvas';

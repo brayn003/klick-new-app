@@ -1,16 +1,39 @@
 
+import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { Document as PdfDocument, Page as PdfPage } from 'react-pdf';
 import { string, number } from 'prop-types';
 
-const InvoicePdf = ({ src, width }) => (
-  <StyledPdfDocument
-    loading={null}
-    file={src}
-  >
-    <StyledPdfPage loading={null} pageNumber={1} width={width} />
-  </StyledPdfDocument>
-);
+const InvoicePdf = ({ src, width }) => {
+  const instance = useRef({});
+  const [load, setLoad] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setLoad(true);
+    }, 800);
+    return () => {
+      if (instance.current.pdf) {
+        instance.current.pdf.destroy();
+      }
+    };
+  }, []);
+
+  if (!load) {
+    return null;
+  }
+
+  return (
+    <StyledPdfDocument
+      loading={null}
+      file={src}
+      onLoadSuccess={(pdf) => {
+        instance.current.pdf = pdf;
+      }}
+    >
+      <StyledPdfPage loading={null} pageNumber={1} width={width} />
+    </StyledPdfDocument>
+  );
+};
 
 InvoicePdf.propTypes = {
   src: string.isRequired,

@@ -12,7 +12,7 @@ import bootstrap from '../helpers/app-bootstrap';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = '/static/js/pdf.worker.min.js';
 
 intercept();
 

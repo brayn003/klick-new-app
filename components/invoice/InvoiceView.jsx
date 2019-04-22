@@ -14,6 +14,7 @@ import useForm from 'hooks/useForm';
 import Button from 'common-components/button/Button';
 import ButtonLink from 'common-components/button/ButtonLink';
 import Animate from 'common-components/animate/Animate';
+import Pagination from 'common-components/Pagination';
 
 import InvoiceCard from './InvoiceCard';
 
@@ -37,6 +38,7 @@ function InvoiceView(props) {
   const { activeOrg } = props;
   const [invoices, setInvoices] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [activePage, setActivePage] = useState(1);
 
   const { formField, getValues } = useForm();
   const values = getValues();
@@ -47,16 +49,18 @@ function InvoiceView(props) {
     getInvoices({
       organization: activeOrg && activeOrg.id,
       status: status === 'all_status' ? undefined : status,
+      page: activePage,
       ...rest,
     })
       .then((res) => {
         setLoading(false);
         setInvoices(res);
+        setActivePage(res.page);
       })
       .catch(() => {
         setLoading(false);
       });
-  }, [values.serial, values.status]);
+  }, [values.serial, values.status, activePage]);
 
   return (
     <Container>
@@ -114,6 +118,11 @@ function InvoiceView(props) {
           ))}
         </Animate>
       </CardContainer>
+      <Pagination
+        active={activePage}
+        total={invoices && invoices.pages}
+        onChange={setActivePage}
+      />
     </Container>
   );
 }
