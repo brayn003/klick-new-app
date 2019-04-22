@@ -6,7 +6,7 @@ function ButtonLink(props) {
   );
 }
 
-const StyledButtonLink = styled.button`
+export const StyledButtonLink = styled.button`
   width: ${p => (p.block ? '100%' : 'initial')};
   text-align: ${p => (p.block ? 'center' : 'initial')};
   height: 40px;

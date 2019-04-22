@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+import { StyledButton } from 'common-components/button/Button';
+import { StyledButtonLink } from 'common-components/button/ButtonLink';
+import { StyledIconButton } from 'common-components/button/IconButton';
+
 export const Container = styled.div``;
 
 const calcFlexWidth = (width) => {
@@ -46,6 +50,16 @@ export const Td = styled.td`
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
   }
+
+  ${StyledButton}, ${StyledButtonLink}, ${StyledIconButton} {
+    margin-top: -8px;
+    /* margin-right: 8px;
+
+    &:last-child {
+      margin-right: 0;
+    } */
+  }
+
 `;
 
 Td.defaultProps = {

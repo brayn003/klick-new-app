@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { shape } from 'prop-types';
 import styled from 'styled-components';
-// import Anime from 'react-anime';
 import Router from 'next/router';
 import { MdArrowDropDown } from 'react-icons/md';
 

@@ -100,7 +100,6 @@ const TooltipStyles = createGlobalStyle`
   }
   .app-tooltip-inner {
     min-width: 30px;
-    min-height: 32px;
     padding: 6px 8px;
     color: #fff;
     text-align: left;
@@ -108,8 +107,7 @@ const TooltipStyles = createGlobalStyle`
     word-wrap: break-word;
     background-color: rgba(0, 0, 0, 0.75);
     border-radius: 4px;
-    -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   }
   .app-tooltip-arrow {
     position: absolute;
