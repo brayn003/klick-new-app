@@ -117,3 +117,10 @@ export const Col = styled(({ width, ...rest }) => <col {...rest} />)`
 Col.defaultProps = {
   width: 'initial',
 };
+
+export const TLoading = styled.div`
+  height: 144px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

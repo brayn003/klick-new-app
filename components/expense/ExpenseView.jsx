@@ -14,6 +14,35 @@ import useForm from 'hooks/useForm';
 import { getExpenses } from '../../apis/expense-apis';
 import Table from '../../common-components/table/Table';
 
+const cols = [{
+  title: 'Expense Date',
+  key: 'expenseDate',
+  width: 140,
+  transform: v => dayjs(v).format('DD MMM YYYY'),
+}, {
+  title: 'Title',
+  key: 'title',
+}, {
+  title: 'Category',
+  key: 'category.name',
+  width: 200,
+}, {
+  title: 'Created By',
+  key: 'createdBy.name',
+  width: 110,
+}, {
+  title: 'Amount',
+  key: 'total',
+  width: 100,
+  align: 'right',
+}, {
+  title: 'Account Type',
+  key: 'accountType',
+  transform: startCase,
+  align: 'right',
+  width: 140,
+}];
+
 const ExpenseView = ({
   activeOrg,
 }) => {
@@ -61,34 +90,8 @@ const ExpenseView = ({
       </ActionBar>
       <Card>
         <Table
-          cols={[{
-            title: 'Expense Date',
-            key: 'expenseDate',
-            width: 140,
-            transform: v => dayjs(v).format('DD MMM YYYY'),
-          }, {
-            title: 'Title',
-            key: 'title',
-          }, {
-            title: 'Category',
-            key: 'category.name',
-            width: 200,
-          }, {
-            title: 'Created By',
-            key: 'createdBy.name',
-            width: 110,
-          }, {
-            title: 'Amount',
-            key: 'total',
-            width: 100,
-            align: 'right',
-          }, {
-            title: 'Account Type',
-            key: 'accountType',
-            transform: startCase,
-            align: 'right',
-            width: 140,
-          }]}
+          loading={loading}
+          cols={cols}
           data={(expenses || {}).docs || []}
           rowKey="id"
         />
