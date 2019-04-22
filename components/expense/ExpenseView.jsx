@@ -9,38 +9,40 @@ import startCase from 'lodash/startCase';
 import Button from 'common-components/button/Button';
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
+import Table from 'common-components/table/Table';
+import Pagination from 'common-components/Pagination';
 import useForm from 'hooks/useForm';
 
 import { getExpenses } from '../../apis/expense-apis';
-import Table from '../../common-components/table/Table';
 
 const cols = [{
   title: 'Expense Date',
   key: 'expenseDate',
-  width: 140,
+  width: '12%',
   transform: v => dayjs(v).format('DD MMM YYYY'),
 }, {
   title: 'Title',
   key: 'title',
+
 }, {
   title: 'Category',
   key: 'category.name',
-  width: 200,
+  width: '12%',
 }, {
   title: 'Created By',
   key: 'createdBy.name',
-  width: 110,
+  width: '10%',
 }, {
   title: 'Amount',
   key: 'total',
-  width: 100,
+  width: '10%',
   align: 'right',
 }, {
   title: 'Account Type',
   key: 'accountType',
   transform: startCase,
   align: 'right',
-  width: 140,
+  width: '12%',
 }];
 
 const ExpenseView = ({
@@ -48,6 +50,7 @@ const ExpenseView = ({
 }) => {
   const [expenses, setExpenses] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [activePage, setActivePage] = useState(1);
 
   const { formField, getValues } = useForm();
   const values = getValues();
@@ -56,16 +59,18 @@ const ExpenseView = ({
     setLoading(true);
     getExpenses({
       organization: activeOrg.id,
-      values,
+      page: activePage,
+      ...values,
     })
       .then((res) => {
         setLoading(false);
         setExpenses(res);
+        setActivePage(res.page);
       })
       .catch(() => {
         setLoading(false);
       });
-  }, Object.values(values));
+  }, [...Object.values(values), activePage]);
 
   return (
     <Container>
@@ -96,6 +101,11 @@ const ExpenseView = ({
           rowKey="id"
         />
       </Card>
+      <Pagination
+        active={activePage}
+        total={(expenses || {}).pages}
+        onChange={setActivePage}
+      />
     </Container>
   );
 };

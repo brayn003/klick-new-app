@@ -118,9 +118,13 @@ Col.defaultProps = {
   width: 'initial',
 };
 
-export const TLoading = styled.div`
-  height: 144px;
+export const TLoading = styled.tbody`
+  height: ${p => p.rows * 48}px;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
+
+TLoading.defaultProps = {
+  rows: 3,
+};

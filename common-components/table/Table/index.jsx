@@ -24,7 +24,7 @@ const Table = ({
       <TableHeader cols={cols} />
     </THead>
     {loading
-      ? <TLoading>Loading ...</TLoading>
+      ? <TLoading rows={data.length || 3}>Loading ...</TLoading>
       : (
         <TBody>
           {data.map(row => (

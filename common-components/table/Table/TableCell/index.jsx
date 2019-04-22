@@ -21,6 +21,7 @@ const TableCell = ({
       placement="right"
       show={showTooltip}
       text={<TableCellDetail row={row} col={col} />}
+      mouseEnterDelay={0.6}
     >
       <Td
         width={col.width}
