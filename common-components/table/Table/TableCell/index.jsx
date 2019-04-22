@@ -23,8 +23,8 @@ const TableCell = ({
       text={<TableCellDetail row={row} col={col} />}
     >
       <Td
-        style={col.style}
         width={col.width}
+        align={col.align}
         ref={onRef}
       >
         <TableCellDetail row={row} col={col} />

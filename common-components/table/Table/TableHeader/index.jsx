@@ -28,8 +28,8 @@ function TableHeader(props) {
             rowSpan={col.children ? undefined : depth}
             colSpan={col.children ? col.children.length : undefined}
             key={col.key}
-            style={col.style}
             width={col.width}
+            align={col.align}
           >
             {col.title}
           </Th>

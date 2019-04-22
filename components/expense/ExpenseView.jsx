@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 import { shape } from 'prop-types';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
-// import Anime from 'react-anime';
 import Router from 'next/router';
 import { connect } from 'react-redux';
 import startCase from 'lodash/startCase';
 
-// import { getInvoices } from 'apis/invoice-apis';
 import Button from 'common-components/button/Button';
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
@@ -27,7 +25,6 @@ const ExpenseView = ({
 
   useEffect(() => {
     setLoading(true);
-    // const { status, ...rest } = values;
     getExpenses({
       organization: activeOrg.id,
       values,
@@ -67,6 +64,7 @@ const ExpenseView = ({
           cols={[{
             title: 'Expense Date',
             key: 'expenseDate',
+            width: 140,
             transform: v => dayjs(v).format('DD MMM YYYY'),
           }, {
             title: 'Title',
@@ -74,52 +72,27 @@ const ExpenseView = ({
           }, {
             title: 'Category',
             key: 'category.name',
+            width: 200,
           }, {
             title: 'Created By',
             key: 'createdBy.name',
+            width: 110,
           }, {
             title: 'Amount',
             key: 'total',
             width: 100,
-            style: { textAlign: 'right' },
+            align: 'right',
           }, {
             title: 'Account Type',
             key: 'accountType',
             transform: startCase,
+            align: 'right',
+            width: 140,
           }]}
           data={(expenses || {}).docs || []}
           rowKey="id"
         />
       </Card>
-      {/* {expenses && expenses.docs.map(expense => (
-
-        // <Card key={expense.id}>
-        //   <ExpenseContainer>
-        //     <DateContainer>
-        //       {dayjs(expense.expenseDate).format('DD MMM YYYY')}
-        //     </DateContainer>
-        //     <DetailsContainer>
-        //       <Title>{expense.title}</Title>
-        //       <Meta>
-        //         Created At:&nbsp;
-        //         {dayjs(expense.createdAt).format('DD MMM YYYY')}&nbsp;
-        //         |&nbsp;&nbsp;Due Date:&nbsp;
-        //         {expense.dueDate ? dayjs(expense.dueDate).format('DD MMM YYYY') : 'n/a'}
-        //       </Meta>
-        //       <Meta>
-        //         <MdPerson
-        //           style={{
-        //             fontSize: '1.1em',
-        //             verticalAlign: 'top',
-        //           }}
-        //         />
-        //         &nbsp;
-        //         {(expense.createdBy || {}).name}
-        //       </Meta>
-        //     </DetailsContainer>
-        //   </ExpenseContainer>
-        // </Card>
-      ))} */}
     </Container>
   );
 };
@@ -148,39 +121,6 @@ const SearchContainer = styled.div`
 const ActionContainer = styled.div`
   flex: 1;
   display: flex;
-`;
-
-const DateContainer = styled.div`
-  flex: 0 0 200px;
-  display: inline-block;
-  vertical-align: top;
-  text-align: right;
-  box-sizing: border-box;
-  padding: 0 16px;
-`;
-
-const ExpenseContainer = styled.div`
-  display: flex;
-`;
-
-const DetailsContainer = styled.div`
-  flex: auto;
-`;
-
-const Title = styled.h3`
-  margin-top: 0;
-  font-size: 1em;
-  margin-bottom: 8px;
-`;
-
-const Meta = styled.p`
-  color: #666;
-  font-size: 0.83em;
-  margin: 0;
-  margin-bottom: 8px;
-  &:last-child {
-    margin-bottom: 0;
-  }
 `;
 
 const mapStateToProps = (state) => {

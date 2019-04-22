@@ -27,7 +27,6 @@ export const Td = styled.td`
   display: block;
   height: 48px;
   padding: 12px;
-  text-align: left;
   box-sizing: border-box;
   line-height: 24px;
   background-color: transparent;
@@ -49,8 +48,14 @@ export const Td = styled.td`
   }
 `;
 
+Td.defaultProps = {
+  width: undefined,
+  align: 'left',
+};
+
 export const Th = styled.th`
   ${p => calcFlexWidth(p.width)};
+  text-align: ${p => p.align};
 
   white-space: nowrap; 
   overflow: hidden;
@@ -60,12 +65,15 @@ export const Th = styled.th`
   font-weight: 700;
   height: 48px;
   padding: 12px;
-  text-align: left;
   box-sizing: border-box;
   line-height: 24px;
   border-bottom: 1px solid #ededed;
   background-color: transparent;
 `;
+
+Th.defaultProps = {
+  align: 'left',
+};
 
 export const TBody = styled.tbody`
   display: table;
