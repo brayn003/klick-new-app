@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import { Th, Tr } from '../styles';
@@ -50,4 +50,4 @@ TableHeader.defaultProps = {
   cols: [],
 };
 
-export default TableHeader;
+export default memo(TableHeader);

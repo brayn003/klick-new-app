@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { shape } from 'prop-types';
 import Tooltip from 'common-components/Tooltip';
 
@@ -43,4 +43,4 @@ TableCell.defaultProps = {
   col: {},
   row: {},
 };
-export default TableCell;
+export default memo(TableCell);

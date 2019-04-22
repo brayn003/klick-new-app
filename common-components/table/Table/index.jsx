@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import {
   arrayOf, string, object, bool,
 } from 'prop-types';
@@ -51,4 +52,4 @@ Table.defaultProps = {
   loading: false,
 };
 
-export default Table;
+export default memo(Table);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { number, func } from 'prop-types';
-import { MdChevronRight, MdChevronLeft } from 'react-icons/md';
+import { FiChevronsRight, FiChevronsLeft } from 'react-icons/fi';
 
 import { Container, PageButton } from './styles';
 
@@ -49,10 +49,10 @@ const Pagination = ({
 
   const getJump = (type = 'left') => {
     if (type === 'left' && active > (endBuffer + surroundBuffer + 1)) {
-      return [{ type: 'jumpLeft', value: <MdChevronLeft style={{ marginTop: 4, fontSize: '1.2em' }} /> }];
+      return [{ type: 'jumpLeft', value: <FiChevronsLeft style={{ marginTop: 6 }} /> }];
     }
     if (type === 'right' && active < (total - endBuffer - surroundBuffer)) {
-      return [{ type: 'jumpRight', value: <MdChevronRight style={{ marginTop: 4, fontSize: '1.2em' }} /> }];
+      return [{ type: 'jumpRight', value: <FiChevronsRight style={{ marginTop: 6 }} /> }];
     }
     return [];
   };

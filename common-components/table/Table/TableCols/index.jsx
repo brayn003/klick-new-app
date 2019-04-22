@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Col } from '../styles';
 
@@ -16,4 +16,4 @@ TableCols.propTypes = {
   cols: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default TableCols;
+export default memo(TableCols);

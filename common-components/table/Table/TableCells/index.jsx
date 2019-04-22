@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { arrayOf, shape, object } from 'prop-types';
 
 import TableCell from '../TableCell';
@@ -29,4 +30,4 @@ TableCells.defaultProps = {
   row: {},
 };
 
-export default TableCells;
+export default memo(TableCells);

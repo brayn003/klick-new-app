@@ -15,8 +15,10 @@ import Table from 'common-components/table/Table';
 import Pagination from 'common-components/Pagination';
 import IconButton from 'common-components/button/IconButton';
 import useForm from 'hooks/useForm';
+import Modal from 'common-components/Modal';
 
 import { getExpenses } from '../../apis/expense-apis';
+import ExpensePaymentForm from '../payment/ExpensePaymentForm';
 
 
 const ExpenseView = ({
@@ -25,6 +27,10 @@ const ExpenseView = ({
   const [expenses, setExpenses] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activePage, setActivePage] = useState(1);
+  const [paymentExpense, setPaymentExpense] = useState(null);
+
+  const onClickPayment = (expense) => { setPaymentExpense(expense); };
+  const onClosePayment = () => { setPaymentExpense(null); };
 
   const cols = [{
     title: 'Expense Date',
@@ -58,32 +64,32 @@ const ExpenseView = ({
     key: 'action',
     width: '13%',
     align: 'right',
-    render: (r) => {
-      console.log(r);
-      return (
-        <>
-          <IconButton tooltipText="Add Payment">
-            <FiDollarSign />
+    render: r => (
+      <>
+        <IconButton
+          tooltipText="Add Payment"
+          onClick={() => { onClickPayment(r); }}
+        >
+          <FiDollarSign />
+        </IconButton>
+        <IconButton tooltipText="Edit Expense">
+          <FiEdit2 />
+        </IconButton>
+        <DropDown
+          options={[{
+            title: 'Force Close',
+            key: 'force_close',
+          }, {
+            title: 'Delete',
+            key: 'delete',
+          }]}
+        >
+          <IconButton tooltipText="More Options">
+            <FiMoreVertical />
           </IconButton>
-          <IconButton tooltipText="Edit Expense">
-            <FiEdit2 />
-          </IconButton>
-          <DropDown
-            options={[{
-              title: 'Force Close',
-              key: 'force_close',
-            }, {
-              title: 'Delete',
-              key: 'delete',
-            }]}
-          >
-            <IconButton tooltipText="More Options">
-              <FiMoreVertical />
-            </IconButton>
-          </DropDown>
-        </>
-      );
-    },
+        </DropDown>
+      </>
+    ),
   }];
 
   const { formField, getValues } = useForm();
@@ -107,40 +113,49 @@ const ExpenseView = ({
   }, [...Object.values(values), activePage]);
 
   return (
-    <Container>
-      <ActionBar>
-        <SearchContainer>
-          <Input
-            {...formField('title')}
-            placeholder="Search expenses"
-            block
+    <>
+      <Container>
+        <ActionBar>
+          <SearchContainer>
+            <Input
+              {...formField('title')}
+              placeholder="Search expenses"
+              block
+            />
+          </SearchContainer>
+          <ActionContainer>
+            <Button
+              onClick={() => { Router.push({ pathname: '/expense/create' }); }}
+              style={{
+                marginLeft: 'auto',
+              }}
+            >
+            New Expense
+            </Button>
+          </ActionContainer>
+        </ActionBar>
+        <Card>
+          <Table
+            loading={loading}
+            cols={cols}
+            data={(expenses || {}).docs || []}
+            rowKey="id"
           />
-        </SearchContainer>
-        <ActionContainer>
-          <Button
-            onClick={() => { Router.push({ pathname: '/expense/create' }); }}
-            style={{
-              marginLeft: 'auto',
-            }}
-          >
-          New Expense
-          </Button>
-        </ActionContainer>
-      </ActionBar>
-      <Card>
-        <Table
-          loading={loading}
-          cols={cols}
-          data={(expenses || {}).docs || []}
-          rowKey="id"
+        </Card>
+        <Pagination
+          active={activePage}
+          total={(expenses || {}).pages}
+          onChange={setActivePage}
         />
-      </Card>
-      <Pagination
-        active={activePage}
-        total={(expenses || {}).pages}
-        onChange={setActivePage}
-      />
-    </Container>
+      </Container>
+      <Modal
+        title="Payment for Expense"
+        show={!!paymentExpense}
+        onClose={onClosePayment}
+      >
+        <ExpensePaymentForm expense={paymentExpense} />
+      </Modal>
+    </>
   );
 };
 

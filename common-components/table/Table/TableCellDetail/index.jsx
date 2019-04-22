@@ -1,4 +1,4 @@
-// import React from 'react';
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import getIn from 'lodash/get';
 
@@ -31,4 +31,4 @@ TableCell.defaultProps = {
   col: {},
 };
 
-export default TableCell;
+export default memo(TableCell);
