@@ -1,34 +1,45 @@
-// import React from 'react';
-import PropTypes from 'prop-types';
-import getIn from 'lodash/get';
+import { useState } from 'react';
+import { shape } from 'prop-types';
+import Tooltip from 'common-components/Tooltip';
 
-function TableCell(props) {
-  const { col, row } = props;
-  if (!col.key) {
-    throw new Error('col requires a key');
-  }
-  if (col.render) {
-    if (typeof col.render === 'function') {
-      return col.render(row, col.transform);
+import { Td } from '../styles';
+import TableCellDetail from '../TableCellDetail';
+
+const TableCell = ({
+  row,
+  col,
+}) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const onRef = (r) => {
+    if (r && (r.scrollWidth > r.offsetWidth)) {
+      setShowTooltip(true);
     }
-    throw new Error('render is defined but not a function');
-  }
-  if (typeof col.transform === 'function') {
-    return col.transform(getIn(row, col.key));
-  }
-  return getIn(row, col.key);
-}
+  };
+  return (
+    <Tooltip
+      trigger={['hover']}
+      placement="right"
+      show={showTooltip}
+      text={<TableCellDetail row={row} col={col} />}
+    >
+      <Td
+        style={col.style}
+        width={col.width}
+        ref={onRef}
+      >
+        <TableCellDetail row={row} col={col} />
+      </Td>
+    </Tooltip>
+  );
+};
 
 TableCell.propTypes = {
-  col: PropTypes.shape({
-    key: PropTypes.string,
-  }),
-  row: PropTypes.shape({}),
+  col: shape({}),
+  row: shape({}),
 };
 
 TableCell.defaultProps = {
-  row: {},
   col: {},
+  row: {},
 };
-
 export default TableCell;

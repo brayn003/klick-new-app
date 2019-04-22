@@ -1,9 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import TableCell from '../TableCell';
-import Popover from '../../../Popover';
+import { arrayOf, shape, object } from 'prop-types';
 
-import { Td } from '../styles';
+import TableCell from '../TableCell';
+
 
 function TableCells(props) {
   const { cols, row } = props;
@@ -14,31 +12,16 @@ function TableCells(props) {
     if (col.children && col.children.length) {
       return <TableCells key={col.key} cols={col.children} row={row} />;
     }
+
     return (
-      <Td
-        style={col.style}
-        width={col.width}
-        key={col.key}
-        onMouseEnter={(e) => {
-          console.log(e.target.offsetWidth, e.target.scrollWidth);
-        }}
-      >
-        <Popover
-          trigger={['hover']}
-          overlay="hello"
-          placement="bottomLeft"
-        >
-          hello
-          {/* <TableCell row={row} col={col} /> */}
-        </Popover>
-      </Td>
+      <TableCell key={col.key} row={row} col={col} />
     );
   });
 }
 
 TableCells.propTypes = {
-  cols: PropTypes.arrayOf(PropTypes.object),
-  row: PropTypes.shape({}),
+  cols: arrayOf(object),
+  row: shape({}),
 };
 
 TableCells.defaultProps = {
