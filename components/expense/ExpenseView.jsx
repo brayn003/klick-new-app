@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import startCase from 'lodash/startCase';
 import { FiDollarSign, FiEdit2, FiMoreVertical } from 'react-icons/fi';
 
+import DropDown from 'common-components/controls/DropDown';
 import Button from 'common-components/button/Button';
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
@@ -55,7 +56,7 @@ const ExpenseView = ({
   }, {
     title: '',
     key: 'action',
-    width: '14%',
+    width: '13%',
     align: 'right',
     render: (r) => {
       console.log(r);
@@ -67,9 +68,19 @@ const ExpenseView = ({
           <IconButton tooltipText="Edit Expense">
             <FiEdit2 />
           </IconButton>
-          <IconButton tooltipText="More Options">
-            <FiMoreVertical />
-          </IconButton>
+          <DropDown
+            options={[{
+              title: 'Force Close',
+              key: 'force_close',
+            }, {
+              title: 'Delete',
+              key: 'delete',
+            }]}
+          >
+            <IconButton tooltipText="More Options">
+              <FiMoreVertical />
+            </IconButton>
+          </DropDown>
         </>
       );
     },

@@ -73,7 +73,9 @@ function InvoiceView(props) {
         </SearchContainer>
         <ActionContainer>
           <DropDown
-            {...formField('status')}
+            {...formField('status', {
+              initialValue: 'all_status',
+            })}
             options={options}
           >
             {({ title }) => (

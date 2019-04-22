@@ -19,6 +19,7 @@ const Tooltip = ({
         prefixCls="app-tooltip"
         overlayClassName="app-tooltip"
         transitionName="animation-tooltip"
+        trigger={['hover']}
         overlay={text}
       >
         {children}

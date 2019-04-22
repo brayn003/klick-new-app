@@ -1,6 +1,8 @@
 
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import {
+  arrayOf, shape, func, string, node, oneOfType,
+} from 'prop-types';
 
 import Popover from '../Popover';
 
@@ -9,9 +11,10 @@ function DropDown(props) {
     options,
     onChange,
     children,
+    placement,
   } = props;
   const {
-    value = options.length ? (options[0].value || options[0].key) : undefined,
+    value,
   } = props;
   let valueOption = options.find(option => (option.value || option.key) === value);
   if (typeof valueOption === 'undefined') {
@@ -20,7 +23,7 @@ function DropDown(props) {
   return (
     <Popover
       trigger={['focus']}
-      placement="bottomLeft"
+      placement={placement}
       overlay={(
         <PopoverContainer>
           {options.map(option => (
@@ -35,7 +38,7 @@ function DropDown(props) {
         </PopoverContainer>
       )}
     >
-      {children({ title: valueOption.title })}
+      {typeof children === 'function' ? children({ title: valueOption.title }) : children}
     </Popover>
   );
 }
@@ -59,10 +62,11 @@ const Item = styled.div`
 `;
 
 DropDown.propTypes = {
-  onChange: PropTypes.func,
-  value: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({})),
-  children: PropTypes.func,
+  onChange: func,
+  value: string,
+  options: arrayOf(shape({})),
+  children: oneOfType([func, node]),
+  placement: string,
 };
 
 DropDown.defaultProps = {
@@ -70,6 +74,7 @@ DropDown.defaultProps = {
   value: undefined,
   options: [],
   children: () => null,
+  placement: 'bottomRight',
 };
 
 export default DropDown;
