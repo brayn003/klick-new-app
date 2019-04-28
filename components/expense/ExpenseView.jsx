@@ -153,7 +153,7 @@ const ExpenseView = ({
         show={!!paymentExpense}
         onClose={onClosePayment}
       >
-        <ExpensePaymentForm expense={paymentExpense} />
+        <ExpensePaymentForm expense={paymentExpense} onComplete={onClosePayment} />
       </Modal>
     </>
   );
