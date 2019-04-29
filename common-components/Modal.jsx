@@ -74,7 +74,6 @@ export const Container = styled.div`
   left: calc(50% - (${p => calcWidth(p.width)} / 2));
   top: 200px;
   min-height: 100px;
-  max-height: 300px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
   z-index: 1010;
   background-color: #FFF;

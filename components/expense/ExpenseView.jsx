@@ -62,13 +62,14 @@ const ExpenseView = ({
   }, {
     title: '',
     key: 'action',
-    width: '13%',
+    width: '14%',
     align: 'right',
     render: r => (
       <>
         <IconButton
           tooltipText="Add Payment"
           onClick={() => { onClickPayment(r); }}
+          disabled={r.status === 'closed'}
         >
           <FiDollarSign />
         </IconButton>

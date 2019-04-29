@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'common-components/Toast';
 import omit from 'lodash/omit';
 import cookies from 'js-cookie';
-import isUnderfined from 'lodash/isUndefined';
+import isUndefined from 'lodash/isUndefined';
 
 import { handleError } from './error-handler';
 
@@ -27,7 +27,7 @@ function requestErrorHandler(error) {
 }
 
 function responseHandler(response) {
-  if (isUnderfined(response.data.success)) {
+  if (isUndefined(response.data.success)) {
     return response.data;
   }
 

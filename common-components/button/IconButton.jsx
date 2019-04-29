@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { string } from 'prop-types';
+import { string, bool } from 'prop-types';
 
 import Tooltip from 'common-components/Tooltip';
 
@@ -7,24 +7,31 @@ import ButtonLink from './ButtonLink';
 
 const IconButton = ({
   tooltipText,
+  disabled,
   ...rest
 }) => (
   <Tooltip
-    show={!!tooltipText}
+    show={!!tooltipText && !disabled}
     placement="top"
     text={tooltipText}
     mouseEnterDelay={0.6}
+    trigger={['hover']}
   >
-    <StyledIconButton {...rest} />
+    <StyledIconButton
+      disabled={disabled}
+      {...rest}
+    />
   </Tooltip>
 );
 
 IconButton.propTypes = {
   tooltipText: string,
+  disabled: bool,
 };
 
 IconButton.defaultProps = {
   tooltipText: undefined,
+  disabled: false,
 };
 
 export const StyledIconButton = styled(ButtonLink)`

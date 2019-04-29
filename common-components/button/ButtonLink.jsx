@@ -29,6 +29,14 @@ export const StyledButtonLink = styled.button`
     color: #4798db;
     box-shadow: rgba(175, 175, 175, 0.5) 0px 2px 4px 0px;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    
+    &:hover {
+      color: inherit;
+    }
+  }
 `;
 
 export default ButtonLink;
