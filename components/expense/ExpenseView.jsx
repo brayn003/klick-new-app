@@ -31,6 +31,9 @@ const ExpenseView = ({
 
   const onClickPayment = (expense) => { setPaymentExpense(expense); };
   const onClosePayment = () => { setPaymentExpense(null); };
+  const onClickEdit = (expense) => {
+    Router.push(`/expense/edit?expenseId=${expense.id}`, `/expense/edit/${expense.id}`);
+  };
 
   const cols = [{
     title: 'Expense Date',
@@ -73,7 +76,10 @@ const ExpenseView = ({
         >
           <FiDollarSign />
         </IconButton>
-        <IconButton tooltipText="Edit Expense">
+        <IconButton
+          onClick={() => { onClickEdit(r); }}
+          tooltipText="Edit Expense"
+        >
           <FiEdit2 />
         </IconButton>
         <DropDown

@@ -16,15 +16,9 @@ app
 
     server.use('/static', express.static(path.join(__dirname, 'static')));
 
-    server.get('/canvas/:id', (req, res) => {
-      const actualPage = '/canvas';
-      const queryParams = { canvasId: req.params.id };
-      app.render(req, res, actualPage, queryParams);
-    });
-
-    server.get('/player/:id', (req, res) => {
-      const actualPage = '/player';
-      const queryParams = { canvasId: req.params.id };
+    server.get('/expense/edit/:id', (req, res) => {
+      const actualPage = '/expense/edit';
+      const queryParams = { expenseId: req.params.id };
       app.render(req, res, actualPage, queryParams);
     });
 

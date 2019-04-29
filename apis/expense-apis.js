@@ -3,9 +3,13 @@ import axios from 'axios';
 const base = `${process.env.SERVER_URL}/api/v1/app`;
 const includeAuth = true;
 
+export const getExpense = id => axios.get(`${base}/expense/${id}`, { includeAuth });
+
 export const getExpenses = params => axios.get(`${base}/expenses`, { params, includeAuth });
 
 export const createExpense = body => axios.post(`${base}/expense`, body, { includeAuth });
+
+export const updateExpense = (id, body) => axios.patch(`${base}/expense/${id}`, body, { includeAuth });
 
 export const getExpenseCategories = params => axios.get(`${base}/expense/categories`, { params, includeAuth });
 

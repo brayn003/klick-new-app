@@ -1,11 +1,11 @@
 import ExpenseForm from 'components/expense/ExpenseForm';
 
-function Page2() {
+function Page() {
   return (
     <ExpenseForm />
   );
 }
 
-Page2.getInitialProps = () => ({ title: 'Create Expense' });
+Page.getInitialProps = () => ({ title: 'Create Expense' });
 
-export default Page2;
+export default Page;

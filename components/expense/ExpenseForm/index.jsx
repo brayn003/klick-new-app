@@ -1,8 +1,9 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { shape } from 'prop-types';
+import { shape, string } from 'prop-types';
 import Router from 'next/router';
 import { connect } from 'react-redux';
+import startCase from 'lodash/startCase';
 
 import Animate from 'common-components/animate/Animate';
 import Card from 'common-components/card/Card';
@@ -15,21 +16,66 @@ import UploadS3 from 'common-components/file/UploadS3';
 import SelectExpenseCategory from 'common-components/smart-selects/SelectExpenseCategory';
 import SelectExpenseAccount from 'common-components/smart-selects/SelectExpenseAccount';
 import useForm from 'hooks/useForm';
-import { createExpense } from 'apis/expense-apis';
+import { getExpense, createExpense } from 'apis/expense-apis';
 import { transformSelect, transformMultiUploadS3 } from 'helpers/form-transforms';
+import { updateExpense } from '../../../apis/expense-apis';
 
 const InvoiceForm = ({
   activeOrg,
+  expenseId,
 }) => {
-  const { formField, getValues } = useForm();
+  const { formField, getValues, setValue } = useForm();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (expenseId) {
+      setLoading(true);
+      getExpense(expenseId)
+        .then((expense) => {
+          setLoading(false);
+          setValue('expenseDate', expense.expenseDate);
+          setValue('title', expense.title);
+          setValue('category', {
+            label: expense.category.name,
+            value: expense.category.id,
+          });
+          setValue('amount', expense.total);
+          setValue('accountType', { label: startCase(expense.accountType), value: expense.accountType });
+          setValue('tdsAmount', expense.tdsAmount);
+          setValue('inlineComment', expense.inlineComment);
+          setValue('attachments', expense.attachments.map(f => ({
+            file: { name: f },
+            key: f,
+            result: { url: f },
+            status: 'succeeded',
+          })));
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    }
+  }, []);
+
   const onClickSubmit = async () => {
     const body = getValues();
-    await createExpense({
-      ...body,
-      organization: activeOrg.id,
-    });
+    if (expenseId) {
+      await updateExpense(expenseId, {
+        ...body,
+        organization: activeOrg.id,
+      });
+    } else {
+      await createExpense({
+        ...body,
+        organization: activeOrg.id,
+      });
+    }
     Router.push('/expense');
   };
+
+  if (loading) {
+    return 'loading ...';
+  }
+
   return (
     <Animate delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
       <Card title="Dates">
@@ -130,10 +176,12 @@ const InvoiceForm = ({
 
 InvoiceForm.propTypes = {
   activeOrg: shape({}),
+  expenseId: string,
 };
 
 InvoiceForm.defaultProps = {
   activeOrg: {},
+  expenseId: undefined,
 };
 
 const FormGroup = styled.div`
