@@ -8,13 +8,16 @@ import isEqual from 'lodash/isEqual';
 import usePrevious from '../../hooks/usePrevious';
 import Input from './Input';
 
-function useFlatpickr(options) {
+function useFlatpickr({ value, ...options }) {
   const ref = useRef();
   const picker = useRef();
 
   useEffect(() => {
     if (ref.current) {
       picker.current = Flatpickr(ref.current, options);
+      if (value) {
+        picker.current.setDate(value && new Date(value), false);
+      }
     }
     return () => {
       if (picker.current) { picker.current.destroy(); }
@@ -53,7 +56,7 @@ function DatePicker(props) {
       }
     },
   };
-  const { ref, picker } = useFlatpickr(newOptions);
+  const { ref, picker } = useFlatpickr({ value, ...newOptions });
 
   // effect for updating options if it changes
   useEffect(() => {
@@ -66,11 +69,15 @@ function DatePicker(props) {
     }
   }, [...Object.values(options)]);
 
-  // assigning value to date
-  useEffect(() => {
-    if (ref.current && picker) {
+  const setValue = () => {
+    if (!!ref.current && !!picker) {
       picker.setDate(value && new Date(value), false);
     }
+  };
+
+  // assigning value to date
+  useEffect(() => {
+    setValue();
   }, [value]);
 
   const { dateFormat } = options;

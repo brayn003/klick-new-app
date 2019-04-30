@@ -17,7 +17,7 @@ import IconButton from 'common-components/button/IconButton';
 import useForm from 'hooks/useForm';
 import Modal from 'common-components/Modal';
 
-import { getExpenses } from '../../apis/expense-apis';
+import { getExpenses, updateExpense } from '../../apis/expense-apis';
 import ExpensePaymentForm from '../payment/ExpensePaymentForm';
 
 
@@ -29,10 +29,51 @@ const ExpenseView = ({
   const [activePage, setActivePage] = useState(1);
   const [paymentExpense, setPaymentExpense] = useState(null);
 
+  const { formField, getValues } = useForm();
+  const values = getValues();
+
+  const getData = async () => {
+    setLoading(true);
+    try {
+      const res = await getExpenses({
+        organization: activeOrg.id,
+        page: activePage,
+        ...values,
+      });
+      setLoading(false);
+      setExpenses(res);
+      setActivePage(res.page);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [...Object.values(values), activePage]);
+
   const onClickPayment = (expense) => { setPaymentExpense(expense); };
   const onClosePayment = () => { setPaymentExpense(null); };
+  const onCompletePayment = () => {
+    onClosePayment();
+    getData();
+  };
   const onClickEdit = (expense) => {
     Router.push(`/expense/edit?expenseId=${expense.id}`, `/expense/edit/${expense.id}`);
+  };
+
+  const onClickForceClose = async (expense) => {
+    await updateExpense(expense.id, { status: 'closed' });
+    getData();
+  };
+  const onClickCancel = async (expense) => {
+    await updateExpense(expense.id, { status: 'cancelled' });
+    getData();
+  };
+
+  const onChangeDropDown = (key, expense) => {
+    if (key === 'force_close') onClickForceClose(expense);
+    if (key === 'cancel') onClickCancel(expense);
   };
 
   const cols = [{
@@ -47,6 +88,11 @@ const ExpenseView = ({
     title: 'Category',
     key: 'category.name',
     width: '12%',
+  }, {
+    title: 'Status',
+    key: 'status',
+    transform: startCase,
+    width: '10%',
   }, {
     title: 'Created By',
     key: 'createdBy.name',
@@ -87,9 +133,10 @@ const ExpenseView = ({
             title: 'Force Close',
             key: 'force_close',
           }, {
-            title: 'Delete',
-            key: 'delete',
+            title: 'Cancel',
+            key: 'cancel',
           }]}
+          onChange={(key) => { onChangeDropDown(key, r); }}
         >
           <IconButton tooltipText="More Options">
             <FiMoreVertical />
@@ -99,25 +146,6 @@ const ExpenseView = ({
     ),
   }];
 
-  const { formField, getValues } = useForm();
-  const values = getValues();
-
-  useEffect(() => {
-    setLoading(true);
-    getExpenses({
-      organization: activeOrg.id,
-      page: activePage,
-      ...values,
-    })
-      .then((res) => {
-        setLoading(false);
-        setExpenses(res);
-        setActivePage(res.page);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  }, [...Object.values(values), activePage]);
 
   return (
     <>
@@ -160,7 +188,7 @@ const ExpenseView = ({
         show={!!paymentExpense}
         onClose={onClosePayment}
       >
-        <ExpensePaymentForm expense={paymentExpense} onComplete={onClosePayment} />
+        <ExpensePaymentForm expense={paymentExpense} onComplete={onCompletePayment} />
       </Modal>
     </>
   );
