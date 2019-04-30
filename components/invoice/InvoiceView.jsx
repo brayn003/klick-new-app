@@ -42,24 +42,31 @@ function InvoiceView(props) {
   const { formField, getValues } = useForm();
   const values = getValues();
 
-  useEffect(() => {
+  const getData = async () => {
     setLoading(true);
     const { status, ...rest } = values;
-    getInvoices({
-      organization: activeOrg && activeOrg.id,
-      status: status === 'all_status' ? undefined : status,
-      page: activePage,
-      ...rest,
-    })
-      .then((res) => {
-        setLoading(false);
-        setInvoices(res);
-        setActivePage(res.page);
-      })
-      .catch(() => {
-        setLoading(false);
+    try {
+      const res = await getInvoices({
+        organization: activeOrg && activeOrg.id,
+        status: status === 'all_status' ? undefined : status,
+        page: activePage,
+        ...rest,
       });
+      setLoading(false);
+      setInvoices(res);
+      setActivePage(res.page);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getData();
   }, [values.serial, values.status, activePage]);
+
+  const onRefreshData = () => {
+    getData();
+  };
 
   return (
     <Container>
@@ -115,6 +122,7 @@ function InvoiceView(props) {
               key={invoice.id}
               width={pdfWidth}
               invoice={invoice}
+              refreshData={onRefreshData}
             />
           ))}
         </Animate>

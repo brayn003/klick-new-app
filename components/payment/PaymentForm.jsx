@@ -25,10 +25,9 @@ function PaymentForm(props) {
         <FormGroup>
           <InlineLabel>Payment Date</InlineLabel>
           <DatePicker
-            // {...formField('paymentDate', {
-            //   intialValue: new Date(),
-            // })}
-            value={(new Date()).toISOString()}
+            {...formField('paymentDate', {
+              intialValue: (new Date()).toISOString(),
+            })}
             block
             placeholder="DD / MM / YYYY"
           />

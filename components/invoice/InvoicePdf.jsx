@@ -2,9 +2,9 @@
 import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { Document as PdfDocument, Page as PdfPage } from 'react-pdf';
-import { string, number } from 'prop-types';
+import { string, number, func } from 'prop-types';
 
-const InvoicePdf = ({ src, width }) => {
+const InvoicePdf = ({ src, width, onClick }) => {
   const instance = useRef({});
   const [load, setLoad] = useState(false);
   useEffect(() => {
@@ -24,6 +24,7 @@ const InvoicePdf = ({ src, width }) => {
 
   return (
     <StyledPdfDocument
+      onClick={onClick}
       loading={null}
       file={src}
       onLoadSuccess={(pdf) => {
@@ -38,10 +39,12 @@ const InvoicePdf = ({ src, width }) => {
 InvoicePdf.propTypes = {
   src: string.isRequired,
   width: number,
+  onClick: func,
 };
 
 InvoicePdf.defaultProps = {
   width: 200,
+  onClick: () => {},
 };
 
 const StyledPdfDocument = styled(PdfDocument)``;

@@ -3,12 +3,8 @@ import axios from 'axios';
 const base = `${process.env.SERVER_URL}/api/v1/app`;
 const includeAuth = true;
 
-export function getInvoices(params) {
-  return axios.get(`${base}/invoices`, { params, includeAuth });
-}
+export const getInvoices = params => axios.get(`${base}/invoices`, { params, includeAuth });
 
-export function createInvoice(body) {
-  return axios.post(`${base}/invoice`, body, { includeAuth });
-}
+export const createInvoice = body => axios.post(`${base}/invoice`, body, { includeAuth });
 
-export default { getInvoices };
+export const createInvoicePayment = body => axios.post(`${base}/invoice/payment`, body, { includeAuth });
