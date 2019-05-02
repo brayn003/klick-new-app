@@ -35,6 +35,7 @@ const InvoiceCard = ({
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const {
+    previewUrl,
     fileUrl,
   } = invoice;
   const serial = invoice.serial || 'n/a';
@@ -60,8 +61,10 @@ const InvoiceCard = ({
         width={width}
         ref={forwardedRef}
       >
-        <InvoicePdf onClick={onClickCard} src={fileUrl} />
-        {/* <Overlay> */}
+        {previewUrl
+          ? <Thumbnail onClick={onClickCard} src={previewUrl} />
+          : <InvoicePdf onClick={onClickCard} src={fileUrl} />
+        }
         <Actions>
           <IconButton
             tooltipText="Add Payment"
@@ -72,7 +75,7 @@ const InvoiceCard = ({
           </IconButton>
           <IconButton
             onClick={() => { }}
-            tooltipText="Edit Expense"
+            tooltipText="Edit Invoice"
           >
             <FiEdit2 />
           </IconButton>
@@ -231,6 +234,15 @@ const StatusTag = styled(Tag)`
   top: 4px;
   right: 8px;
   position: absolute;
+`;
+
+const Thumbnail = styled.div`
+  background-image: ${p => (p.src ? `url(${p.src})` : 'none')};
+  background-size: contain;
+  background-position: center top;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
 `;
 
 export default forwardRef((p, ref) => <InvoiceCard {...p} forwardedRef={ref} />);
