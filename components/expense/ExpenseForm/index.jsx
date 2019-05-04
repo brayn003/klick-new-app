@@ -88,7 +88,7 @@ const InvoiceForm = ({
           />
         </FormGroup>
       </Card>
-      <Card title="Details">
+      <Card style={{ zIndex: 20 }} title="Details">
         <FormGroup width="50%">
           <InlineLabel>Description</InlineLabel>
           <Input
@@ -108,7 +108,7 @@ const InvoiceForm = ({
           />
         </FormGroup>
       </Card>
-      <Card title="Accounts & Amounts">
+      <Card style={{ zIndex: 10 }} title="Accounts & Amounts">
         <FormGroup width="50%">
           <InlineLabel>Amount</InlineLabel>
           <Input

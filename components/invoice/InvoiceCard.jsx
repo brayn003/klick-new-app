@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import startCase from 'lodash/startCase';
 import { FiDollarSign, FiMoreVertical, FiEdit2 } from 'react-icons/fi';
 import Router from 'next/router';
+import sumBy from 'lodash/sumBy';
 
 import Tag from 'common-components/Tag';
 import IconButton from 'common-components/button/IconButton';
@@ -16,6 +17,7 @@ import Modal from 'common-components/Modal';
 import InvoicePdf from './InvoicePdf';
 import InvoicePdfModal from './InvoicePdfModal';
 import InvoicePaymentForm from '../payment/InvoicePaymentForm';
+import { updateInvoice } from '../../apis/invoice-apis';
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -34,6 +36,7 @@ const InvoiceCard = ({
 }) => {
   const [showInvoiceModal, setShowInvoiceModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     previewUrl,
@@ -42,9 +45,10 @@ const InvoiceCard = ({
   const serial = invoice.serial || 'n/a';
   const raisedDate = dayjs(invoice.raisedDate).format('DD MMM YYYY');
   const roundedTotal = invoice.roundedTotal ? invoice.roundedTotal.toLocaleString('en-IN') : '-';
-  const roundedAmountReceivable = invoice.roundedAmountReceivable.toLocaleString('en-IN');
   const statusColor = getStatusColor(invoice.status);
   const status = startCase(invoice.status);
+  const amountReceived = sumBy(invoice.payments, 'amount');
+  const amountLeft = (invoice.roundedAmountReceivable - amountReceived).toLocaleString('en-IN');
 
   const onClickCard = (e) => { e.stopPropagation(); setShowInvoiceModal(p => !p); };
   const onCloseModal = () => { setShowInvoiceModal(false); };
@@ -59,6 +63,44 @@ const InvoiceCard = ({
   const onClickEdit = () => {
     Router.push(`/invoice/edit?invoiceId=${invoice.id}`, `invoice/edit/${invoice.id}`);
   };
+
+  const onForceClose = async () => {
+    setLoading(true);
+    try {
+      await updateInvoice(invoice.id, { status: 'closed' });
+      setLoading(false);
+      refreshData();
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  const onCancel = async () => {
+    setLoading(true);
+    try {
+      await updateInvoice(invoice.id, { status: 'cancelled' });
+      setLoading(false);
+      refreshData();
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  const onChangeDropDown = (key) => {
+    if (key === 'force_close') onForceClose();
+    if (key === 'cancel') onCancel();
+  };
+
+  if (loading) {
+    return (
+      <Card
+        width={width}
+        ref={forwardedRef}
+      >
+        Loading ...
+      </Card>
+    );
+  }
 
   return (
     <>
@@ -92,7 +134,7 @@ const InvoiceCard = ({
               title: 'Cancel',
               key: 'cancel',
             }]}
-            onChange={() => { }}
+            onChange={onChangeDropDown}
           >
             <IconButton tooltipText="More Options">
               <FiMoreVertical />
@@ -107,7 +149,7 @@ const InvoiceCard = ({
             <Text noMargin bold style={{ fontSize: '1em' }}>
             ₹ {roundedTotal}
             </Text>
-            <Text gray noMargin>Left: ₹ {roundedAmountReceivable}</Text>
+            <Text gray noMargin>Left: ₹ {amountLeft}</Text>
           </Flex>
           <StatusTag color={statusColor}>
             {status}

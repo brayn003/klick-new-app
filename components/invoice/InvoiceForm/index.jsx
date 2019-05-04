@@ -114,7 +114,7 @@ const InvoiceForm = ({ activeOrg, invoiceId }) => {
             />
           </FormGroup>
         </Card>
-        <Card title="Client Details">
+        <Card style={{ zIndex: 30 }} title="Client Details">
           <FormGroup width="50%">
             <InlineLabel>Branch</InlineLabel>
             <SelectBranch
@@ -139,14 +139,14 @@ const InvoiceForm = ({ activeOrg, invoiceId }) => {
             />
           </FormGroup>
         </Card>
-        <Card title="Particulars">
+        <Card style={{ zIndex: 20 }} title="Particulars">
           <InvoiceParticularForm
             taxPerItem={(activeOrg.invoicePreferences || {}).taxPerItem}
             particulars={valParticular}
             {...formField('particulars')}
           />
         </Card>
-        <Card title="Taxes">
+        <Card style={{ zIndex: 10 }} title="Taxes">
           <FormGroup width="50%">
             <InlineLabel>Tax Inclusion</InlineLabel>
             <SelectTaxInclusion

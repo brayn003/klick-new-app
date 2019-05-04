@@ -36,7 +36,8 @@ const Container = styled.div`
   border-radius: 20px;
   box-shadow: rgba(175, 175, 175, 0.5) 0px 2px 4px 0px;
   margin-bottom: 24px;
-
+  position: relative;
+  
   &::after {
     display: block;
     content: "";
