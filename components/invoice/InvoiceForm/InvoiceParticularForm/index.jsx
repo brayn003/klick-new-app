@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { func, shape } from 'prop-types';
+import { func, shape, arrayOf } from 'prop-types';
 import { connect } from 'react-redux';
 
 import Input from 'common-components/controls/Input';
@@ -9,38 +9,46 @@ import { FlexRow, FlexCol } from 'common-components/table/FlexTable';
 import useForm from 'hooks/useForm';
 import SelectTaxType from 'common-components/smart-selects/SelectTaxType';
 
-function InvoiceParticularForm(props) {
-  const { onChange, activeOrg } = props;
+const InvoiceParticularForm = ({ onChange, activeOrg, particulars }) => {
   const { includeQuantity, taxPerItem } = ((activeOrg || {}).invoicePreferences) || {};
 
   const [rows, setRows] = useState(1);
 
-  const { formField } = useForm({
+  const { formField, setValue } = useForm({
     onChange: (formValue) => {
-      let { particulars } = formValue;
+      let { particulars: inParticulars } = formValue;
+      inParticulars = inParticulars.map((p) => {
+        const newP = p;
+        if (!includeQuantity) newP.quantity = 1;
+        if (p.details.id) newP.details = p.details.id;
+        return newP;
+      });
       if (!includeQuantity) {
-        particulars = particulars.map(p => ({
+        inParticulars = inParticulars.map(p => ({
           ...p,
           quantity: 1,
         }));
       }
-      onChange(particulars);
+      onChange(inParticulars);
     },
   });
 
+  useEffect(() => {
+    if (particulars) {
+      setRows(particulars.length);
+      particulars.forEach((p, index) => {
+        setValue(`particulars[${index}].details.id`, p.details.id);
+        setValue(`particulars[${index}].details.name`, p.details.name);
+        setValue(`particulars[${index}].rate`, p.rate);
+        setValue(`particulars[${index}].quantity`, p.quantity);
+        setValue(`particulars[${index}].taxes`, {
+          label: p.taxes.map(({ taxType }) => taxType.name).join(' & '),
+          value: p.taxes.map(({ taxType }) => taxType.id),
+        });
+      });
+    }
+  }, Object.values(particulars || []));
 
-  // const value = getValues();
-  // const getAmount = (index) => {
-  //   if (value && value.particulars) {
-  //     const { rate = 0, quantity: origQuantity = 0 } = value.particulars[index] || {};
-  //     let quantity = origQuantity;
-  //     if (!includeQuantity) {
-  //       quantity = 1;
-  //     }
-  //     return (rate * quantity).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-  //   }
-  //   return '-';
-  // };
 
   const onClickAddNew = () => { setRows(rows + 1); };
   const onClickRemove = () => { setRows(rows - 1); };
@@ -125,16 +133,18 @@ function InvoiceParticularForm(props) {
       </ActionContainer>
     </>
   );
-}
+};
 
 InvoiceParticularForm.propTypes = {
   onChange: func,
   activeOrg: shape({}),
+  particulars: arrayOf(shape({})),
 };
 
 InvoiceParticularForm.defaultProps = {
   onChange: () => {},
   activeOrg: {},
+  particulars: [],
 };
 
 

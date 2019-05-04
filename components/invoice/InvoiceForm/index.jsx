@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { shape } from 'prop-types';
+import { shape, string } from 'prop-types';
 import Router from 'next/router';
+import startCase from 'lodash/startCase';
 
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
@@ -19,19 +20,62 @@ import SelectTaxType from 'common-components/smart-selects/SelectTaxType';
 import Animate from 'common-components/animate/Animate';
 import SelectTaxInclusion from 'common-components/smart-selects/SelectTaxInclusion';
 import { transformSelect, transformMultiUploadS3 } from 'helpers/form-transforms';
-import { createInvoice } from 'apis/invoice-apis';
+import { getInvoice, createInvoice, updateInvoice } from 'apis/invoice-apis';
 
 import InvoiceParticularForm from './InvoiceParticularForm';
 import OrganizationClientForm from '../../organization/OrganizationClientForm';
 
-function InvoiceForm(props) {
-  const { activeOrg } = props;
+const InvoiceForm = ({ activeOrg, invoiceId }) => {
   const { formField, getValues, setValue } = useForm();
   const [showAddOrg, setShowAddOrg] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [valParticular, setValParticular] = useState();
+
+  const getData = async () => {
+    try {
+      setLoading(true);
+      const res = await getInvoice(invoiceId);
+      setValParticular(res.particulars);
+      setValue('raisedDate', res.raisedDate);
+      setValue('dueDate', res.dueDate);
+      setValue('organizationBranch', { label: res.organizationBranch.name, value: res.organizationBranch.id });
+      setValue('client', { label: res.client.name, value: res.client.id });
+      setValue('taxInclusion', { label: startCase(res.taxInclusion), value: res.taxInclusion });
+      setValue('discountRate', res.discountRate);
+      setValue('tdsAmount', res.tdsAmount);
+      setValue('inlineComment', res.inlineComment);
+      setValue('attachments', res.attachments.map(f => ({
+        file: { name: f },
+        key: f,
+        result: { url: f },
+        status: 'succeeded',
+      })));
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (invoiceId) {
+      getData();
+    }
+  }, []);
 
   const onClickSubmit = async () => {
     const body = getValues();
-    await createInvoice(body);
+    if (!(activeOrg.invoicePreferences || {}).taxPerItem) {
+      body.particulars = body.particulars.map(p => ({
+        ...p,
+        taxes: body.taxTypes.map(taxType => ({ taxType })),
+      }));
+      body.taxTypes = undefined;
+    }
+    if (invoiceId) {
+      await updateInvoice(invoiceId, body);
+    } else {
+      await createInvoice(body);
+    }
     Router.push('/invoice');
   };
 
@@ -44,6 +88,11 @@ function InvoiceForm(props) {
       value: organization.id,
     });
   };
+
+  if (loading) {
+    return 'loading ...';
+  }
+
   return (
     <>
       <Animate delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
@@ -92,7 +141,8 @@ function InvoiceForm(props) {
         </Card>
         <Card title="Particulars">
           <InvoiceParticularForm
-            taxPerItem
+            taxPerItem={(activeOrg.invoicePreferences || {}).taxPerItem}
+            particulars={valParticular}
             {...formField('particulars')}
           />
         </Card>
@@ -183,14 +233,16 @@ function InvoiceForm(props) {
       </Modal>
     </>
   );
-}
+};
 
 InvoiceForm.propTypes = {
   activeOrg: shape({}),
+  invoiceId: string,
 };
 
 InvoiceForm.defaultProps = {
   activeOrg: {},
+  invoiceId: null,
 };
 
 const FormGroup = styled.div`

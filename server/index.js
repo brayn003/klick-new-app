@@ -22,6 +22,12 @@ app
       app.render(req, res, actualPage, queryParams);
     });
 
+    server.get('/invoice/edit/:id', (req, res) => {
+      const actualPage = '/invoice/edit';
+      const queryParams = { invoiceId: req.params.id };
+      app.render(req, res, actualPage, queryParams);
+    });
+
     server.get('/*', (req, res) => handle(req, res));
 
     server.listen(process.env.PORT, (err) => {

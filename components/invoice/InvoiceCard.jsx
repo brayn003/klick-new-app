@@ -6,6 +6,7 @@ import {
 import dayjs from 'dayjs';
 import startCase from 'lodash/startCase';
 import { FiDollarSign, FiMoreVertical, FiEdit2 } from 'react-icons/fi';
+import Router from 'next/router';
 
 import Tag from 'common-components/Tag';
 import IconButton from 'common-components/button/IconButton';
@@ -55,6 +56,10 @@ const InvoiceCard = ({
     refreshData();
   };
 
+  const onClickEdit = () => {
+    Router.push(`/invoice/edit?invoiceId=${invoice.id}`, `invoice/edit/${invoice.id}`);
+  };
+
   return (
     <>
       <Card
@@ -74,7 +79,7 @@ const InvoiceCard = ({
             <FiDollarSign />
           </IconButton>
           <IconButton
-            onClick={() => { }}
+            onClick={onClickEdit}
             tooltipText="Edit Invoice"
           >
             <FiEdit2 />
