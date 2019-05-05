@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import Router from 'next/router';
+
 import Card from 'common-components/card/Card';
 import { FormGroup, ActionCard, InlineLabel } from 'common-components/form-helpers';
 // import DatePicker from 'common-components/controls/DatePicker';
@@ -7,12 +10,25 @@ import Checkbox from 'common-components/controls/Checkbox';
 import UploadS3 from 'common-components/file/UploadS3';
 import SelectIndustryType from 'common-components/smart-selects/SelectIndustryType';
 import useForm from 'hooks/useForm';
-import { transformUploadS3 } from 'helpers/form-transforms';
+import { transformUploadS3, transformSelect } from 'helpers/form-transforms';
+import { createOrganization } from '../../apis/organization-apis';
 
 const OrganizationForm = () => {
   const { formField, getValues } = useForm();
+  const [loading, setLoading] = useState(false);
 
-  const onClickSubmit = () => { console.log(getValues()); };
+  const onClickSubmit = async () => {
+    setLoading(true);
+    try {
+      await createOrganization(getValues());
+      setLoading(false);
+      Router.push('/organization');
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <>
       <Card title="Details">
@@ -75,7 +91,9 @@ const OrganizationForm = () => {
         <FormGroup width="50%">
           <InlineLabel>Industry Type</InlineLabel>
           <SelectIndustryType
-            {...formField('industryType')}
+            {...formField('industryType', {
+              transform: transformSelect,
+            })}
             block
             placeholder="Eg. Service Based"
           />
@@ -94,6 +112,7 @@ const OrganizationForm = () => {
       </Card>
       <ActionCard>
         <Button
+          loading={loading}
           onClick={onClickSubmit}
         >
           Submit

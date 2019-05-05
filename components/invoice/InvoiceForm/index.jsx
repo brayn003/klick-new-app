@@ -7,7 +7,7 @@ import startCase from 'lodash/startCase';
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
 import Button from 'common-components/button/Button';
-import { InlineLabel, FormGroup, ActionCard } from 'common-components/form-helper';
+import { InlineLabel, FormGroup, ActionCard } from 'common-components/form-helpers';
 import DatePicker from 'common-components/controls/DatePicker';
 import SelectOrganization from 'common-components/smart-selects/SelectOrganization';
 import useForm from 'hooks/useForm';

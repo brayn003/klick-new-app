@@ -26,3 +26,14 @@ export const InlineLabel = styled(Label)`
 export const ActionCard = styled.div`
   text-align: right;
 `;
+
+export const ActionContainer = styled.div`
+  flex: 1;
+  display: flex;
+`;
+
+export const ActionBar = styled.div`
+  height: 40px;
+  margin-bottom: 24px;
+  display: flex;
+`;

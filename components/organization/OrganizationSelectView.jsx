@@ -6,16 +6,20 @@ import Router from 'next/router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import Button from 'common-components/button/Button';
+import { ActionBar, ActionContainer } from 'common-components/form-helpers';
 import { getOrganizations } from 'apis/organization-apis';
 import { setActiveOrgAction } from 'store/organization/active';
+import Pagination from 'common-components/Pagination';
 
 function OrganizationSelectView(props) {
   const { meId } = props;
   const [organizations, setOrganizations] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activePage, setActivePage] = useState(1);
 
   useEffect(() => {
-    getOrganizations({ user: meId })
+    getOrganizations({ user: meId, page: activePage })
       .then((res) => {
         setLoading(false);
         setOrganizations(res);
@@ -23,7 +27,7 @@ function OrganizationSelectView(props) {
       .catch(() => {
         setLoading(false);
       });
-  }, []);
+  }, [activePage]);
 
   const onClickOrganizationCard = (organization) => {
     const { setActiveOrganization } = props;
@@ -36,32 +40,51 @@ function OrganizationSelectView(props) {
   };
 
   return (
-    <Container>
-      {loading && (<p>Loading ...</p>)}
-      {organizations && organizations.docs.map(organization => (
+    <>
+      <ActionBar>
+        <ActionContainer>
+          <Button
+            onClick={onClickAddNew}
+            style={{
+              marginLeft: 'auto',
+            }}
+          >
+            New Organization
+          </Button>
+        </ActionContainer>
+      </ActionBar>
+      <Container>
+        {loading && (<p>Loading ...</p>)}
+        {organizations && organizations.docs.map(organization => (
+          <Card
+            role="presentation"
+            key={organization.id}
+            onClick={() => { onClickOrganizationCard(organization); }}
+          >
+            <BgImg src={organization.logo} />
+            <Title>{organization.name}</Title>
+          </Card>
+        ))}
+        {/* {!loading && (
         <Card
+          key="add-new"
           role="presentation"
-          key={organization.id}
-          onClick={() => { onClickOrganizationCard(organization); }}
+          onClick={onClickAddNew}
         >
-          <BgImg src={organization.logo} />
-          <Title>{organization.name}</Title>
+          <FlexBox>
+            <AddNew>
+              + Add new
+            </AddNew>
+          </FlexBox>
         </Card>
-      ))}
-      {!loading && (
-      <Card
-        key="add-new"
-        role="presentation"
-        onClick={onClickAddNew}
-      >
-        <FlexBox>
-          <AddNew>
-            + Add new
-          </AddNew>
-        </FlexBox>
-      </Card>
-      )}
-    </Container>
+        )} */}
+      </Container>
+      <Pagination
+        active={activePage}
+        total={organizations && organizations.pages}
+        onChange={setActivePage}
+      />
+    </>
   );
 }
 
@@ -82,6 +105,8 @@ const Container = styled.div`
   flex-wrap: wrap;
   margin-left: -12px;
   margin-right: -12px;
+  margin-bottom: 12px;
+  margin-top: -12px;
 `;
 
 const Card = styled(({ width, ...rest }) => <div {...rest} />)`
@@ -115,18 +140,6 @@ const BgImg = styled.div`
   background-repeat: no-repeat;
 `;
 
-const FlexBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
-
-const AddNew = styled.p`
-  text-align: center;
-  margin: 0;
-  font-size: 1.2em;
-`;
 
 const Title = styled.h3`
   font-weight: 400;

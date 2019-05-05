@@ -6,10 +6,15 @@ import { Container, PageButton } from './styles';
 
 const Pagination = ({
   active,
-  total, onChange,
+  total,
+  onChange,
   endBuffer,
   surroundBuffer,
 }) => {
+  if (total < 2) {
+    return null;
+  }
+
   const getPageNumbers = (startIndex, endIndex) => {
     const length = endIndex - startIndex + 1;
     if (length > 0) {
@@ -29,6 +34,9 @@ const Pagination = ({
   const getActiveElementChunk = () => {
     const activeChunkStart = active - surroundBuffer;
     const activeChunkEnd = active + surroundBuffer;
+    if (total <= endBuffer + surroundBuffer) {
+      return [];
+    }
     if (active <= endBuffer) {
       return getPageNumbers(endBuffer + 1, activeChunkEnd);
     }
