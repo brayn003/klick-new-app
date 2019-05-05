@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon .",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "start-prod": "NODE_ENV=production node server.js"
   },
   "author": "brayn003@gmail.com",
   "dependencies": {
