@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { shape, string } from 'prop-types';
 import Router from 'next/router';
@@ -7,8 +6,8 @@ import startCase from 'lodash/startCase';
 
 import Card from 'common-components/card/Card';
 import Input from 'common-components/controls/Input';
-import Label from 'common-components/Label';
 import Button from 'common-components/button/Button';
+import { InlineLabel, FormGroup, ActionCard } from 'common-components/form-helper';
 import DatePicker from 'common-components/controls/DatePicker';
 import SelectOrganization from 'common-components/smart-selects/SelectOrganization';
 import useForm from 'hooks/useForm';
@@ -244,31 +243,6 @@ InvoiceForm.defaultProps = {
   activeOrg: {},
   invoiceId: null,
 };
-
-const FormGroup = styled.div`
-  width: ${p => p.width};
-  float: left;
-  margin: 0;
-  vertical-align: middle;
-  height: auto;
-  display: flex;
-`;
-
-FormGroup.defaultProps = {
-  width: '100%',
-};
-
-const InlineLabel = styled(Label)`
-  flex: 0 0 30%;
-  text-align: right;
-  margin: 0;
-  height: 100%;
-  line-height: 40px;
-`;
-
-const ActionCard = styled.div`
-  text-align: right;
-`;
 
 const mapStateToProps = (state) => {
   const { organization } = state;

@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Link from 'next/link';
@@ -14,10 +15,43 @@ const menu = [{
   title: 'Expenses',
   key: 'expenses',
   path: '/expense',
+}, {
+  title: 'Organizations',
+  key: 'organization',
+  path: '/organization',
+  children: [{
+    title: 'Add',
+    key: 'organization.add',
+    path: '/organization/add',
+  }, {
+    title: 'Edit',
+    key: 'organization.edit',
+    path: '/organization/5bad458b39b04708096d26c9/edit',
+  }, {
+    title: 'Invoice Preferences',
+    key: 'organization.invoice-preferences',
+    path: '/organization/5bad458b39b04708096d26c9/invoice-preferences',
+  }],
 }];
+
+const findByPath = (pathname, menu2) => {
+  for (let i = 0; i < menu2.length; i += 1) {
+    const item = menu2[i];
+    if (item.path === pathname) {
+      return item;
+    }
+    if (item.children) {
+      return findByPath(pathname, item.children);
+    }
+  }
+  return undefined;
+};
 
 function CoreNav(props) {
   const { pathname } = props;
+  const activeKey = (findByPath(pathname, menu) || {}).key;
+
+  const parentActiveKey = activeKey ? activeKey.split('.')[0] : null;
   return (
     <Container>
       <Logo>
@@ -25,15 +59,28 @@ function CoreNav(props) {
       </Logo>
       <Menu>
         {menu.map(item => (
-          <MenuItem key={item.key} active={pathname === item.path}>
-            <Link href={item.path} passHref>
-              {/* eslint-disable */}
-              <a>
-              {/* eslint-enable */}
-                {item.title}
-              </a>
-            </Link>
-          </MenuItem>
+          <Fragment key={item.key}>
+            <MenuItem active={activeKey === item.key}>
+              <Link href={item.path} passHref>
+                {/* eslint-disable */}
+                <a>
+                {/* eslint-enable */}
+                  {item.title}
+                </a>
+              </Link>
+            </MenuItem>
+            {item.children && parentActiveKey === item.key && item.children.map(child => (
+              <MenuItem child key={child.key} active={pathname === child.path}>
+                <Link href={child.path} passHref>
+                  {/* eslint-disable */}
+                  <a>
+                  {/* eslint-enable */}
+                    {child.title}
+                  </a>
+                </Link>
+              </MenuItem>
+            ))}
+          </Fragment>
         ))}
       </Menu>
     </Container>
@@ -71,10 +118,37 @@ const Menu = styled.ul`
   margin: 0;
 `;
 
+const getProperties = (p) => {
+  if (p.child) {
+    if (p.active) {
+      return `
+        background-color: rgba(0, 0, 0, 0.13);
+      `;
+    }
+    return `
+      background-color: rgba(0, 0, 0, 0.2);
+
+      &:hover, &:focus, &:active {
+        background-color: rgba(0, 0, 0, 0.13);
+      }
+    `;
+  }
+  if (p.active) {
+    return 'background-color: rgba(0, 0, 0, 0.08)';
+  }
+  return `
+    background-color: transparent;
+    
+    &:hover, &:focus, &:active {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+  `;
+};
+
 const MenuItem = styled.li`
-  padding: 16px 16px 16px 32px;
-  height: 64px;
-  line-height: 32px;
+  padding: 12px 16px 12px ${p => (p.child ? '48px' : '32px')};
+  height: 52px;
+  line-height: 28px;
   box-sizing: border-box;
   color: #FFF;
   list-style-type: none;
@@ -83,7 +157,7 @@ const MenuItem = styled.li`
   border: 0;
   border-style: solid;
   border-color: rgba(255, 255, 255, 0.8);
-  background-color: ${p => (p.active ? 'rgba(0, 0, 0, 0.13)' : 'transparent')};
+  ${p => getProperties(p)};
   border-left-width: ${p => (p.active ? '4px' : '0')};
   transition: background-color 0.1s linear, border-left-width 0.1s linear;
 
@@ -95,9 +169,6 @@ const MenuItem = styled.li`
     text-decoration: none;
   }
   
-  &:hover, &:focus, &:active {
-    background-color: ${p => (p.active ? 'rgba(0, 0, 0, 0.13)' : 'rgba(0, 0, 0, 0.04)')};
-  }
 `;
 
 export default CoreNav;

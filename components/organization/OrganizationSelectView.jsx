@@ -31,6 +31,10 @@ function OrganizationSelectView(props) {
     Router.push('/');
   };
 
+  const onClickAddNew = () => {
+    Router.push('/organization/add');
+  };
+
   return (
     <Container>
       {loading && (<p>Loading ...</p>)}
@@ -48,6 +52,7 @@ function OrganizationSelectView(props) {
       <Card
         key="add-new"
         role="presentation"
+        onClick={onClickAddNew}
       >
         <FlexBox>
           <AddNew>
