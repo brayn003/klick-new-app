@@ -3,6 +3,7 @@ import { verifyToken } from '../apis/auth-apis';
 
 export async function checkToken(ctx) {
   const { req = false, pathname } = ctx;
+  console.log(pathname);
   if (req) {
     const { sessToken, activeOrg } = ctx.req.cookies;
     if (!sessToken && pathname !== '/login') {
@@ -13,9 +14,12 @@ export async function checkToken(ctx) {
         console.log('hit verify token');
         const res = await verifyToken({ token: sessToken });
         if (res.verified && pathname !== '/') {
-          if (!activeOrg && pathname !== '/organization') {
+          if (!activeOrg && (pathname !== '/organization' && pathname !== '/organization/create')) {
             ctx.res.redirect('/organization');
           }
+          // if (!activeOrg && pathname !== '/organization/create') {
+          //   ctx.res.redirect('/organization/create');
+          // }
         }
       } catch (err) {
         ctx.res.clearCookie('sessToken');

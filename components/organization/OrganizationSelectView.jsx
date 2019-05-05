@@ -37,7 +37,7 @@ function OrganizationSelectView(props) {
   };
 
   const onClickAddNew = () => {
-    Router.push('/organization/add');
+    Router.push('/organization/create');
   };
 
   return (
