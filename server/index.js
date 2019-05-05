@@ -2,7 +2,7 @@
 const express = require('express');
 
 const next = require('next');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const path = require('path');
 
 const app = next({ dev: process.env.NODE_ENV !== 'production' });
@@ -12,7 +12,7 @@ app
   .prepare()
   .then(() => {
     const server = express();
-    server.use(cookieParser());
+    // server.use(cookieParser());
 
     server.use('/static', express.static(path.join(__dirname, 'static')));
 

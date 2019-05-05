@@ -1,16 +1,16 @@
 
-import { checkToken } from 'helpers/auth-service';
+import { checkToken, getCookie } from 'helpers/auth-service';
 import { getMeAction } from 'store/user/me';
 import { setActiveOrgAction } from 'store/organization/active';
 import { setTokenAction } from 'store/auth/token';
 
 export async function checkOrganization(ctx) {
   const {
-    req, res, pathname, reduxStore,
+    res, pathname, reduxStore,
   } = ctx;
   const { dispatch } = reduxStore;
   if (res) {
-    const { activeOrg } = req.cookies;
+    const activeOrg = getCookie('activeOrg', ctx);
     if (activeOrg) {
       await dispatch(setActiveOrgAction(activeOrg));
     }

@@ -1,11 +1,19 @@
 import cookies from 'js-cookie';
 import { verifyToken } from '../apis/auth-apis';
 
+export const getCookie = (name, ctx) => {
+  const { req } = ctx || {};
+  const token = req
+    ? (req.headers.cookie || '').match(new RegExp(`${name}=([^;]+)`)) || []
+    : document.cookie.match(new RegExp(`${name}=([^;]+)`)) || [];
+  return token[1];
+};
+
 export async function checkToken(ctx) {
   const { req = false, pathname } = ctx;
-  console.log(pathname);
   if (req) {
-    const { sessToken, activeOrg } = ctx.req.cookies;
+    const sessToken = getCookie('sessToken', ctx);
+    const activeOrg = getCookie('activeOrg', ctx);
     if (!sessToken && pathname !== '/login') {
       ctx.res.redirect('/login');
     }
@@ -14,16 +22,13 @@ export async function checkToken(ctx) {
         console.log('hit verify token');
         const res = await verifyToken({ token: sessToken });
         if (res.verified && pathname !== '/') {
-          if (!activeOrg && (pathname !== '/organization' && pathname !== '/organization/create')) {
+          if (!activeOrg && pathname !== '/organization') {
             ctx.res.redirect('/organization');
           }
-          // if (!activeOrg && pathname !== '/organization/create') {
-          //   ctx.res.redirect('/organization/create');
-          // }
         }
       } catch (err) {
-        ctx.res.clearCookie('sessToken');
-        ctx.res.clearCookie('activeOrg');
+        // ctx.res.clearCookie('sessToken');
+        // ctx.res.clearCookie('activeOrg');
         if (pathname !== '/login') {
           ctx.res.redirect('/login');
         }
