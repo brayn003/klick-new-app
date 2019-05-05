@@ -3,6 +3,8 @@ import {
   arrayOf, string, object, bool,
 } from 'prop-types';
 
+import Animate from 'common-components/animate/Animate';
+
 import {
   TableWrapper,
   THead,
@@ -28,11 +30,13 @@ const Table = ({
       ? <TLoading rows={data.length || 3}>Loading ...</TLoading>
       : (
         <TBody>
-          {data.map(row => (
-            <Tr key={row[rowKey]}>
-              <TableCells cols={cols} row={row} />
-            </Tr>
-          ))}
+          <Animate delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[4, 0]}>
+            {data.map(row => (
+              <Tr key={row[rowKey]}>
+                <TableCells cols={cols} row={row} />
+              </Tr>
+            ))}
+          </Animate>
         </TBody>
       )}
   </TableWrapper>

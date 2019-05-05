@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import Button from 'common-components/button/Button';
+import Animate from 'common-components/animate/Animate';
 import { ActionBar, ActionContainer } from 'common-components/form-helpers';
 import { getOrganizations } from 'apis/organization-apis';
 import { setActiveOrgAction } from 'store/organization/active';
@@ -55,16 +56,18 @@ function OrganizationSelectView(props) {
       </ActionBar>
       <Container>
         {loading && (<p>Loading ...</p>)}
-        {organizations && organizations.docs.map(organization => (
-          <Card
-            role="presentation"
-            key={organization.id}
-            onClick={() => { onClickOrganizationCard(organization); }}
-          >
-            <BgImg src={organization.logo} />
-            <Title>{organization.name}</Title>
-          </Card>
-        ))}
+        <Animate delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
+          {organizations && organizations.docs.map(organization => (
+            <Card
+              role="presentation"
+              key={organization.id}
+              onClick={() => { onClickOrganizationCard(organization); }}
+            >
+              <BgImg src={organization.logo} />
+              <Title>{organization.name}</Title>
+            </Card>
+          ))}
+        </Animate>
         {/* {!loading && (
         <Card
           key="add-new"
@@ -99,17 +102,13 @@ OrganizationSelectView.defaultProps = {
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   width: calc(100%);
   box-sizing: border-box;
   flex-wrap: wrap;
-  margin-left: -12px;
-  margin-right: -12px;
-  margin-bottom: 12px;
-  margin-top: -12px;
 `;
 
-const Card = styled(({ width, ...rest }) => <div {...rest} />)`
+const Card = styled.div`
   height: ${p => `${p.width * 1.4142}px`};
   width: ${p => `${p.width}px`};
   box-shadow: rgba(175, 175, 175, 0.5) 0px 2px 4px 0px;
@@ -120,7 +119,6 @@ const Card = styled(({ width, ...rest }) => <div {...rest} />)`
   cursor: pointer;
   background-color: #FFF;
   transition: box-shadow 0.1s linear;
-  margin: 12px;
   box-sizing: border-box;
   padding: 12px;
   position: relative;
@@ -129,6 +127,11 @@ const Card = styled(({ width, ...rest }) => <div {...rest} />)`
     box-shadow: rgba(0, 0, 0, 0.12) 0px 14px 28px, rgba(0, 0, 0, 0.08) 0px 10px 10px;
   }
 `;
+
+Card.defaultProps = {
+  width: 200,
+  thumbnail: null,
+};
 
 const BgImg = styled.div`
   width: 100%;
@@ -157,11 +160,6 @@ const Title = styled.h3`
   border-top: 1px solid #EFEFEF;
   background-color: #FFF;
 `;
-
-Card.defaultProps = {
-  width: 200,
-  thumbnail: null,
-};
 
 const mapStateToProps = (state) => {
   const { me } = state.user;

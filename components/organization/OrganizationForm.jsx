@@ -3,7 +3,7 @@ import Router from 'next/router';
 
 import Card from 'common-components/card/Card';
 import { FormGroup, ActionCard, InlineLabel } from 'common-components/form-helpers';
-// import DatePicker from 'common-components/controls/DatePicker';
+import Animate from 'common-components/animate/Animate';
 import Input from 'common-components/controls/Input';
 import Button from 'common-components/button/Button';
 import Checkbox from 'common-components/controls/Checkbox';
@@ -30,7 +30,7 @@ const OrganizationForm = () => {
 
 
   return (
-    <>
+    <Animate delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
       <Card title="Details">
         <FormGroup width="50%">
           <InlineLabel>Name</InlineLabel>
@@ -118,7 +118,7 @@ const OrganizationForm = () => {
           Submit
         </Button>
       </ActionCard>
-    </>
+    </Animate>
   );
 };
 
