@@ -9,8 +9,8 @@ import ToastContainer from 'common-components/Toast';
 import intercept from 'helpers/api-interceptor';
 import bootstrap from '../helpers/app-bootstrap';
 
-import 'flatpickr/dist/flatpickr.min.css';
-import 'react-toastify/dist/ReactToastify.min.css';
+// import 'flatpickr/dist/flatpickr.min.css';
+// import 'react-toastify/dist/ReactToastify.min.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = '/static/js/pdf.worker.min.js';
 

@@ -23,6 +23,8 @@ export default class CustomDocument extends Document {
           <meta charSet="UTF-8" />
           <meta key="viewport" name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" />
+          <link href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.5.7/flatpickr.min.css" rel="stylesheet" />
+          <link href="https://cdn.jsdelivr.net/npm/react-toastify@5.1.0/dist/ReactToastify.min.css" rel="stylesheet" />
           {this.props.styleTags}
         </Head>
         <body style={{ margin: 0 }}>
