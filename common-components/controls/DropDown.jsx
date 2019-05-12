@@ -1,7 +1,7 @@
 
 import styled from 'styled-components';
 import {
-  arrayOf, shape, func, string, node, oneOfType,
+  arrayOf, shape, func, string, node, oneOfType, number,
 } from 'prop-types';
 
 import Popover from '../Popover';
@@ -12,8 +12,6 @@ function DropDown(props) {
     onChange,
     children,
     placement,
-  } = props;
-  const {
     value,
   } = props;
   let valueOption = options.find(option => (option.value || option.key) === value);
@@ -45,6 +43,8 @@ function DropDown(props) {
 
 const PopoverContainer = styled.div`
   padding: 12px 0px;
+  max-height: 200px;
+  overflow-y: auto;
 `;
 
 const Item = styled.div`
@@ -63,7 +63,7 @@ const Item = styled.div`
 
 DropDown.propTypes = {
   onChange: func,
-  value: string,
+  value: oneOfType([string, number]),
   options: arrayOf(shape({})),
   children: oneOfType([func, node]),
   placement: string,
