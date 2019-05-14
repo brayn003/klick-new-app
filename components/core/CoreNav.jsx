@@ -87,7 +87,7 @@ function CoreNav(props) {
         <Animate delay={(e, i) => i * 100} opacity={[0, 1]} translateY={[12, 0]}>
           {menu.map(item => (
             <Fragment key={item.key}>
-              <MenuItem active={activeKey === item.key}>
+              <MenuItem dark={parentActiveKey === item.key} active={activeKey === item.key}>
                 <Link href={item.path} passHref>
                   {/* eslint-disable */}
                 <a>
@@ -162,7 +162,7 @@ const getProperties = (p) => {
       `;
     }
     return `
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.13);
       padding-left: 52px;
 
       &:hover, &:focus, &:active {
@@ -172,7 +172,7 @@ const getProperties = (p) => {
   }
   if (p.active) {
     return `
-      background-color: rgba(0, 0, 0, 0.08);
+      background-color: rgba(0, 0, 0, 0.13);
       padding-left: 28px;
     `;
   }
@@ -181,7 +181,7 @@ const getProperties = (p) => {
     padding-left: 32px;
     
     &:hover, &:focus, &:active {
-      background-color: rgba(0, 0, 0, 0.08);
+      background-color: rgba(0, 0, 0, 0.13);
     }
   `;
 };
