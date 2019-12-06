@@ -14,7 +14,7 @@ export async function checkOrganization(ctx) {
     if (activeOrg) {
       await dispatch(setActiveOrgAction(activeOrg));
     }
-    if (!activeOrg && pathname !== '/login' && pathname !== '/organization') {
+    if (!activeOrg && pathname !== '/login' && pathname !== '/forgot-password' && pathname !== '/organization') {
       res.redirect('/organization');
     }
   }

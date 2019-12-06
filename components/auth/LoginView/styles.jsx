@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+import GenericCard from 'common-components/card/Card';
+import { DEVICE } from 'helpers/style-helper';
+
 export const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -7,6 +10,15 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   background-image: linear-gradient(to bottom right, #4064d8, #4ad8dd); 
+`;
+
+export const Card = styled(GenericCard)`
+  width: 400px;
+
+  ${DEVICE.mobile} {
+    width: initial;
+  }
+
 `;
 
 export const Title = styled.h1`

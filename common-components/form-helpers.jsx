@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import Label from 'common-components/Label';
+import { DEVICE } from 'helpers/style-helper';
 
 export const FormGroup = styled.div`
   width: ${p => p.width};
@@ -30,6 +31,11 @@ export const ActionCard = styled.div`
 export const ActionContainer = styled.div`
   flex: 1;
   display: flex;
+  flex-direction: row-reverse;
+
+  ${DEVICE.mobile} {
+    flex-direction: row;
+  }
 `;
 
 export const ActionBar = styled.div`

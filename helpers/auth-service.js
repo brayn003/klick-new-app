@@ -14,12 +14,12 @@ export async function checkToken(ctx) {
   if (req) {
     const sessToken = getCookie('sessToken', ctx);
     const activeOrg = getCookie('activeOrg', ctx);
-    if (!sessToken && pathname !== '/login') {
+    if (!sessToken && (pathname !== '/login' && pathname !== '/forgot-password')) {
       ctx.res.redirect('/login');
+      console.log('redirect', pathname);
     }
     if (sessToken) {
       try {
-        console.log('hit verify token');
         const res = await verifyToken({ token: sessToken });
         if (res.verified && pathname !== '/') {
           if (!activeOrg && pathname !== '/organization') {
@@ -29,7 +29,7 @@ export async function checkToken(ctx) {
       } catch (err) {
         // ctx.res.clearCookie('sessToken');
         // ctx.res.clearCookie('activeOrg');
-        if (pathname !== '/login') {
+        if (pathname !== '/login' && pathname !== '/forgot-password') {
           ctx.res.redirect('/login');
         }
       }
@@ -40,7 +40,7 @@ export async function checkToken(ctx) {
   const md = await import('next/router');
   const Router = md.default;
   const sessToken = cookies.get('sessToken');
-  if (!sessToken && pathname !== '/login') {
+  if (!sessToken && (pathname !== '/login' && pathname !== '/forgot-password')) {
     Router.push('/login');
   }
   if (sessToken && pathname === '/login') {

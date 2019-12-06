@@ -6,7 +6,8 @@ import Router from 'next/router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Button from 'common-components/button/Button';
+import { DEVICE } from 'helpers/style-helper';
+import GenericButton from 'common-components/button/Button';
 import Animate from 'common-components/animate/Animate';
 import { ActionBar, ActionContainer } from 'common-components/form-helpers';
 import { getOrganizations } from 'apis/organization-apis';
@@ -46,9 +47,6 @@ function OrganizationSelectView(props) {
         <ActionContainer>
           <Button
             onClick={onClickAddNew}
-            style={{
-              marginLeft: 'auto',
-            }}
           >
             New Organization
           </Button>
@@ -102,15 +100,21 @@ OrganizationSelectView.defaultProps = {
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: calc(100%);
+  width: 800px;
+  justify-content: center;
   box-sizing: border-box;
   flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+
+  ${DEVICE.mobile} {
+    width: 100%;
+  }
 `;
 
 const Card = styled.div`
-  height: ${p => `${p.width * 1.4142}px`};
-  width: ${p => `${p.width}px`};
+  height: ${200 * 1.4142}px;
+  width: 200px;
   box-shadow: rgba(175, 175, 175, 0.5) 0px 2px 4px 0px;
   border-radius: 4px;
   overflow: hidden;
@@ -122,16 +126,27 @@ const Card = styled.div`
   box-sizing: border-box;
   padding: 12px;
   position: relative;
-
+  margin-left: 16px;
+  margin-right: 16px;
   &:hover {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 14px 28px, rgba(0, 0, 0, 0.08) 0px 10px 10px;
+  }
+
+  ${DEVICE.mobile} {
+    height: ${120 * 1.4142}px;
+    width: 120px;
   }
 `;
 
 Card.defaultProps = {
-  width: 200,
   thumbnail: null,
 };
+
+const Button = styled(GenericButton)`
+  ${DEVICE.mobile} {
+    width: 100%;
+  }
+`;
 
 const BgImg = styled.div`
   width: 100%;

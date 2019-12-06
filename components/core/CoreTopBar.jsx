@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Router from 'next/router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { DEVICE } from 'helpers/style-helper';
 
 import DropDown from 'common-components/controls/DropDown';
 import ButtonLink from 'common-components/button/ButtonLink';
@@ -103,6 +104,12 @@ const Title = styled.p`
   font-size: 1.6em;
   margin: 0;
   flex: 0 0 260px;
+
+  ${DEVICE.mobile} {
+    padding-top: 4px;
+    font-size: 1.1em;
+    flex: 1;
+  }
 `;
 
 const Avatar = styled.div`
