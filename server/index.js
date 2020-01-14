@@ -28,6 +28,12 @@ app
       app.render(req, res, actualPage, queryParams);
     });
 
+    server.get('/organization/edit/:id', (req, res) => {
+      const actualPage = '/organization/edit';
+      const queryParams = { organizationId: req.params.id };
+      app.render(req, res, actualPage, queryParams);
+    });
+
     server.get('/*', (req, res) => handle(req, res));
 
     server.listen(process.env.PORT, (err) => {

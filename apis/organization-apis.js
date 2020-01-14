@@ -23,4 +23,12 @@ export function createOrganization(body) {
   return axios.post(`${base}/organization`, body, { includeAuth });
 }
 
+export function deleteOrganization(id) {
+  return axios.delete(`${base}/organization/${id}`, { includeAuth });
+}
+
+export function updateOrganization(id, body) {
+  return axios.patch(`${base}/organization/${id}`, body, { includeAuth });
+}
+
 export default { getOrganizations };

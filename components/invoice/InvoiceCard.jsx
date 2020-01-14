@@ -13,6 +13,7 @@ import Tag from 'common-components/Tag';
 import IconButton from 'common-components/button/IconButton';
 import DropDown from 'common-components/controls/DropDown';
 import Modal from 'common-components/Modal';
+import Actions from 'common-components/Actions';
 
 import InvoicePdf from './InvoicePdf';
 import InvoicePdfModal from './InvoicePdfModal';
@@ -183,24 +184,6 @@ InvoiceCard.defaultProps = {
   forwardedRef: {},
   refreshData: () => {},
 };
-
-
-const Actions = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  /* padding-top: 8px; */
-  /* padding-right: 8px; */
-  padding: 8px;
-  height: 40px;
-  will-change: opacity;
-  opacity: 0;
-  transition: opacity 0.1s linear;
-  background-color: rgba(0, 0, 0, 0.3);
-  /* box-shadow: 0 0 12px 12px rgba(0, 0, 0, 0.18); */
-  /* border-top-left-radius: 20px; */
-  border-bottom-left-radius: 20px;
-`;
 
 const Card = styled.div`
   height: ${p => `${p.width * 1.4142}px`};

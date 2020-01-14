@@ -22,6 +22,10 @@ function CoreTopBar(props) {
     resetActiveOrg,
   } = props;
   const options = [{
+    title: 'Edit Organization',
+    key: 'edit-org',
+    show: !!activeOrganization && !!activeOrganization.value,
+  }, {
     title: 'Select Organization',
     key: '/organization',
   }, {
@@ -30,7 +34,9 @@ function CoreTopBar(props) {
   }];
 
   const onChangeAvatarMenu = (key) => {
-    if (key === 'logout') {
+    if (key === 'edit-org') {
+      Router.push(`/organization/edit/${activeOrganization.value.id}`);
+    } else if (key === 'logout') {
       clearToken(true);
       resetToken();
       resetActiveOrg();
@@ -87,6 +93,7 @@ CoreTopBar.defaultProps = {
 
 const TopBar = styled.div`
   height: 80px;
+  width: 100%;
   line-height: 32px;
   padding: 32px 24px 16px 24px;
   box-sizing: border-box;

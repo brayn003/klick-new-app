@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { shape } from 'prop-types';
+import { DEVICE } from 'helpers/style-helper';
 
 import Card from 'common-components/card/Card';
-import { Row, Col } from 'common-components/FlexGrid';
+import { Row as GenRow, Col } from 'common-components/FlexGrid';
 import ExpenseCategoryPieSection from './ExpenseCategoryPieSection';
 
 function DashboardView({ activeOrg }) {
@@ -11,11 +12,13 @@ function DashboardView({ activeOrg }) {
     <Container>
       <Row gutter={24}>
         <Col>
+          <Card title="Invoices" />
+        </Col>
+        <Col>
           <Card title="Expenses">
             <ExpenseCategoryPieSection organization={activeOrg} />
           </Card>
         </Col>
-        <Col />
       </Row>
     </Container>
   );
@@ -34,5 +37,12 @@ const Container = styled.div``;
 const mapStateToProps = ({ organization }) => ({
   activeOrg: organization.active.value,
 });
+
+const Row = styled(GenRow)`
+  ${DEVICE.mobile} {
+    flex-basis: 0;
+    flex-wrap: wrap;
+  }
+`;
 
 export default connect(mapStateToProps, null)(DashboardView);

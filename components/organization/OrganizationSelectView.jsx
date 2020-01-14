@@ -13,6 +13,11 @@ import { ActionBar, ActionContainer } from 'common-components/form-helpers';
 import { getOrganizations } from 'apis/organization-apis';
 import { setActiveOrgAction } from 'store/organization/active';
 import Pagination from 'common-components/Pagination';
+import Actions from 'common-components/Actions';
+import IconButton from 'common-components/button/IconButton';
+import { FiMoreVertical, FiEdit2 } from 'react-icons/fi';
+import DropDown from 'common-components/controls/DropDown';
+import { deleteOrganization } from '../../apis/organization-apis';
 
 function OrganizationSelectView(props) {
   const { meId } = props;
@@ -20,15 +25,24 @@ function OrganizationSelectView(props) {
   const [loading, setLoading] = useState(true);
   const [activePage, setActivePage] = useState(1);
 
+  const get = async () => {
+    try {
+      const res = await getOrganizations({ user: meId, page: activePage });
+      setLoading(false);
+      setOrganizations(res);
+    } catch (e) {
+      setLoading(false);
+    }
+  };
+
+
+  const deleteOne = async (orgId) => {
+    await deleteOrganization(orgId);
+    get();
+  };
+
   useEffect(() => {
-    getOrganizations({ user: meId, page: activePage })
-      .then((res) => {
-        setLoading(false);
-        setOrganizations(res);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
+    get();
   }, [activePage]);
 
   const onClickOrganizationCard = (organization) => {
@@ -39,6 +53,17 @@ function OrganizationSelectView(props) {
 
   const onClickAddNew = () => {
     Router.push('/organization/create');
+  };
+
+  const onClickEdit = (orgId) => {
+    Router.push(`/organization/edit/${orgId}`);
+  };
+
+
+  const onChangeDropDown = async (v, orgId) => {
+    if (v === 'delete') {
+      deleteOne(orgId);
+    }
   };
 
   return (
@@ -63,6 +88,28 @@ function OrganizationSelectView(props) {
             >
               <BgImg src={organization.logo} />
               <Title>{organization.name}</Title>
+
+              <Actions onClick={e => e.stopPropagation()}>
+                <IconButton
+                  onClick={() => { onClickEdit(organization.id); }}
+                  tooltipText="Edit Invoice"
+                >
+                  <FiEdit2 />
+                </IconButton>
+                <DropDown
+                  options={[{
+                    title: 'Delete',
+                    key: 'delete',
+                  }]}
+                  onChange={(v) => { onChangeDropDown(v, organization.id); }}
+                >
+                  <IconButton tooltipText="More Options">
+                    <FiMoreVertical />
+                  </IconButton>
+                </DropDown>
+              </Actions>
+
+
             </Card>
           ))}
         </Animate>
@@ -128,8 +175,13 @@ const Card = styled.div`
   position: relative;
   margin-left: 16px;
   margin-right: 16px;
+
   &:hover {
     box-shadow: rgba(0, 0, 0, 0.12) 0px 14px 28px, rgba(0, 0, 0, 0.08) 0px 10px 10px;
+
+    ${Actions} {
+      opacity: 1;
+    }
   }
 
   ${DEVICE.mobile} {

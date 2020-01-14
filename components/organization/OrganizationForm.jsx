@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Router from 'next/router';
+import { string } from 'prop-types';
+import startCase from 'lodash/startCase';
 
 import Card from 'common-components/card/Card';
 import { FormGroup, ActionCard, InlineLabel } from 'common-components/form-helpers';
@@ -11,13 +13,13 @@ import UploadS3 from 'common-components/file/UploadS3';
 import SelectIndustryType from 'common-components/smart-selects/SelectIndustryType';
 import useForm from 'hooks/useForm';
 import { transformUploadS3, transformSelect } from 'helpers/form-transforms';
-import { createOrganization } from '../../apis/organization-apis';
+import { createOrganization, getOrganization, updateOrganization } from '../../apis/organization-apis';
 
-const OrganizationForm = () => {
-  const { formField, getValues } = useForm();
+const OrganizationForm = ({ organizationId }) => {
+  const { formField, getValues, setValue } = useForm();
   const [loading, setLoading] = useState(false);
 
-  const onClickSubmit = async () => {
+  const create = async () => {
     setLoading(true);
     try {
       await createOrganization(getValues());
@@ -27,6 +29,63 @@ const OrganizationForm = () => {
       setLoading(false);
     }
   };
+
+  const update = async () => {
+    setLoading(true);
+    try {
+      await updateOrganization(organizationId, getValues());
+      setLoading(false);
+      Router.push('/organization');
+    } catch (e) {
+      setLoading(false);
+    }
+  };
+
+  const onClickSubmit = async () => {
+    if (!organizationId) {
+      create();
+    } else {
+      update();
+    }
+  };
+
+  const get = async (orgId) => {
+    try {
+      const org = await getOrganization(orgId);
+      setValue('name', org.name);
+      setValue('email', org.email);
+      setValue('phone', org.phone);
+      setValue('pan', org.pan);
+      setValue('isUnderComposition', org.isUnderComposition);
+      setValue('industryType', { label: startCase(org.industryType), value: org.industryType });
+      if (org.logo) {
+        setValue('logo', {
+          file: { name: org.logo },
+          key: org.logo,
+          result: { url: org.logo },
+          status: 'succeeded',
+        });
+      }
+      if (org.signature) {
+        setValue('signature', {
+          file: { name: org.signature },
+          key: org.signature,
+          result: { url: org.signature },
+          status: 'succeeded',
+        });
+      }
+
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (organizationId) {
+      get(organizationId);
+    }
+  }, [organizationId]);
 
 
   return (
@@ -120,6 +179,14 @@ const OrganizationForm = () => {
       </ActionCard>
     </Animate>
   );
+};
+
+OrganizationForm.propTypes = {
+  organizationId: string,
+};
+
+OrganizationForm.defaultProps = {
+  organizationId: null,
 };
 
 export default OrganizationForm;

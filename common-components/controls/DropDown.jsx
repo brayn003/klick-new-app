@@ -20,18 +20,20 @@ function DropDown(props) {
   }
   return (
     <Popover
-      trigger={['focus']}
+      trigger={['click']}
       placement={placement}
       overlay={(
         <PopoverContainer>
           {options.map(option => (
-            <Item
-              active={(option.value || option.key) === value}
-              key={option.key}
-              onClick={() => { onChange(option.value || option.key); }}
-            >
-              {option.title}
-            </Item>
+            typeof option.show === 'undefined' || option.show ? (
+              <Item
+                active={(option.value || option.key) === value}
+                key={option.key}
+                onClick={() => { onChange(option.value || option.key); }}
+              >
+                {option.title}
+              </Item>
+            ) : null
           ))}
         </PopoverContainer>
       )}
