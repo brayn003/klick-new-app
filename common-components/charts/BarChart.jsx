@@ -2,6 +2,9 @@ import { useEffect, useRef } from 'react';
 import {
   arrayOf, shape, string, oneOfType, number, bool,
 } from 'prop-types';
+
+import uniq from 'lodash/uniq';
+
 import styled from 'styled-components';
 import Chart from 'chart.js';
 import 'chartjs-plugin-colorschemes';
@@ -11,7 +14,6 @@ if (typeof window !== 'undefined') {
   Chart.defaults.global.plugins.colorschemes.scheme = 'tableau.Tableau20';
 }
 
-
 const getUnit = (num) => {
   if (typeof num === 'number') {
     return `${num}px`;
@@ -19,47 +21,63 @@ const getUnit = (num) => {
   return num;
 };
 
-const PieChart = ({
+const BarChart = ({
   data,
   labelKey,
   valueKey,
+  stackBy,
+  groupBy,
   height,
   width,
   loading,
 }) => {
   const instance = useRef({});
-
   // useEffect(() => {
   //   instance.current.ref = undefined;
   //   instance.current.chart = undefined;
   // }, [loading]);
 
-  const getChartData = () => ({
-    labels: data.map(d => d[labelKey]),
-    datasets: [{
-      label: 'Default',
-      data: data.map(d => d[valueKey]),
-    }],
-  });
+  const getChartData = () => {
+    const labels = uniq(data.map(d => d[labelKey]));
+    let stacks = [];
+    let groups = [];
+    if (stackBy) {
+      stacks = uniq(data.map(d => d[stackBy]));
+    }
+    if (groupBy) {
+      groups = uniq(data.map(d => d[groupBy]));
+    }
+    // console.log(groups);
+    return {
+      labels,
+      datasets: (groups.length ? groups : ['Default']).reduce((agg, group) => agg.concat(stacks.map(stack => ({
+        label: `${group} ${stack}`,
+        stack: `${group}`,
+        data: data
+          .filter(d => d[groupBy] === group && d[stackBy] === stack)
+          .map(d => d[valueKey]),
+      }))), []),
+    };
+  };
 
   const onRef = (ref) => {
     if (ref) {
       const config = {
-        type: 'doughnut',
+        type: 'bar',
         data: getChartData(),
         responsive: true,
         maintainAspectRatio: false,
         options: {
-          outerRadius: 200,
-          cutoutPercentage: 50,
-          legend: {
-            position: 'bottom',
-            labels: {
-              boxWidth: 12,
-              padding: 8,
-              usePointStyle: true,
-            },
-          },
+          // outerRadius: 200,
+          // cutoutPercentage: 50,
+          // legend: {
+          //   position: 'bottom',
+          //   labels: {
+          //     boxWidth: 12,
+          //     padding: 8,
+          //     usePointStyle: true,
+          //   },
+          // },
         },
       };
       instance.current.ref = ref;
@@ -103,19 +121,23 @@ const PieChart = ({
   );
 };
 
-PieChart.propTypes = {
+BarChart.propTypes = {
   data: arrayOf(shape({})),
   labelKey: string,
   valueKey: string,
+  stackBy: string,
+  groupBy: string,
   height: oneOfType([string, number]),
   width: oneOfType([string, number]),
   loading: bool,
 };
 
-PieChart.defaultProps = {
+BarChart.defaultProps = {
   data: [],
   labelKey: 'label',
   valueKey: 'value',
+  stackBy: undefined,
+  groupBy: undefined,
   height: '100%',
   width: '100%',
   loading: false,
@@ -143,4 +165,4 @@ const CenterTextContainer = styled.div`
   font-size: 1.2em;
 `;
 
-export default PieChart;
+export default BarChart;

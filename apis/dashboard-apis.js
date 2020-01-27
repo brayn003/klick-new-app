@@ -5,4 +5,4 @@ const includeAuth = true;
 
 export const getExpenseCategoryPie = params => axios.get(`${base}/dashboard/expense-category-pie`, { includeAuth, params });
 
-export default { getExpenseCategoryPie };
+export const getCashflowBar = params => axios.get(`${base}/dashboard/cashflow-bar`, { includeAuth, params });

@@ -1,26 +1,29 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { shape } from 'prop-types';
 
-import PieChart from 'common-components/charts/PieChart';
-import { getExpenseCategoryPie } from 'apis/dashboard-apis';
 import DropDown from 'common-components/controls/DropDown';
 import ButtonLink from 'common-components/button/ButtonLink';
 import useForm from 'hooks/useForm';
+import {
+  months,
+  getYears,
+  getCurrentMonthNum,
+  getCurrentYear,
+} from 'helpers/date-service';
+import BarChart from '../../common-components/charts/BarChart';
+import { getCashflowBar } from '../../apis/dashboard-apis';
 
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const years = [2018, 2019];
-const ExpenseCategoryPieSection = ({ organization }) => {
+const SectionCashflowBar = ({ organization }) => {
   const [res, setRes] = useState();
   const [loading, setLoading] = useState(false);
   const { formField, setValue, getValues } = useForm();
-  const now = new Date();
-
+  const years = getYears();
   const values = getValues();
 
   const getData = async () => {
     setLoading(true);
     try {
-      const inRes = await getExpenseCategoryPie({
+      const inRes = await getCashflowBar({
         ...values,
         organization: organization.id,
       });
@@ -36,12 +39,12 @@ const ExpenseCategoryPieSection = ({ organization }) => {
   useEffect(() => {
     getData();
   }, Object.values(values));
-
+  console.log(res);
   return (
     <>
       <DropDown
         {...formField('month', {
-          initialValue: (now.getMonth() + 1),
+          initialValue: (getCurrentMonthNum()),
         })}
         options={months.map((m, index) => ({ title: m, key: index + 1 }))}
       >
@@ -49,16 +52,18 @@ const ExpenseCategoryPieSection = ({ organization }) => {
       </DropDown>
       <DropDown
         {...formField('year', {
-          initialValue: (now.getFullYear()),
+          initialValue: (getCurrentYear()),
         })}
         options={years.map(y => ({ title: y, key: y }))}
       >
         {({ title }) => (<ButtonLink>{title}</ButtonLink>)}
       </DropDown>
-      <PieChart
+      <BarChart
         data={res && res.data}
         labelKey={res && res.labelKey}
         valueKey={res && res.valueKey}
+        groupBy={res && res.groupBy}
+        stackBy={res && res.stackBy}
         height={300}
         loading={loading}
       />
@@ -66,12 +71,12 @@ const ExpenseCategoryPieSection = ({ organization }) => {
   );
 };
 
-ExpenseCategoryPieSection.propTypes = {
+SectionCashflowBar.propTypes = {
   organization: shape({}),
 };
 
-ExpenseCategoryPieSection.defaultProps = {
+SectionCashflowBar.defaultProps = {
   organization: {},
 };
 
-export default ExpenseCategoryPieSection;
+export default SectionCashflowBar;
