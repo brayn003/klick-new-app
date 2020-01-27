@@ -16,7 +16,7 @@ function SelectTaxType(props) {
       ...params,
     });
     if (groupByRate) {
-      const groupedTaxTypes = map(groupBy(res.docs, 'rate'), value => value.reduce((acc, taxType, index) => {
+      const groupedTaxTypes = map(groupBy(res, 'rate'), value => value.reduce((acc, taxType, index) => {
         const acc2 = acc;
         acc2.label += `${index === 0 ? '' : ' & '}${taxType.name}`;
         acc2.value.push(taxType.id);
@@ -24,7 +24,7 @@ function SelectTaxType(props) {
       }, { label: '', value: [] }));
       return groupedTaxTypes;
     }
-    return res.docs.map(taxType => ({ label: taxType.name, value: [taxType.id] }));
+    return res.map(taxType => ({ label: taxType.name, value: [taxType.id] }));
   };
 
   return (
