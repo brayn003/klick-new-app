@@ -7,10 +7,21 @@ import Card from 'common-components/card/Card';
 import { Row as GenRow, Col } from 'common-components/FlexGrid';
 import SectionExpenseCategoryPie from './SectionExpenseCategoryPie';
 import SectionCashflowBar from './SectionCashflowBar';
+import SectionInvoiceView from './SectionInvoiceValue';
 
 function DashboardView({ activeOrg }) {
   return (
     <Container>
+      <Row gutter={24}>
+        <Col>
+          <Card title="Total Invoice Value" style={{ minHeight: 92 }}>
+            <SectionInvoiceView organization={activeOrg} />
+          </Card>
+        </Col>
+        <Col />
+        <Col />
+        <Col />
+      </Row>
       <Row gutter={24}>
         <Col>
           <Card title="Cashflow">
