@@ -16,6 +16,12 @@ app
 
     server.use('/static', express.static(path.join(__dirname, 'static')));
 
+    server.get('/branch/edit/:id', (req, res) => {
+      const actualPage = '/branch/edit';
+      const queryParams = { branchId: req.params.id };
+      app.render(req, res, actualPage, queryParams);
+    });
+
     server.get('/expense/edit/:id', (req, res) => {
       const actualPage = '/expense/edit';
       const queryParams = { expenseId: req.params.id };

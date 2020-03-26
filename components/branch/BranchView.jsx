@@ -80,7 +80,7 @@ const BranchView = ({
       <>
         <IconButton
           onClick={() => { onClickEdit(r); }}
-          tooltipText="Edit Expense"
+          tooltipText="Edit Branch"
         >
           <FiEdit2 />
         </IconButton>
