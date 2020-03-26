@@ -15,6 +15,6 @@ Page.defaultProps = {
   query: {},
 };
 
-Page.getInitialProps = () => ({ title: 'Create Expense' });
+Page.getInitialProps = () => ({ title: 'Edit Expense' });
 
 export default Page;

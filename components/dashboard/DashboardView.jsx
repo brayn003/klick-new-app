@@ -5,9 +5,10 @@ import { DEVICE } from 'helpers/style-helper';
 
 import Card from 'common-components/card/Card';
 import { Row as GenRow, Col } from 'common-components/FlexGrid';
-import SectionExpenseCategoryPie from './SectionExpenseCategoryPie';
+// import SectionExpenseCategoryPie from './SectionExpenseCategoryPie';
 import SectionCashflowBar from './SectionCashflowBar';
 import SectionInvoiceView from './SectionInvoiceValue';
+// import SectionClientValueTable from './SectionClientValueTable';
 
 function DashboardView({ activeOrg }) {
   return (
@@ -22,6 +23,13 @@ function DashboardView({ activeOrg }) {
         <Col />
         <Col />
       </Row>
+      {/* <Row gutter={24}>
+        <Col>
+          <Card title="Client Debts">
+            <SectionClientValueTable organization={activeOrg} />
+          </Card>
+        </Col>
+      </Row> */}
       <Row gutter={24}>
         <Col>
           <Card title="Cashflow">
@@ -29,9 +37,9 @@ function DashboardView({ activeOrg }) {
           </Card>
         </Col>
         <Col>
-          <Card title="Expenses">
+          {/* <Card title="Expenses">
             <SectionExpenseCategoryPie organization={activeOrg} />
-          </Card>
+          </Card> */}
         </Col>
       </Row>
     </Container>

@@ -7,6 +7,10 @@ export function getBranches(params) {
   return axios.get(`${base}/branches`, { params, includeAuth });
 }
 
+export function getBranch(id) {
+  return axios.get(`${base}/branch/${id}`, { includeAuth });
+}
+
 export function createBranch(body) {
   return axios.post(`${base}/branch`, body, { includeAuth });
 }

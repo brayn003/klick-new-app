@@ -8,3 +8,5 @@ export const getExpenseCategoryPie = params => axios.get(`${base}/dashboard/expe
 export const getCashflowBar = params => axios.get(`${base}/dashboard/cashflow-bar`, { includeAuth, params });
 
 export const getInvoiceValue = params => axios.get(`${base}/dashboard/invoice-value`, { includeAuth, params });
+
+export const getClientValueTable = params => axios.get(`${base}/dashboard/client-value-table`, { includeAuth, params });

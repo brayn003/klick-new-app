@@ -16,7 +16,7 @@ function TableCell(props) {
   if (typeof col.transform === 'function') {
     return col.transform(getIn(row, col.key));
   }
-  return getIn(row, col.key);
+  return getIn(row, col.key) || null;
 }
 
 TableCell.propTypes = {
