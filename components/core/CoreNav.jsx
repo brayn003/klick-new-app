@@ -38,6 +38,20 @@ const menu = [{
     dynamic: true,
   }],
 }, {
+  title: 'Clients',
+  key: 'clients',
+  path: '/client',
+  children: [{
+    title: 'Create',
+    key: 'client.create',
+    path: '/client/create',
+  }, {
+    title: 'Edit',
+    key: 'client.edit',
+    path: '/client/edit',
+    dynamic: true,
+  }],
+}, {
   title: 'Branches',
   key: 'branches',
   path: '/branch',

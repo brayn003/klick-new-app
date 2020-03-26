@@ -131,6 +131,10 @@ const InvoiceForm = ({ activeOrg, invoiceId }) => {
               {...formField('client', {
                 transform: transformSelect,
               })}
+              params={{
+                verfied: false,
+                referrer: activeOrg.id,
+              }}
               block
               filter={[activeOrg.id]}
               placeholder="Search your client list"

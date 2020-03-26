@@ -1,7 +1,8 @@
 import React from 'react';
-import { shape, func } from 'prop-types';
+import { shape, func, string } from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import Router from 'next/router';
 
 import Input from 'common-components/controls/Input';
 import Label from 'common-components/Label';
@@ -10,20 +11,26 @@ import ButtonLink from 'common-components/button/ButtonLink';
 import useForm from 'hooks/useForm';
 import { createOrganization } from 'apis/organization-apis';
 import { updateBranch } from 'apis/branch-apis';
+// import { transformSelect } from 'helpers/form-transforms';
+// import SelectLocationState from 'common-components/smart-selects/SelectLocationState';
 
 function InvoiceForm(props) {
-  const { value, onComplete } = props;
+  const { value, onComplete, activeOrgId } = props;
   const { formField, getValues } = useForm();
 
   const add = async () => {
-    const { name, phone, gstNumber } = getValues();
+    const {
+      name, phone,
+      // gstNumber, state,
+    } = getValues();
     const organization = await createOrganization({
       name,
       phone,
+      referrer: activeOrgId,
     });
-    if (gstNumber) {
-      await updateBranch(organization.defaultBranch.id, { gstNumber });
-    }
+    // if (gstNumber) {
+    //   await updateBranch(organization.defaultBranch.id, { gstNumber, state });
+    // }
     onComplete({ organization });
   };
 
@@ -45,7 +52,7 @@ function InvoiceForm(props) {
       </Row>
       <Row>
         <FormGroup>
-          <InlineLabel>Phone</InlineLabel>
+          <InlineLabel>Mobile</InlineLabel>
           <Input
             {...formField('phone')}
             block
@@ -53,7 +60,7 @@ function InvoiceForm(props) {
           />
         </FormGroup>
       </Row>
-      <Row>
+      {/* <Row>
         <FormGroup>
           <InlineLabel>GST Number</InlineLabel>
           <Input
@@ -63,8 +70,21 @@ function InvoiceForm(props) {
           />
         </FormGroup>
       </Row>
+      <Row>
+        <FormGroup>
+          <InlineLabel>State</InlineLabel>
+          <SelectLocationState
+            {...formField('state', {
+              transform: transformSelect,
+            })}
+            block
+            placeholder="Eg. Maharashtra"
+          />
+        </FormGroup>
+      </Row> */}
       <ActionCard>
         <ButtonLink
+          onClick={() => { Router.push(`/client/create?name=${value.name}`); }}
           style={{ marginRight: 12 }}
         >
           Advanced Options
@@ -82,6 +102,7 @@ function InvoiceForm(props) {
 InvoiceForm.propTypes = {
   value: shape({}),
   onComplete: func,
+  activeOrgId: string.isRequired,
 };
 
 InvoiceForm.defaultProps = {
