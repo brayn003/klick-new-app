@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { func, shape, arrayOf } from 'prop-types';
+import {
+  func, shape, arrayOf, bool,
+} from 'prop-types';
 import { connect } from 'react-redux';
 
 import Input from 'common-components/controls/Input';
@@ -9,7 +11,10 @@ import { FlexRow, FlexCol } from 'common-components/table/FlexTable';
 import useForm from 'hooks/useForm';
 import SelectTaxType from 'common-components/smart-selects/SelectTaxType';
 
-const InvoiceParticularForm = ({ onChange, activeOrg, particulars }) => {
+const InvoiceParticularForm = ({
+  onChange, activeOrg, particulars, isSameState,
+}) => {
+  console.log('sameState ->', isSameState);
   const { includeQuantity, taxPerItem } = ((activeOrg || {}).invoicePreferences) || {};
 
   const [rows, setRows] = useState(1);
@@ -105,7 +110,7 @@ const InvoiceParticularForm = ({ onChange, activeOrg, particulars }) => {
                 })}
                 placeholder="Tax Rate"
                 params={{
-                  'config.isSameState': true,
+                  'config.isSameState': isSameState,
                 }}
                 groupByRate
                 block
@@ -139,12 +144,14 @@ InvoiceParticularForm.propTypes = {
   onChange: func,
   activeOrg: shape({}),
   particulars: arrayOf(shape({})),
+  isSameState: bool,
 };
 
 InvoiceParticularForm.defaultProps = {
   onChange: () => {},
   activeOrg: {},
   particulars: [],
+  isSameState: false,
 };
 
 

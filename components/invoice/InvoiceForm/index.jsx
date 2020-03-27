@@ -20,6 +20,7 @@ import Animate from 'common-components/animate/Animate';
 import SelectTaxInclusion from 'common-components/smart-selects/SelectTaxInclusion';
 import { transformSelect, transformMultiUploadS3 } from 'helpers/form-transforms';
 import { getInvoice, createInvoice, updateInvoice } from 'apis/invoice-apis';
+import { getOrganization } from 'apis/organization-apis';
 
 import InvoiceParticularForm from './InvoiceParticularForm';
 import OrganizationClientForm from '../../organization/OrganizationClientForm';
@@ -29,6 +30,9 @@ const InvoiceForm = ({ activeOrg, invoiceId }) => {
   const [showAddOrg, setShowAddOrg] = useState(null);
   const [loading, setLoading] = useState(false);
   const [valParticular, setValParticular] = useState();
+  const [sameState, setSameState] = useState();
+
+  const currentValues = getValues();
 
   const getData = async () => {
     try {
@@ -60,6 +64,19 @@ const InvoiceForm = ({ activeOrg, invoiceId }) => {
       getData();
     }
   }, []);
+
+  const compareStates = async () => {
+    const { organizationBranch, client } = currentValues;
+    if (organizationBranch && client) {
+      // const orgBranch = await getBranch(currentValues.organizationBranch);
+      const cliOrg = await getOrganization(currentValues.client);
+      setSameState(activeOrg.defaultBranch.state._id === cliOrg.defaultBranch.state._id);
+    }
+  };
+
+  useEffect(() => {
+    compareStates();
+  }, [currentValues.client, currentValues.organizationBranch]);
 
   const onClickSubmit = async () => {
     const body = getValues();
@@ -146,6 +163,7 @@ const InvoiceForm = ({ activeOrg, invoiceId }) => {
           <InvoiceParticularForm
             taxPerItem={(activeOrg.invoicePreferences || {}).taxPerItem}
             particulars={valParticular}
+            isSameState={sameState}
             {...formField('particulars')}
           />
         </Card>
