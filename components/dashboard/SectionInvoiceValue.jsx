@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import { shape } from 'prop-types';
 import Loading from 'common-components/Loading';
 import LeadText from 'common-components/LeadText';
 import { getInvoiceValue } from 'apis/dashboard-apis';
@@ -7,8 +7,6 @@ import { getInvoiceValue } from 'apis/dashboard-apis';
 const SectionInvoiceView = ({
   organization,
 }) => {
-  console.log('hey there');
-
   const [res, setRes] = useState();
   const [loading, setLoading] = useState(true);
 
@@ -36,6 +34,10 @@ const SectionInvoiceView = ({
   return (
     <LeadText>{res && new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(res.totalTaxableAmount)}</LeadText>
   );
+};
+
+SectionInvoiceView.propTypes = {
+  organization: shape({}).isRequired,
 };
 
 export default SectionInvoiceView;

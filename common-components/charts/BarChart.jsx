@@ -47,18 +47,17 @@ const BarChart = ({
     if (groupBy) {
       groups = uniq(data.map(d => d[groupBy]));
     }
-    // console.log(groups);
+    // console.log('>>>', data.map(d => d[valueKey]));
     return {
       labels,
-      datasets: (groups.length ? groups : ['Default']).reduce((agg, group) => agg.concat(stacks.map(stack => ({
-        label: `${group} ${stack}`,
-        stack: `${group}`,
-        data: data
-          .filter(d => d[groupBy] === group && d[stackBy] === stack)
-          .map(d => d[valueKey]),
+      datasets: (groupBy ? groups : ['Default']).reduce((agg, group) => agg.concat(stacks.length ? stacks : ['Default'].map(stack => ({
+        label: (groupBy && stackBy) ? `${group} ${stack}` : valueKey,
+        stack: groupBy && `${group}`,
+        data: data.map(d => d[valueKey]),
       }))), []),
     };
   };
+
 
   const onRef = (ref) => {
     if (ref) {
@@ -66,7 +65,8 @@ const BarChart = ({
         type: 'bar',
         data: getChartData(),
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
+        height,
         options: {
           // outerRadius: 200,
           // cutoutPercentage: 50,

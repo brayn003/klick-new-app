@@ -1,23 +1,20 @@
 import { useEffect, useState } from 'react';
-
+import { shape } from 'prop-types';
 import Loading from 'common-components/Loading';
 import LeadText from 'common-components/LeadText';
-import { getClientValueTable } from 'apis/dashboard-apis';
+import { getTotalInvoiceRemaining } from 'apis/dashboard-apis';
 
 const SectionClientValueTable = ({
   organization,
 }) => {
-  console.log('hey there');
-
   const [res, setRes] = useState();
   const [loading, setLoading] = useState(true);
 
   const getData = async () => {
     try {
-      const response = await getClientValueTable({
+      const response = await getTotalInvoiceRemaining({
         organization: organization._id,
       });
-      console.log('>>>', response);
       setLoading(true);
       setRes(response);
       setLoading(false);
@@ -35,9 +32,12 @@ const SectionClientValueTable = ({
   }
 
   return (
-    <p>Hey there</p>
-    // <LeadText>{res && new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(res.totalTaxableAmount)}</LeadText>
+    <LeadText>{res && new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(res.remaining)}</LeadText>
   );
+};
+
+SectionClientValueTable.propTypes = {
+  organization: shape({}).isRequired,
 };
 
 export default SectionClientValueTable;

@@ -8,7 +8,7 @@ import { Row as GenRow, Col } from 'common-components/FlexGrid';
 // import SectionExpenseCategoryPie from './SectionExpenseCategoryPie';
 import SectionCashflowBar from './SectionCashflowBar';
 import SectionInvoiceView from './SectionInvoiceValue';
-// import SectionClientValueTable from './SectionClientValueTable';
+import SectionClientValueTable from './SectionClientValueTable';
 
 function DashboardView({ activeOrg }) {
   return (
@@ -19,7 +19,11 @@ function DashboardView({ activeOrg }) {
             <SectionInvoiceView organization={activeOrg} />
           </Card>
         </Col>
-        <Col />
+        <Col>
+          <Card title="Total Indebted" style={{ minHeight: 92 }}>
+            <SectionClientValueTable organization={activeOrg} />
+          </Card>
+        </Col>
         <Col />
         <Col />
       </Row>

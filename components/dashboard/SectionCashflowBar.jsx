@@ -39,7 +39,6 @@ const SectionCashflowBar = ({ organization }) => {
   useEffect(() => {
     getData();
   }, Object.values(values));
-  console.log(res);
   return (
     <>
       <DropDown
@@ -62,8 +61,8 @@ const SectionCashflowBar = ({ organization }) => {
         data={res && res.data}
         labelKey={res && res.labelKey}
         valueKey={res && res.valueKey}
-        groupBy={res && res.groupBy}
-        stackBy={res && res.stackBy}
+        // groupBy={res && res.groupBy}
+        // stackBy={res && res.stackBy}
         height={300}
         loading={loading}
       />

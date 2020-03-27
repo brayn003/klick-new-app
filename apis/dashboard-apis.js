@@ -9,4 +9,4 @@ export const getCashflowBar = params => axios.get(`${base}/dashboard/cashflow-ba
 
 export const getInvoiceValue = params => axios.get(`${base}/dashboard/invoice-value`, { includeAuth, params });
 
-export const getClientValueTable = params => axios.get(`${base}/dashboard/client-value-table`, { includeAuth, params });
+export const getTotalInvoiceRemaining = params => axios.get(`${base}/dashboard/invoice-payment-remaining`, { includeAuth, params });
